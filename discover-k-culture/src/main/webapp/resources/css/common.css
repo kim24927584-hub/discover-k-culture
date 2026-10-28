@@ -42,6 +42,10 @@ img{
   max-width: 100%;
   height: auto;
 }
+/* 리스트스타일 없애기 */
+ul{
+	list-style:none;
+}
 /* 링크 밑줄과 파란색 없애기 */
 a{
   text-decoration: none;
