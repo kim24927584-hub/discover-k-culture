@@ -2,11 +2,16 @@
     language="java"
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<% request.setAttribute("pageCss", "header.css"); %>
+
 <%-- <%@ taglib prefix="c" uri="jakarta.tags.core" %> --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}" />
+<%@ taglib
+    prefix="c"
+    uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set
+    var="ctx"
+    value="${pageContext.request.contextPath}" />
 <!doctype html>
 <html lang="en">
 <head>
@@ -24,15 +29,22 @@
     rel="stylesheet"
     href="css/home.css" />
  -->
- 
+
 
 <%-- 모든 페이지 공통 --%>
-<link rel="stylesheet" href="${ctx}/resources/css/common.css" />
+<link
+    rel="stylesheet"
+    href="${ctx}/resources/css/reset.css" />
+<link
+    rel="stylesheet"
+    href="${ctx}/resources/css/common.css" />
 
 
 <%-- 페이지별 CSS (값이 있을 때만) --%>
 <c:if test="${not empty pageCss}">
-  <link rel="stylesheet" href="${ctx}/resources/css/${pageCss}" />
+    <link
+        rel="stylesheet"
+        href="${ctx}/resources/css/${pageCss}" />
 </c:if>
 
 
@@ -41,7 +53,8 @@
     <!-- 헤더 -->
     <div class="wrapper">
         <header>
-            <!-- <div class="h-profile">
+            <!-- 수정 필요
+             <div class="h-profile">
             <a href="#"
               ><img src="assets/icon-user-profile-3682323.png" alt="" />
               Esther
@@ -55,9 +68,9 @@
                 <div class="f-cc">
                     <div class="logo f-cc">
                         <img
-                            src="assets/logo-mark.png"
+                            src="${ctx}/resources/assets/logo-mark.png"
                             alt="" /> <img
-                            src="assets/logo-text.png"
+                            src="${ctx}/resources/assets/logo-text.png"
                             alt="" />
                     </div>
                 </div>
@@ -89,7 +102,7 @@
                     <a
                         href="#"
                         class="f-cc"> <img
-                        src="assets/icon-plus-sign-3114793.png"
+                        src="${ctx}/resources/assets/icon-plus-sign-3114793.png"
                         alt="" />NEW POST
                     </a>
                 </div>

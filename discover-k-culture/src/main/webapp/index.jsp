@@ -1,10 +1,29 @@
-<%@ page
-    language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<% request.setAttribute("pageCss", "home.css"); %>
+
+<%@ taglib
+    prefix="c"
+    uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set
+    var="ctx"
+    value="${pageContext.request.contextPath}" />
+
+<link
+    rel="stylesheet"
+    href="${ctx}/resources/css/reset.css" />
+<link
+    rel="stylesheet"
+    href="${ctx}/resources/css/common.css" />
+
+<c:if test="${not empty pageCss}">
+    <link
+        rel="stylesheet"
+        href="${ctx}/resources/css/${pageCss}" />
+</c:if>
+
+
 <%@ include file="/include/header.jsp"%>
 
-<body>
+
  <div class="layout">
             <div class="search-bar">
                 <form>
@@ -14,10 +33,10 @@
                         value=""
                         placeholder="Search" />
                     <button
-                        class="btn search-btn"
+                        class="btn-y search-btn"
                         type="search">
                         <img
-                            src="assets/icon-search-6328608.png"
+                            src="${ctx}/resources/assets/icon-search-6328608.png"
                             alt="" />
                     </button>
                 </form>
@@ -29,7 +48,7 @@
                             <caption>
                                 <div class="notice-caption">
                                     <strong>Notice</strong> <a href="#"> <img
-                                        src="assets/icon-arrow-right-6423875.png"
+                                        src="${ctx}/resources/assets/icon-arrow-right-6423875.png"
                                         alt="" />
                                     </a>
                                 </div>
@@ -56,4 +75,4 @@
                 </main>
                 
 <%@ include file = "/include/sidebar.jsp" %>
-    <%@include file = "/include/footer.jsp" %>
+<%@include file = "/include/footer.jsp" %>
