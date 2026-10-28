@@ -1,0 +1,40 @@
+.chips{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 30px;
+}
+.chip{
+  padding:8px 56px;
+  /* border: 1px solid var(--color-border); */
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+  border-radius: var(--radius);
+  cursor: pointer;
+  
+}
+.post-list{
+  
+}
+.post-item{
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  padding:14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 10px;
+}
+.post-emoji{
+  font-size: 30px;
+}
+.post-title{
+  font-size: 20px;
+
+}
+.post-meta{
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
