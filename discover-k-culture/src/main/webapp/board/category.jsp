@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../resources/css/common.css">
-  <link rel="stylesheet" href="../resources/css/category.css">
-  <style>
-    
-  </style>
-</head>
-<body>
+<%@ page
+    language="java"
+    contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+request.setAttribute("pageCss", "category.css");
+
+%>
+<%@include file="/include/header.jsp" %>
+
+
   <div class="container">
     <h1>Discover K-Culture</h1>
     <div class="chips">
