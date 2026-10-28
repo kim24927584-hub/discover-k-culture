@@ -1,3 +1,4 @@
+```
 src/main/webapp/
 ├── index.jsp
 ├── include/                 ← 모든 페이지가 공유 (헤더 담당 팀원)
@@ -23,3 +24,4 @@ src/main/webapp/
 │   └── img/
 └── WEB-INF/
     └── web.xml
+```
