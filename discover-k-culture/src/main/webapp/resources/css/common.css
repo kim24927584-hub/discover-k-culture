@@ -1,0 +1,43 @@
+:root {
+  /* 색 */
+  --color-text: #222222;
+  --color-text-muted: #888888;
+  --color-primary: #c8372d;
+  --color-primary-hover: #a82b22;
+  --color-primary-text: white;
+  --color-border: #dddddd;
+  --color-line: #dddddd;
+  --color-bg: #faf7f2;
+  --color-bg-soft: #e0ded9da;
+  /* 카드, 게시글처럼 올라온 면의 배경 */
+  --color-surface: #ffffff;
+
+  /* -------------------- */
+  --radius: 12px;
+
+}
+*{
+  box-sizing: border-box;
+  margin: 0;padding: 0;
+}
+/* common.css */
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.container{
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+img{
+  /* 이미지 크기가 부모 크기를 넘지 못하게 하고 
+  높이는 넓이 비례를 따라감 */
+  max-width: 100%;
+  height: auto;
+}
+/* 링크 밑줄과 파란색 없애기 */
+a{
+  text-decoration: none;
+  color: inherit;
+}
