@@ -11,7 +11,7 @@
   white-space: nowrap;
 }
 .board th{
-  background: var(--color-bg-soft);
+  background: var(--color-bg-muted);
   font-size: 12px;
   
 }

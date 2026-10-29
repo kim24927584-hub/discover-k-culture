@@ -93,7 +93,7 @@ ul li a {
 	display: block;
 }
 
-nav {
+header nav {
 	width: 280px;
 	height: 100vh;
 	display: flex;

@@ -109,6 +109,7 @@ h1{
 	font-size: var(--font-size-sm);
 	color: var(--color-text-muted);
 }
+/* 페이지네이션 */
 .pagination{
 	display:flex;
 	
