@@ -36,6 +36,10 @@
 	--font-weight-medium: 500;
 	--font-weight-semibold: 600;
 	--font-weight-bold: 700;
+	
+	/* box shodow */
+	--box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+	
 }
 /* 모든 요소 */
 *{

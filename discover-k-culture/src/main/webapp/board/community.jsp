@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../resources/css/common.css">
-  <link rel="stylesheet" href="../resources/css/community-board.css">
-</head>
-<body>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<% request.setAttribute("pageCss", "community-board.css"); %>
+
+<%@include file="/include/header.jsp" %>
   
 <main class="container">
   <h1 class="board-title">자유게시판</h1>
@@ -67,6 +63,7 @@
 
   </nav>
 </main>
-  
-</body>
-</html>
+
+<%@include file="/include/sidebar.jsp" %>
+<%@include file="/include/footer.jsp" %>
+

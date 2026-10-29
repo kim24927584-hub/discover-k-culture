@@ -1,15 +1,10 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="../resources/css/common.css">
-<link rel="stylesheet" href="../resources/css/mypage.css">
-</head>
-<body>
+
+<% request.setAttribute("pageCss", "mypage.css"); %>
+
+<%@include file="/include/header.jsp" %>
 <main class="container">
 <h1>마이페이지</h1>
 <!-- 프로필 -->
@@ -122,5 +117,6 @@ fileInput.addEventListener('change', function () {
   if (file) avatar.src = URL.createObjectURL(file);
 });
 </script>
-</body>
-</html>
+
+<%@include file="/include/sidebar.jsp"%>
+<%@include file="/include/footer.jsp"%>
