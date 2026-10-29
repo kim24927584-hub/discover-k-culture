@@ -38,38 +38,42 @@
     <!-- 헤더 -->
     <div class="wrapper">
         <header>
-            <!-- <div class="h-profile">
-            <a href="#"
-              ><img src="assets/icon-user-profile-3682323.png" alt="" />
-              Esther
-            </a>
-            <div class="nationality">
-              <img src="assets/icon-global-2531125.png" alt="" />
-              US
-            </div>
-          </div> -->
             <nav>
                 <div class="f-cc">
                     <div class="logo f-cc">
                         <img
-                            src="assets/logo-mark.png"
+                            src="${ctx}/resources/assets/logo-mark.png"
                             alt="" /> <img
-                            src="assets/logo-text.png"
+                            src="${ctx}/resources/assets/logo-text.png"
                             alt="" />
                     </div>
                 </div>
-                <div class="auth-menu">
-                    <div class="auth-link">
-                        <a href="#">Login</a>
+                <!-- 로그인 X -->
+                <!-- <div class="auth-menu f-cc">
+            <div class="auth-link">
+              <a href="#">Login</a>
+            </div>
+            <span>|</span>
+            <div class="auth-link">
+              <a href="#">Sign Up</a>
+            </div>
+          </div> -->
+                <!-- 로그인 O -->
+                <div class="user-profile">
+                    <!-- 닉네임 길어질 시 줄바꿈이나 영역을 넘치지 않고
+             말줄임 표시되도록 추가 -->
+                    <div class="login-user">
+                        <a href="#"><img
+                            src="${ctx}/resources/assets/icon-user-profile-3682323.png"
+                            alt="" /> Esther </a>
                     </div>
-                    <span>|</span>
-                    <div class="auth-link">
-                        <a href="#">Sign Up</a>
+                    <div class="nationality">
+                        <img
+                            src="${ctx}/resources/assets/language-svgrepo-com.svg"
+                            alt="" /> US
                     </div>
                 </div>
                 <div class="nav-side">
-                    <!-- 로그인 X -->
-
                     <ul class="main-menu">
                         <li><a href="#">Menu</a></li>
                     </ul>
@@ -86,7 +90,7 @@
                     <a
                         href="#"
                         class="f-cc"> <img
-                        src="assets/icon-plus-sign-3114793.png"
+                        src="${ctx}/resources/assets/icon-plus-sign-3114793.png"
                         alt="" />NEW POST
                     </a>
                 </div>
