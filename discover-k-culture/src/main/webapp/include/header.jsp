@@ -2,16 +2,7 @@
     language="java"
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% request.setAttribute("pageCss", "header.css"); %>
 
-<%-- <%@ taglib prefix="c" uri="jakarta.tags.core" %> --%>
-
-<%@ taglib
-    prefix="c"
-    uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set
-    var="ctx"
-    value="${pageContext.request.contextPath}" />
 <!doctype html>
 <html lang="en">
 <head>
@@ -20,33 +11,6 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0" />
 <title>K-culture</title>
-
-<!-- 
-<link
-    rel="stylesheet"
-    href="css/style.css" />
-<link
-    rel="stylesheet"
-    href="css/home.css" />
- -->
-
-
-<%-- 모든 페이지 공통 --%>
-<link
-    rel="stylesheet"
-    href="${ctx}/resources/css/reset.css" />
-<link
-    rel="stylesheet"
-    href="${ctx}/resources/css/common.css" />
-
-
-<%-- 페이지별 CSS (값이 있을 때만) --%>
-<c:if test="${not empty pageCss}">
-    <link
-        rel="stylesheet"
-        href="${ctx}/resources/css/${pageCss}" />
-</c:if>
-
 
 </head>
 <body>

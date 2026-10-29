@@ -2,10 +2,27 @@
     language="java"
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-request.setAttribute("pageCss", "category.css");
+<!-- css 세팅 -->
+<% request.setAttribute("pageCss", "category.css"); %>
 
-%>
+<%@ taglib
+    prefix="c"
+    uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set
+    var="ctx"
+    value="${pageContext.request.contextPath}" />
+
+<!-- 공통 -->
+<link
+    rel="stylesheet"
+    href="${ctx}/resources/css/style.css" />
+
+<!-- 개별 -->
+<c:if test="${not empty pageCss}">
+    <link
+        rel="stylesheet"
+        href="${ctx}/resources/css/${pageCss}" />
+</c:if>
 <%@include file="/include/header.jsp" %>
 
 

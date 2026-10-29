@@ -1,106 +1,117 @@
-@charset "UTF-8";
-
-@import
-	url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Noto+Sans+KR:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap")
-	;
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Noto+Sans+KR:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
 
 :root {
-	/* 컬러 */
-	--color--deepteal: #003d4c;
-	--color--pink: #e92d70;
-	--color--skyblue: #159ed8;
-	--color--orange: #f5a623;
-	--color--green: #64b44e;
-	--color--purple: #70469c;
-	/* 텍스트 */
-	--color--primary-text: #202b30;
-	--color--secondary-text: #687780;
-	--color--light-text: #e0e0e0;
-	/* 배경 */
-	--color--white: #ffffff;
-	--color--rose: #f0dfd8;
-	--color--border1: #c7c7c7;
-	--color--border2: #d8d8d8;
-	--color--border3: #e6eaed;
-	/* 공지사항 */
-	--color--must-text: #e02e2a;
-	--color--must-bg: #fbdedd;
-	--color--notice-text: #3a83f7;
-	--color--notice-bg: #dbecfc;
-	/* 색 */
-	--color-text: #222222;
-	--color-text-muted: #888888;
-	--color-primary: #c8372d;
-	--color-primary-hover: #a82b22;
-	--color-primary-text: white;
-	--color-border: #dddddd;
-	--color-line: #dddddd;
-	--color-bg: #faf7f2;
-	--color-bg-soft: #e0ded9da;
-	/* 카드, 게시글처럼 올라온 면의 배경 */
-	--color-surface: #ffffff;
-	/* -------------------- */
-	--radius: 12px;
-	--radius-pill: 999px;
-	/*폰트*/
-	--font-size-md: 15px;
-	/*트랜지션*/
-	--transition: 0.2s ease;
+  --color-primary: #164a50;
+  --color-primary-hover: #103c41;
+  --color-primary-light: #e8f1f1;
+
+  /* ========= text ========== */
+  --color-text: #333333; /* 본문 */
+  --color-text-heading: #222222; /* 제목 */
+  --color-secondary-text: #666666;
+  --color-text-muted: #888888;
+  --color-text-white: #ffffff;
+
+  /* ========= background ========== */
+  --color-bg: #f8f9fa;
+  --color-bg-muted: #f1f3f4;
+  --color-surface: #ffffff;
+
+  /* ========= border ========== */
+  --color-border: #e0e0e0;
+  --color-divider: #eeeeee; /* 게시글 구분선 */
+
+  /* ========= border-radius ========== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-pill: 999px;
+
+  /* ========= font size ========== */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 2rem; /* 32px */
+
+  /* ========= font weight ========== */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 }
 /* common.css */
+
 body {
-	background: var(--color-bg);
-	color: var(--color-text);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family:
+    "Pretendard Variable",
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    sans-serif;
 }
-
 .container {
-	max-width: 720px;
-	margin: 0 auto;
-	padding: 0 20px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
-
 img {
-	/* 이미지 크기가 부모 크기를 넘지 못하게 하고
+  /* 이미지 크기가 부모 크기를 넘지 못하게 하고
   높이는 넓이 비례를 따라감 */
-	max-width: 100%;
-	height: auto;
+  max-width: 100%;
+  height: auto;
 }
 
 /*버튼*/
 .btn {
-	display: inline-block;
-	padding: 10px 20px;
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-pill);
-	background: var(--color-surface);
-	color: var(--color-text);
-	font-size: var(--font-size-md);
-	text-decoration: none;
-	cursor: pointer;
-	transition: var(--transition);
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .btn:hover {
-	border-color: var(--color-primary);
-	color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .btn-primary {
-	background: var(--color-primary);
-	border-color: var(--color-primary);
-	color: #fff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-white);
 }
 
 .btn-primary:hover {
-	background: var(--color-primary-hover);
-	border-color: var(--color-primary-hover);
-	color: #fff;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: var(--color-text-white);
 }
 
 .f-cc {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .wrapper {

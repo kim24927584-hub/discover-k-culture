@@ -3,31 +3,6 @@
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-
-<% request.setAttribute("pageCss", "footer.css"); %>
-
-
-<%@ taglib
-    prefix="c"
-    uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set
-    var="ctx"
-    value="${pageContext.request.contextPath}" />
-
-<link
-    rel="stylesheet"
-    href="${ctx}/resources/css/reset.css" />
-<link
-    rel="stylesheet"
-    href="${ctx}/resources/css/common.css" />
-
-<c:if test="${not empty pageCss}">
-    <link
-        rel="stylesheet"
-        href="${ctx}/resources/css/${pageCss}" />
-</c:if>
-
-
 <!-- 푸터 -->
 <footer>
     <div class="f-section">

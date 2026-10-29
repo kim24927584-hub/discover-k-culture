@@ -1,30 +1,3 @@
-
-<% request.setAttribute("pageCss", "sidebar.css"); %>
-
-
-<%@ taglib
-    prefix="c"
-    uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set
-    var="ctx"
-    value="${pageContext.request.contextPath}" />
-
-<link
-    rel="stylesheet"
-    href="${ctx}/resources/css/reset.css" />
-<link
-    rel="stylesheet"
-    href="${ctx}/resources/css/common.css" />
-    
-    
-
-<c:if test="${not empty pageCss}">
-    <link
-        rel="stylesheet"
-        href="${ctx}/resources/css/${pageCss}" />
-</c:if>
-
-
 <div class="sidebar">
     <!-- 화면이 작아지면 맨 아래로 내려가도록 -->
     <div class="sidebar-s1">
