@@ -2,10 +2,9 @@
     language="java"
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-request.setAttribute("pageCss", "category.css");
+<!-- css 세팅 -->
+<% request.setAttribute("pageCss", "category.css"); %>
 
-%>
 <%@include file="/include/header.jsp" %>
 
 
@@ -42,6 +41,5 @@ request.setAttribute("pageCss", "category.css");
       </div>
     </div>  
   </div>
-  
-</body>
-</html>
+<%@ include file="/include/sidebar.jsp"%>
+<%@include file="/include/footer.jsp"%>
