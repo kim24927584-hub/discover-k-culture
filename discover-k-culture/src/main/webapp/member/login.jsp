@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../resources/css/common.css">
-  <link rel="stylesheet" href="../resources/css/login.css">
-</head>
-<body>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<% request.setAttribute("pageCss", "login.css"); %>
+
+<%@include file="/include/header.jsp" %>
+
   <div class="login-page">
   	<div class="login-box">
 	    <img src="../resources/img/logo.jpg" alt="" class="login-logo" alt="K-Culture 로고">
@@ -24,5 +21,5 @@
 	    </form>
     </div>
   </div>
-</body>
-</html>
+<%@include file="/include/sidebar.jsp" %>
+<%@include file="/include/footer.jsp" %>

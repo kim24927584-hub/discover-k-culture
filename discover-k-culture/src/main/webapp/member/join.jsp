@@ -3,16 +3,9 @@
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../resources/css/common.css">
-  <link rel="stylesheet" href="../resources/css/join.css">
-</head>
-<body>
+<% request.setAttribute("pageCss", "join.css"); %>
+
+<%@include file="/include/header.jsp" %>
   <div class="join-page">
   	<div class="join-box">
 	    <img src="../resources/img/logo.jpg" class="login-logo" alt="K-Culture 로고">
@@ -49,5 +42,5 @@
 	    </form>
     </div>
   </div>
-</body>
-</html>
+<%@include file="/include/sidebar.jsp" %>
+<%@include file="/include/footer.jsp" %>

@@ -1,6 +1,4 @@
-.container{
-	
-}
+
 .login-page{
 	min-height:100vh;
 	display:flex;
@@ -15,7 +13,7 @@
   	padding: 32px 28px;
   	background: var(--color-surface);
   	border: 1px solid var(--color-border);
-  	border-radius: var(--radius);
+  	border-radius: var(--radius-md);
 }
 .login-logo{
 	
@@ -33,7 +31,7 @@
 	pdding: 0 12px;
 	border: 1px solid var(--color-border);
 	
-	border-radius: var(--radius);
+	border-radius: var(--radius-md);
 	background:var(--color-surface);
 	
 	font-size:1rem;
@@ -41,7 +39,7 @@
 	
 }
 .btn-primary{
-	width:100%;
-	margin-top: 30px;
-	
+	width:100%;height: 50px;
+	margin-top: 20px;
+	border-radius: var(--radius-md);
 }
