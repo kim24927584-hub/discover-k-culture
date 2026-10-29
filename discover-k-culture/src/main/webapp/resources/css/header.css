@@ -1,5 +1,4 @@
-@charset "UTF-8";
-
+/* 헤더 */
 .logo {
 	width: 230px;
 	height: 75px;
@@ -27,9 +26,7 @@
 
 /* 비로그인 (Login, Sign up) */
 .auth-menu {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	height: 27px;
 	gap: 25px;
 	color: var(--color--light-text);
 	margin-bottom: 35px;
@@ -44,43 +41,51 @@
 	color: var(--color--light-text);
 }
 
-/* 로그인 시 유저 정보 해당 내용 수정 필요 */
-.h-profile {
+/* 로그인 시 유저 정보 */
+.user-profile {
 	display: flex;
 	align-items: center;
-	gap: 20px;
+	justify-content: space-between;
+	height: 50px;
+	margin-bottom: 35px;
+	padding: 0 30px 0 50px;
 }
 
-.h-profile a {
+.login-user a {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	width: 100%;
-	height: 100%;
+	justify-content: center;
+	border-radius: 12px;
+	line-height: 1;
+	gap: 10px;
 	font-size: 0.9rem;
-	color: #555;
+	color: var(--color--white);
 }
 
-.h-profile a img {
+.login-user a img {
 	display: block;
-	width: 30px;
-	height: 30px;
-	border: 2px solid #d9d9d9;
+	width: 27px;
+	height: 27px;
+	border: 2px solid var(--color--border2);
 	border-radius: 50%;
-	background: #fff;
+	background: var(--color--white);
 }
 
-.h-profile .nationality {
+.user-profile .nationality {
 	display: flex;
+	align-items: center;
+	height: 25px;
 	gap: 3px;
+	margin-left: auto;
 	font-size: 0.7rem;
-	color: #555;
+	color: var(--color-surface);
 }
 
-.h-profile .nationality img {
+.user-profile .nationality img {
 	display: block;
 	width: 20px;
 	height: 20px;
+	color: var(--color--white);
 }
 
 /* 내비 메뉴 */

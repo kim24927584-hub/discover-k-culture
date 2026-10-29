@@ -1,12 +1,10 @@
-@charset "UTF-8";
-
 /* 추천 목록 사이드바 - 현재 수정 중 */
 .sidebar {
-	width: 300px;
+	width: 270px;
 	display: flex;
 	flex-direction: column;
 	gap: 50px;
-	margin: 0 40px;
+	margin: 20px 50px 60px 30px;
 }
 
 .sidebar-tabs {
@@ -15,20 +13,16 @@
 
 .sidebar-tabs .tab-btn {
 	flex: 1;
-	color: var(--color--deepteal);
 	text-align: center;
 	font-size: 0.8rem;
 	font-weight: 500;
-	height: 32px;
+	height: 30px;
+	line-height: 30px;
+	color: var(--color--deepteal);
+	background: var(--color-surface);
 	border: 1px solid var(--color--deepteal);
 	border-bottom: none;
 	border-radius: 10px 10px 0 0;
-}
-
-.sidebar-tabs .tab-btn span {
-	display: inline-block;
-	height: 100%;
-	line-height: 32px;
 }
 
 /* active 탭 */
@@ -38,11 +32,12 @@
 }
 
 .tab-contents.active-tab-contents {
-	background: #64b44e15;
+	background: var(--color--light-green);
 	display: table-row-group;
 }
 
 .sidebar-contents {
+	background: var(--color-surface);
 	border: 1px solid var(--color--deepteal);
 	border-radius: 0 0 5px 5px;
 	border-top: none;
@@ -52,7 +47,7 @@
 	width: 100%;
 	table-layout: fixed;
 	border-collapse: collapse;
-	font-size: 0.8rem;
+	font-size: 0.75rem;
 }
 
 .tab-contents {
