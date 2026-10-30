@@ -44,16 +44,26 @@ h1{
   font-size: 12px;
   
 }
+
 .board .col-title{
   width: 100%;
   text-align: left;
 }
+.board .col-title.head-title{
+	/* 제목 타이틀만 가운데로 오도록 */
+	text-align: center;
+}
 .board a:hover{
   text-decoration: underline;
 }
-.board tbody tr:hover{
-  background: var(--color-bg-soft)
+.board tbody tr{
+	color: var(--color-text-muted);
 }
+.board tbody tr:hover{
+  background: var(--color-bg-hover)
+}
+
+
 /* 페이지 번호 */
 .pagination{
   display: flex;
