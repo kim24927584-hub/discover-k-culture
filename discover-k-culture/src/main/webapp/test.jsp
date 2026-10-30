@@ -8,7 +8,6 @@
 <%@ include file="/include/header.jsp"%>
 <!-- 메인 -->
 
-        <div class="content-wrapper">
           <main>
             <div class="wrapper">
             <section class="main-s1">
