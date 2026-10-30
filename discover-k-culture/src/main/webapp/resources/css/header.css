@@ -108,7 +108,7 @@ ul li a {
   display: block;
 }
 
-nav {
+body > .wrapper > nav {
   position: fixed;
   top: 0;
 
