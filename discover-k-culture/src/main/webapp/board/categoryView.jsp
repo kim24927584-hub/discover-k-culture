@@ -3,7 +3,7 @@
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<% request.setAttribute("pageCss", "categoryView.css"); %>
+<% request.setAttribute("pageCss", "board/categoryView.css"); %>
 
 <%@include file="/include/header.jsp" %>
 
