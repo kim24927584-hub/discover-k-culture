@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<% request.setAttribute("pageCss", "community-board.css"); %>
+<% request.setAttribute("pageCss", "board/qnaList.css"); %>
 
 <%@include file="/include/header.jsp" %>
   
 <main class="container">
-  <h1 class="board-title">자유게시판</h1>
+  <h1 class="board-title">질문게시판</h1>
 
   <table class="board">
     <thead>
