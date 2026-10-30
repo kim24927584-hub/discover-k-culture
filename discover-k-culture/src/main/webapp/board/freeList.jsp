@@ -8,11 +8,21 @@
 <main class="container">
   <h1 class="board-title">자유게시판</h1>
 
+<form class="board-search" action="freeList.jsp" method="get">
+	<input type="search" class="board-search-input" placeholder="제목, 내용, 작성자 검색" name="keyword">
+	<select name="sortType" class="board-sort">
+		<option value="latest" selected>최신순</option>
+		<option value="likes">추천순</option>
+		<option value="views">조회순</option>
+	</select>
+	<button type="submit" class="btn btn-primary">검색</button>
+</form>
+	
   <table class="board">
     <thead>
       <tr>
         <th class="col-num">번호</th>
-        <th class="col-title">제목</th>
+        <th class="col-title head-title">제목</th>
         <th class="col-author">작성자</th>
         <th class="col-nationality">국적</th>
         <th class="col-date">등록일</th>
