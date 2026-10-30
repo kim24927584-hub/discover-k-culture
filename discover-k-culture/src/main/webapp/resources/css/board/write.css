@@ -1,0 +1,248 @@
+/* 전체 레이아웃 */
+.write-page,
+.write-page * {
+    box-sizing: border-box;
+}
+
+body > .wrapper > .layout {
+    min-width: 0;
+}
+
+.write-page {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+}
+
+/* 글쓰기 본문 + 오른쪽 사이드바 */
+.write-page .write-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+    min-width: 0;
+    padding: 0 24px 50px;
+}
+
+.write-page .write-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.write-page .write-layout > .sidebar {
+    flex: 0 0 270px;
+    width: 270px;
+    min-width: 0;
+    margin: 0;
+    gap: 32px;
+}
+
+/* 글쓰기 카드 */
+.write-page .write-card {
+    width: 100%;
+    padding: 28px;
+    border: 1px solid #e0e8e5;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(35, 75, 66, 0.04);
+}
+
+/* 제목 영역 */
+.write-page .write-heading {
+    margin-bottom: 28px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #e5ece9;
+}
+
+.write-page .write-label {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: var(--color--deepteal, #32675c);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.write-page .write-heading h1 {
+    margin: 0;
+    color: #254c43;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.write-page .write-heading p {
+    margin: 10px 0 0;
+    color: #82908a;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* 입력 영역 */
+.write-page .write-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.write-page .write-field {
+    min-width: 0;
+}
+
+.write-page .write-field > label {
+    display: block;
+    margin-bottom: 10px;
+    color: #36594e;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.write-page .write-field input[type="text"],
+.write-page .write-field select,
+.write-page .write-field textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid #dce5e0;
+    border-radius: 9px;
+    background: #fff;
+    color: #33483f;
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.write-page .write-field input[type="text"],
+.write-page .write-field select {
+    height: 46px;
+}
+
+.write-page .write-field textarea {
+    min-height: 300px;
+    line-height: 1.8;
+    resize: vertical;
+}
+
+.write-page .write-field input::placeholder,
+.write-page .write-field textarea::placeholder {
+    color: #a1ada6;
+}
+
+.write-page .write-field input[type="text"]:focus,
+.write-page .write-field select:focus,
+.write-page .write-field textarea:focus {
+    border-color: #6d9d88;
+    box-shadow: 0 0 0 3px rgba(109, 157, 136, 0.12);
+}
+
+/* 파일 첨부 영역 */
+.write-page .write-upload {
+    min-width: 0;
+    padding: 16px;
+    border: 1px dashed #c6d7cc;
+    border-radius: 10px;
+    background: #f7faf8;
+}
+
+.write-page .write-upload p {
+    margin: 0 0 12px;
+    color: #7a8b81;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.write-page .write-upload input[type="file"] {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    color: #708075;
+    font-size: 12px;
+}
+
+.write-page .write-upload input::file-selector-button {
+    margin-right: 10px;
+    padding: 8px 12px;
+    border: 1px solid #cbdacf;
+    border-radius: 6px;
+    background: #fff;
+    color: #456a56;
+    font: inherit;
+    cursor: pointer;
+}
+
+.write-page .write-file-guide {
+    margin: 8px 0 0;
+    color: #98a49c;
+    font-size: 12px;
+}
+
+/* 하단 버튼 */
+.write-page .write-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 22px;
+    border-top: 1px solid #e5ece9;
+}
+
+.write-page .write-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 88px;
+    min-height: 42px;
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    border-radius: 24px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.write-page .write-button-cancel {
+    border-color: #dce5df;
+    background: #fff;
+    color: #75867a;
+}
+
+.write-page .write-button-submit {
+    background: var(--color--rose, #f1cbd6);
+    color: #8b4a5e;
+}
+
+.write-page .write-button:hover {
+    filter: brightness(0.97);
+}
+
+/* 좁은 화면 */
+@media (max-width: 1100px) {
+    .write-page .write-layout {
+        flex-direction: column;
+    }
+
+    .write-page .write-main,
+    .write-page .write-layout > .sidebar {
+        flex: none;
+        width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    .write-page .write-layout {
+        padding: 0 14px 30px;
+    }
+
+    .write-page .write-card {
+        padding: 18px;
+    }
+
+    .write-page .write-heading h1 {
+        font-size: 21px;
+    }
+}
