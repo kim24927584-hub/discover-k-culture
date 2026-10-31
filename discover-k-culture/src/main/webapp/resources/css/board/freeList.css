@@ -6,6 +6,9 @@ h1{
 	border-radius: var(--radius-lg);
 	overflow:hidden;
 	box-shadow: var(--box-shadow);
+	width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-surface);
 }
 .board-search{
 	width: 100%;
@@ -33,12 +36,6 @@ h1{
 }
 
 
-.board{
-  width: 100%;
-  border-collapse: collapse;
-  border-top: 2px solid var(--color-text);
-  background-color: var(--color-surface);
-}
 .board th,
 .board td{
   padding: 10px 10px;
