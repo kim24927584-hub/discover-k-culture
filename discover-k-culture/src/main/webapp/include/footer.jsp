@@ -2,7 +2,7 @@
     language="java"
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+</div> <!-- /.content-wrapper (header.jsp에서 열림) -->
 <!-- 푸터 -->
 <footer>
     <div class="f-section">
@@ -22,9 +22,8 @@
         </div>
     </div>
 </footer>
-
-</div>
-</div>
+</div> <!-- /.layout -->
+</div> <!-- /.wrapper -->
 
 </body>
 </html>
