@@ -91,6 +91,7 @@ tbody tr .col-board span{
   align-items: center;
   gap: 12px;
   margin: 50px 0 ;
+  font-size:12px;
 }
 .page-numbers{
   display: flex;
@@ -112,7 +113,7 @@ tbody tr .col-board span{
 }
 .page{
   min-width: 36px;
-  padding: 6px 10px;
+  padding: 6px 0px;
   border:1px solid var(--color-border);
   border-radius: 8px;
   text-align: center;
