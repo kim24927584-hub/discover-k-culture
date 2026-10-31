@@ -3,6 +3,9 @@ h1{
 }
 .board{
 	font-size:13px;
+	border-radius: var(--radius-lg);
+	overflow:hidden;
+	box-shadow: var(--box-shadow);
 }
 .board-search{
 	width: 100%;
@@ -112,12 +115,11 @@ tbody tr .col-board span{
   pointer-events: none;
 }
 .page{
-  min-width: 36px;
+  min-width: 27px;
   padding: 6px 0px;
   border:1px solid var(--color-border);
   border-radius: 8px;
   text-align: center;
-
 }
 .page.is-active{
   background: var(--color-primary);
