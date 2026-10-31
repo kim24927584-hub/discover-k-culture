@@ -10,6 +10,8 @@ h1{
   border-collapse: collapse;
   background-color: var(--color-surface);
 }
+
+/* 상단 검색창 */
 .board-search{
 	width: 100%;
 	display: flex;
@@ -30,6 +32,7 @@ h1{
 .board-sort{
 	border-radius: var(--radius-md);
 	padding: 0 5px;
+	border: var(--color-border) 1px solid;
 }
 .btn{
 	padding: 0 10px;
