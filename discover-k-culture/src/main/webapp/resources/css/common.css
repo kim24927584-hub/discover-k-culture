@@ -16,6 +16,7 @@
   --color-bg: #f8f9fa;
   --color-bg-muted: #f1f3f4;
   --color-surface: #ffffff;
+  --color-bg-hover: #eceff2;
 
   /* ========= border ========== */
   --color-border: #e0e0e0;
@@ -42,6 +43,12 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+  
+  /* ========= box shadow ========== */
+    --box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.16);
+  
+  /* ========= transition ========== */
+  --transition: 0.2s ease;
 }
 /* common.css */
 
@@ -81,12 +88,10 @@ img {
 /*버튼*/
 .btn {
   display: inline-block;
-  padding: 10px 20px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-text);
-  font-size: var(--font-size-md);
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition);
