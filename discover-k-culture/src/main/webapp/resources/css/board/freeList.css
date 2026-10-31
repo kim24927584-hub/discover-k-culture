@@ -1,6 +1,9 @@
 h1{
 	margin: 0 0 20px 0;
 }
+.board{
+	font-size:13px;
+}
 .board-search{
 	width: 100%;
 	display: flex;
@@ -30,11 +33,12 @@ h1{
 .board{
   width: 100%;
   border-collapse: collapse;
-  border-top: 2px solid var(--color-text)
+  border-top: 2px solid var(--color-text);
+  background-color: var(--color-surface);
 }
 .board th,
 .board td{
-  padding: 12px 8px;
+  padding: 10px 10px;
   border-bottom: 1px solid var(--color-border);
   text-align: center;
   white-space: nowrap;
@@ -53,14 +57,30 @@ h1{
 	/* 제목 타이틀만 가운데로 오도록 */
 	text-align: center;
 }
+
 .board a:hover{
   text-decoration: underline;
 }
 .board tbody tr{
+	/* 글자 색 연하게 */
 	color: var(--color-text-muted);
 }
+.board tbody .col-title{
+	/* 타이틀은 진하게 */
+	color: var(--color-text);
+}
 .board tbody tr:hover{
+	/* 게시글에 호버하면 색 바뀌게 */
   background: var(--color-bg-hover)
+}
+
+/* 게시판 컬럼 */
+tbody tr .col-board span{
+	background-color: var(--color-primary-light);
+	color: var(--color-primary);
+	padding: 3px 10px;
+	border-radius: var(--radius-pill);
+	font-size:11px;
 }
 
 

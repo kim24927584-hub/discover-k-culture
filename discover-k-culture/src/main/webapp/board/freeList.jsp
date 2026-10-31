@@ -22,42 +22,43 @@
     <thead>
       <tr>
         <th class="col-num">번호</th>
+        <th class="col-board">게시판</th>
         <th class="col-title head-title">제목</th>
         <th class="col-author">작성자</th>
-        <th class="col-nationality">국적</th>
-        <th class="col-date">등록일</th>
         <th class="col-views">조회</th>
         <th class="col-like">추천</th>
+        <th class="col-no-like">비추천</th>
+        <th class="col-date">작성일</th>
+        
+        
       </tr>
     </thead>
     <tbody>
       <tr>
         <td class="col-num">3</td>
+        <td class="col-board">
+        	<span>공지</span>
+        </td>
         <td class="col-title"><a href="community-view.html">엽기떡볶이 후기</a></td>
         <td class="col-author">민지</td>
-        <td class="col-nationality">국적</td>
-        <td class="col-date">2026-10-24</td>
         <td class="col-views">120</td>
-        <td class="col-like">추천</td>
+        <td class="col-like">1</td>
+        <td class="col-no-like">2</td>
+        <td class="col-date">2026-10-24</td>  
       </tr>
       <tr>
         <td class="col-num">3</td>
-        <td class="col-title"><a href="view.html">엽기떡볶이 후기</a></td>
+        <td class="col-board">
+        	<span>공지</span>
+        </td>
+        <td class="col-title"><a href="community-view.html">엽기떡볶이 후기</a></td>
         <td class="col-author">민지</td>
-        <td class="col-nationality">국적</td>
-        <td class="col-date">2026-10-24</td>
         <td class="col-views">120</td>
-        <td class="col-like">추천</td>
+        <td class="col-like">1</td>
+        <td class="col-no-like">2</td>
+        <td class="col-date">2026-10-24</td>  
       </tr>
-      <tr>
-        <td class="col-num">3</td>
-        <td class="col-title"><a href="view.html">엽기떡볶이 후기</a></td>
-        <td class="col-author">민지</td>
-        <td class="col-nationality">국적</td>
-        <td class="col-date">2026-10-24</td>
-        <td class="col-views">120</td>
-        <td class="col-like">추천</td>
-      </tr>
+      
       
     </tbody>
   </table>
