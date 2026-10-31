@@ -39,7 +39,7 @@
         <td class="col-board">
         	<span>공지</span>
         </td>
-        <td class="col-title"><a href="community-view.html">엽기떡볶이 후기</a></td>
+        <td class="col-title"><a href="freeView.jsp">엽기떡볶이 후기</a></td>
         <td class="col-author">민지</td>
         <td class="col-views">120</td>
         <td class="col-like">1</td>
