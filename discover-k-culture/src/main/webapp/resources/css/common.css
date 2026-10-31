@@ -47,6 +47,8 @@
   /* ========= box shadow ========== */
     --box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.16);
   
+  /* ========= transition ========== */
+  --transition: 0.2s ease;
 }
 /* common.css */
 

@@ -1,7 +1,7 @@
-h1{
+.board-title{
 	margin: 0 0 20px 0;
 }
-.board{
+.board-table{
 	font-size:13px;
 	border-radius: var(--radius-lg);
 	overflow:hidden;
@@ -34,51 +34,55 @@ h1{
 	padding: 0 5px;
 	border: var(--color-border) 1px solid;
 }
-.btn{
+.board-search .btn{
 	padding: 0 10px;
 }
 
 
-.board th,
-.board td{
+.board-table th,
+.board-table td{
   padding: 10px 10px;
   border-bottom: 1px solid var(--color-border);
   text-align: center;
   white-space: nowrap;
 }
-.board th{
+.board-table th{
   background: var(--color-bg-muted);
   font-size: 12px;
   
 }
-
-.board .col-title{
+.board-table td.col-title{
+	max-width: 0; /* width:100%와 함께 쓰면 나머지 공백을 모두 차지 */
+	overflow: hidden; 
+	text-overflow: ellipsis; /* 넘치는 텍스트 말줄임표 */
+}
+.board-table .col-title{
   width: 100%;
   text-align: left;
 }
-.board .col-title.head-title{
+.board-table th.col-title{
 	/* 제목 타이틀만 가운데로 오도록 */
 	text-align: center;
 }
 
-.board a:hover{
+.board-table a:hover{
   text-decoration: underline;
 }
-.board tbody tr{
+.board-table tbody tr{
 	/* 글자 색 연하게 */
 	color: var(--color-text-muted);
 }
-.board tbody .col-title{
+.board-table tbody .col-title{
 	/* 타이틀은 진하게 */
 	color: var(--color-text);
 }
-.board tbody tr:hover{
+.board-table tbody tr:hover{
 	/* 게시글에 호버하면 색 바뀌게 */
   background: var(--color-bg-hover)
 }
 
-/* 게시판 컬럼 */
-tbody tr .col-board span{
+/* 게시판 컬럼 뱃지 모양*/
+.board-table-badge{
 	background-color: var(--color-primary-light);
 	color: var(--color-primary);
 	padding: 3px 10px;
