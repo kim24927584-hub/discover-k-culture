@@ -196,15 +196,24 @@ body > .wrapper > nav {
 
 /* 헤더 - 검색창 */
 .search-bar {
+  height: 70px;
   position: relative;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  height: 70px;
-  min-width: 300px;
+  flex-shrink: 0;
   margin-bottom: 35px;
-  border-bottom: 1px solid var(--color--border1);
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 300px;
+}
+
+.search-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  border: 1px solid var(--color-border);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .search-bar input {
