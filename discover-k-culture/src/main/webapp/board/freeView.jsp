@@ -13,18 +13,18 @@
 	  	이 브라우저는 video 태그를 지원하지 않습니다.
 		</video>
 	    <p class="post-content">진짜 좋은데?</p>
-	    <div class="row">
+	    <div class="post-actions">
 		    <div class="like-box">
-			    <button type="button" class="post-like active">
+			    <button type="button" class="action-btn post-reaction post-like active">
 				  <i class="fa-regular fa-thumbs-up fa-lg "></i>			  	     
 			      <span class="like-count">1</span>
 			    </button>
-			    <button type="button" class="post-like">
+			    <button type="button" class="action-btn post-reaction post-dislike">
 			      <i class="fa-regular fa-thumbs-down fa-lg"></i>
 			      <span class="like-count">1</span>
 			    </button>
 		    </div>
-		   	<button type="button" class="post-bookmark">
+		   	<button type="button" class="action-btn post-bookmark">
 			      <i class="fa-regular fa-star icon-off"></i>
 			      
 			      <i class="fa-solid fa-star icon-on" style="color: rgb(255, 212, 59);"></i>
@@ -33,7 +33,7 @@
 			
 		</div>
     </div>
-    <a href="freeList.jsp" class="list btn"><span class="btn-arrow">←</span>목록</a>
+    <a href="freeList.jsp" class="btn btn-primary btn-list"><span class="btn-arrow">←</span>목록</a>
     <h2 class="comments-title">Comments <span class="comment-count">(1)</span></h2>
     
    	<form class="comment-write" method="post" action="commentProcess.jsp">
@@ -82,7 +82,7 @@
 	})
 	
 	/* 게시글 좋아요 버튼 토글 */
-	const postLikeBtns = document.querySelectorAll(".post-like");
+	const postLikeBtns = document.querySelectorAll(".post-reaction");
 	postLikeBtns.forEach(function(btn){
 		btn.addEventListener("click", function(){
 			const isActive = btn.classList.contains("active");
