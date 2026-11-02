@@ -5,33 +5,13 @@
 
 <%@include file="/include/header.jsp" %>
   <main class="container">
-    <h1 class="post-title"><span>[k-food]</span> 코르티스 신곡 나왔다</h1>
-    <p class="post-meta">작성자 <span class="post-writer">unknowun</span> · 조회 3 · 2028-10-10 14:20</p>
+    <h1 class="post-title"><span>[공지]</span> 1.2 패치사항</h1>
+    <p class="post-meta">작성자 <span class="post-writer">관리자</span> · 조회 3 · 2028-10-10 14:20</p>
     
     <div class="post-body">
-	    <video src="../resources/video/redred.mp4" controls poster="../resources/img/intro-thumb.png" width="640">
-	  	이 브라우저는 video 태그를 지원하지 않습니다.
-		</video>
-	    <p class="post-content">진짜 좋은데?</p>
-	    <div class="post-actions">
-		    <div class="like-box">
-			    <button type="button" class="action-btn post-reaction post-like active">
-				  <i class="fa-regular fa-thumbs-up fa-lg "></i>			  	     
-			      <span class="like-count">1</span>
-			    </button>
-			    <button type="button" class="action-btn post-reaction post-dislike">
-			      <i class="fa-regular fa-thumbs-down fa-lg"></i>
-			      <span class="like-count">1</span>
-			    </button>
-		    </div>
-		   	<button type="button" class="action-btn post-bookmark">
-			      <i class="fa-regular fa-star icon-off"></i>
-			      
-			      <i class="fa-solid fa-star icon-on" style="color: rgb(255, 212, 59);"></i>
-			      <span class="bookmark-text">북마크</span>
-			</button>
-			
-		</div>
+	    
+	    <p class="post-content">이번 1.2 패치에서는 홈페이지 로딩 속도를 개선했습니다.</p>
+	   
     </div>
     <a href="freeList.jsp" class="btn btn-primary btn-list"><span class="btn-arrow">←</span>목록</a>
     <h2 class="comments-title">Comments <span class="comment-count">(1)</span></h2>
