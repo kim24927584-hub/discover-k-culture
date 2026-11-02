@@ -78,7 +78,9 @@ body {
   margin: 0 auto;
   padding: 0 20px;
 }
-img {
+img,
+video
+ {
   /* 이미지 크기가 부모 크기를 넘지 못하게 하고
   높이는 넓이 비례를 따라감 */
   max-width: 100%;
@@ -133,8 +135,13 @@ img {
 .content-wrapper {
   display: flex;
   flex: 1;
+  /* 컨텐츠 전체 폰트 크기 고정 */
+    font-size: var(--font-size-sm); /* 14px */
+  
 }
 
 main {
   flex: 1;
 }
+
+

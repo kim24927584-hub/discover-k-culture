@@ -19,9 +19,11 @@
 	<link rel="stylesheet" href="${ctx}/resources/css/${pageCss}" />
 </c:if>
 
+<!-- 아이콘 사용 -->
+<script src="https://kit.fontawesome.com/0b6f7fb313.js" crossorigin="anonymous"></script>
 </head>
 <body>
-	<!-- 헤더 -->
+<!-- 헤더 -->
 	<div class="wrapper">
 		<nav>
 			<div class="f-cc">
