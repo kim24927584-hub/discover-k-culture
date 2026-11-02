@@ -5,14 +5,12 @@
 
 <%@include file="/include/header.jsp" %>
   <main class="container">
-    <h1 class="post-title"><span>[k-food]</span> 코르티스 신곡 나왔다</h1>
+    <h1 class="post-title"><span>[질문]</span> 한국음식 추천좀!</h1>
     <p class="post-meta">작성자 <span class="post-writer">unknowun</span> · 조회 3 · 2028-10-10 14:20</p>
     
     <div class="post-body">
-	    <video src="../resources/video/redred.mp4" controls poster="../resources/img/intro-thumb.png" width="640">
-	  	이 브라우저는 video 태그를 지원하지 않습니다.
-		</video>
-	    <p class="post-content">진짜 좋은데?</p>
+	    
+	    <p class="post-content">한국에 가보려고 하는데 꼭 먹어봐야 하는 음식 있나요?</p>
 	    <div class="post-actions">
 		    <div class="like-box">
 			    <button type="button" class="action-btn post-reaction post-like active">
@@ -33,7 +31,7 @@
 			
 		</div>
     </div>
-    <a href="freeList.jsp" class="btn btn-primary btn-list"><span class="btn-arrow">←</span>목록</a>
+    <a href="qnaList.jsp" class="btn btn-primary btn-list"><span class="btn-arrow">←</span>목록</a>
     <h2 class="comments-title">Comments <span class="comment-count">(1)</span></h2>
     
    	<form class="comment-write" method="post" action="commentProcess.jsp">
@@ -47,7 +45,7 @@
         <div class="comment-body">
           <span class="comment-name">unknown</span>
           <span class="comment-meta">2028-10-10 14:20</span>
-          <p class="comment-text">아 정말요?</p>
+          <p class="comment-text">엽떡은 꼭 먹어보세요!</p>
         </div>
         <button  type="button" class="comment-like">
           <span class="thumb-up">
@@ -61,7 +59,7 @@
         <div class="comment-body">
           <span class="comment-name">unknown</span>
           <span class="comment-meta">2028-10-10 14:20</span>
-          <p class="comment-text">아 정말요?</p>
+          <p class="comment-text">김밥</p>
         </div>
         <div class="comment-like active">
           <span class="thumb-up">
