@@ -39,7 +39,7 @@
         <td class="col-board">
         	<span class="board-badge">자유</span>
         </td>
-        <td class="col-title"><a href="freeView.jsp">코르티스 신곡 나왔다</a></td>
+        <td class="col-title"><a href="allView.jsp">코르티스 신곡 나왔다</a></td>
         <td class="col-author">민지</td>
         <td class="col-views">120</td>
         <td class="col-like">1</td>
@@ -51,7 +51,7 @@
         <td class="col-board">
         	<span class="board-badge">자유</span>
         </td>
-        <td class="col-title"><a href="freeView.jsp">엽기떡볶이 후기</a></td>
+        <td class="col-title"><a href="allView.jsp">엽기떡볶이 후기</a></td>
         <td class="col-author">민지</td>
         <td class="col-views">120</td>
         <td class="col-like">1</td>
