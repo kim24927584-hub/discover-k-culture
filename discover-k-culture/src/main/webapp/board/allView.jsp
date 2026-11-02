@@ -33,7 +33,7 @@
 			
 		</div>
     </div>
-    <a href="freeList.jsp" class="btn btn-primary btn-list"><span class="btn-arrow">←</span>목록</a>
+    <a href="allList.jsp" class="btn btn-primary btn-list"><span class="btn-arrow">←</span>목록</a>
     <h2 class="comments-title">Comments <span class="comment-count">(1)</span></h2>
     
    	<form class="comment-write" method="post" action="commentProcess.jsp">
