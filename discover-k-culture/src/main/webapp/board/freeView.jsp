@@ -38,7 +38,7 @@
     
    	<form class="comment-write" method="post" action="commentProcess.jsp">
    		<input type="text" name="commentContent" class="comment-write-input"
-   		placeholder="댓글을 입력하세요">
+   		placeholder="댓글을 입력하세요" aria-label="댓글입력">
    		<button type="submit" class="btn comment-button">댓글 작성</button>
    	</form>
     
