@@ -25,7 +25,7 @@
 <body>
 <!-- 헤더 -->
 	<div class="wrapper">
-		<nav>
+		<nav class="home-nav">
 			<div class="f-cc">
 				<div class="logo f-cc">
 					<img src="${ctx}/resources/assets/logo-mark.png" alt="" /> <img

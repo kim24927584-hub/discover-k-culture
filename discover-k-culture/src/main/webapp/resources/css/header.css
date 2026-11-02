@@ -104,11 +104,11 @@ body > .wrapper > .layout {
 }
 
 /* 내비 메뉴 */
-ul li a {
+.home-nav ul li a {
   display: block;
 }
 
-nav {
+.home-nav {
   position: fixed;
   top: 0;
   width: 270px;
