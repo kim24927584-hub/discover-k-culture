@@ -29,7 +29,7 @@
     <div class="comments">
       <div class="comment">
         <div class="comment-body">
-          <span class=""> 🎌 이름</span>
+          <span class="comment-name">unknown</span>
           <span class="comment-meta">2028-10-10 14:20</span>
           <p class="comment-text">아 정말요?</p>
         </div>
@@ -39,8 +39,20 @@
         </div>
         
       </div>
+      <div class="comment">
+        <div class="comment-body">
+          <span class="comment-name">unknown</span>
+          <span class="comment-meta">2028-10-10 14:20</span>
+          <p class="comment-text">아 정말요?</p>
+        </div>
+        <div class="comment-like active">
+          <span class="thumb-up">👍</span>
+          <span class="like-count">1</span>
+        </div>
+        
+      </div>
 
-    </div>
+	 </div>
   </main>
 
 <%@include file="/include/sidebar.jsp" %>

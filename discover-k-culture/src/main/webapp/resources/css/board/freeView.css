@@ -2,6 +2,8 @@
 h1{
 	margin: 20px 0;
 }
+
+/*=============게시물===============  */
 .post-meta{
   color: #6e6e6e;
 	font-size: 12px;
@@ -32,8 +34,8 @@ h1{
   gap: 6px;
   justify-content: center;
 }
-/* 좋아요 버튼을 눌렀을 때 */
-.post-like.active{
+
+.post-like.active{                            /* 좋아요 버튼을 눌렀을 때 */
   background-color: var(--color-primary);
   color: var(--color-primary-light);
 }
@@ -47,21 +49,45 @@ h1{
   margin-right: 9px;
   font-size: 18px;
 }
+
+/* ================댓글================ */
 .comments-title{
   margin-top: 20px;
 }
 .comments{
-  margin-top: 20px;
+  margin: 10px 0;
 }
 .comment{
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: var(--color-surface);
   padding: 10px 20px;
   border-radius: var(--radius-md);
   box-shadow: var(--box-shadow);
+  margin-bottom:10px;
+}
+.comment-meta{
+	font-size: 11px;
+	color: var(--color-text-muted);
+}
+.comment-text{
+	padding-top: 10px;
 }
 .comment-like{
-  padding-top: 10px;
+  height: 30px;width: 50px;
+  
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  
+  padding-bottom: 3px;
+}
+.comment-like.active{
+	background-color: var(--color-primary);
+	border: var(--color-primary);
+	color: var(--color-primary-light);
 }
 
