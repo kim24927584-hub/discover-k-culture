@@ -1,12 +1,14 @@
 
-h1{
+.post-title{
 	margin: 20px 0;
 }
+
+/*=============게시물===============  */
 .post-meta{
   color: #6e6e6e;
 	font-size: 12px;
 }
-.post-meta.writer{
+.post-writer{
 	font-weight: var(--font-weight-semibold);
 }
 .post-body{
@@ -16,52 +18,124 @@ h1{
 	border-top: 1px solid var(--color-border);
 	border-bottom: 1px solid var(--color-border);
 }
+.post-content{
+	padding: 20px 0;
+}
+.post-actions{
+	display:grid;
+	  grid-template-columns: 1fr auto 1fr; /* 왼쪽 빈칸 | 가운데 | 오른쪽 */
+	align-items: center;
+}
 .like-box{
+	grid-column:2;
 	display: flex;
 	gap: 10px;
-	justify-content: center;
-	margin-top: 30px;
+	
 }
-.post-like{
+.action-btn{
   border: solid 1px var(--color-primary);
-  border-radius: var(--radius-md);
-  padding: 9px 15px;
-  
   display: flex;
   align-items: center;
   gap: 6px;
   justify-content: center;
+  font: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  padding: 9px 10px;
 }
-/* 좋아요 버튼을 눌렀을 때 */
-.post-like.active{
+.post-reaction{
+  border-radius: var(--radius-md);
+  padding: 9px 15px;
+  
+  
+}
+.post-reaction.active{                            /* 좋아요 버튼을 눌렀을 때 */
   background-color: var(--color-primary);
   color: var(--color-primary-light);
 }
-.btn{
-  padding: 8px 20px;
-  background-color: var(--color-primary);
-  border-radius: 10px;
-  color: white;
+.post-bookmark{
+  justify-self:end;
 }
+
+.post-bookmark .icon-on{
+	display:none;
+}
+.post-bookmark.active .icon-on{
+	display:inline;
+}
+.post-bookmark.active .icon-off{
+	display: none;
+}
+
+.btn-list{
+
+  padding: 8px 20px;
+
+}
+
 .btn-arrow{
   margin-right: 9px;
   font-size: 18px;
 }
+
+/* ================댓글================ */
 .comments-title{
-  margin-top: 20px;
+  margin: 10px 0;
 }
-.comments{
-  margin-top: 20px;
-}
-.comment{
-  display: flex;
-  justify-content: space-between;
-  background-color: var(--color-surface);
+.comment-write{
+	width: 100%;
+	display: flex;
+	gap:10px;
+	background-color: var(--color-surface);
   padding: 10px 20px;
   border-radius: var(--radius-md);
   box-shadow: var(--box-shadow);
 }
+.comment-write-input{
+	flex:1;
+	height: 30px;	
+	border-radius: var(--radius-md);
+	border: var(--color-border) 1px solid;
+	padding: 0 10px;
+}
+.comment-button.btn{
+	padding: 0 10px;
+}
+.comments{
+  margin: 10px 0;
+}
+.comment{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-surface);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--box-shadow);
+  margin-bottom:10px;
+}
+.comment-meta{
+	font-size: 11px;
+	color: var(--color-text-muted);
+}
+.comment-text{
+	padding-top: 10px;
+}
 .comment-like{
-  padding-top: 10px;
+padding: 4px 10px; min-width: 50px;  
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  
+  
+  font: inherit;
+  cursor: pointer;
+}
+.comment-like.active{
+	background-color: var(--color-primary);
+	border-color: var(--color-primary);
+	color: var(--color-primary-light);
 }
 
