@@ -101,7 +101,7 @@ video
 
 .btn:hover {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  
 }
 
 .btn-primary {

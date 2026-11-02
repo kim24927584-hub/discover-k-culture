@@ -55,7 +55,7 @@ h1{
   background-color: var(--color-primary);
   color: var(--color-primary-light);
 }
-.btn{
+.list.btn{
   padding: 8px 20px;
   background-color: var(--color-primary);
   border-radius: 10px;
@@ -68,7 +68,26 @@ h1{
 
 /* ================댓글================ */
 .comments-title{
-  margin-top: 20px;
+  margin: 10px 0;
+}
+.comment-write{
+	width: 100%;
+	display: flex;
+	gap:10px;
+	background-color: var(--color-surface);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--box-shadow);
+}
+.comment-write-input{
+	flex:1;
+	height: 30px;	
+	border-radius: var(--radius-md);
+	border: var(--color-border) 1px solid;
+	padding: 0 10px;
+}
+.comment-button.btn{
+	padding: 0 10px;
 }
 .comments{
   margin: 10px 0;

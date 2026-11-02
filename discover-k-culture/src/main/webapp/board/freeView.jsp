@@ -32,8 +32,14 @@
 			</div>
 		</div>
     </div>
-    <a href="category.html" class="btn"><span class="btn-arrow">←</span>목록</a>
+    <a href="category.html" class="list btn"><span class="btn-arrow">←</span>목록</a>
     <h3 class="comments-title">Comments <span class="comment-count">(1)</span></h3>
+    
+   	<form class="comment-write" method="get" action="commentProcess.jsp">
+   		<input type="text" name="commentContent" class="comment-write-input"
+   		placeholder="댓글을 입력하세요">
+   		<button type="submit" class="btn comment-button">댓글 작성</button>
+   	</form>
     
     <div class="comments">
       <div class="comment">
