@@ -135,6 +135,9 @@ video
 .content-wrapper {
   display: flex;
   flex: 1;
+  /* 컨텐츠 전체 폰트 크기 고정 */
+    font-size: var(--font-size-sm); /* 14px */
+  
 }
 
 main {
