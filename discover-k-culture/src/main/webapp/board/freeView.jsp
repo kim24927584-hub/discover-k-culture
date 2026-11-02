@@ -13,19 +13,28 @@
 	  	이 브라우저는 video 태그를 지원하지 않습니다.
 		</video>
 	    <p class="post-content">진짜 좋은데?</p>
-	    <div class="like-box">
-		    <div class="post-like active">
-			  <i class="fa-regular fa-thumbs-up fa-lg "></i>			  	     
-		      <span class="like-count">1</span>
+	    <div class="row">
+		    <div class="like-box">
+			    <div class="post-like active">
+				  <i class="fa-regular fa-thumbs-up fa-lg "></i>			  	     
+			      <span class="like-count">1</span>
+			    </div>
+			    <div class="post-like">
+			      <i class="fa-regular fa-thumbs-down fa-lg"></i>
+			      <span class="like-count">1</span>
+			    </div>
 		    </div>
-		    <div class="post-like">
-		      <i class="fa-regular fa-thumbs-down fa-lg"></i>
-		      <span class="like-count">1</span>
-		    </div>
-	    </div>
+		   	<div class="post-bookmark">
+			      <i class="fa-regular fa-star"></i>
+			      <!-- 북마크 되어있을때 아래 아이콘 사용 -->
+			      <!-- <i class="fa-solid fa-star" style="color: rgb(255, 212, 59);"></i> -->
+			      <span class="bookmark-text">북마크</span>
+			</div>
+		</div>
     </div>
     <a href="category.html" class="btn"><span class="btn-arrow">←</span>목록</a>
     <h3 class="comments-title">Comments <span class="comment-count">(1)</span></h3>
+    
     <div class="comments">
       <div class="comment">
         <div class="comment-body">
