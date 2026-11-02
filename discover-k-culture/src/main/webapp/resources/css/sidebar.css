@@ -5,85 +5,80 @@
 	flex-direction: column;
 	gap: 50px;
 	margin: 20px 50px 60px 30px;
+  	flex-shrink: 0;
+}
+
+.sidebar-s1,
+.sidebar-s2 {
+  height: 200px;
 }
 
 .sidebar-tabs {
-	display: flex;
+  display: flex;
 }
 
 .sidebar-tabs .tab-btn {
-	flex: 1;
-	text-align: center;
-	font-size: 0.8rem;
-	font-weight: 500;
-	height: 30px;
-	line-height: 30px;
-	color: var(--color--deepteal);
-	background: var(--color-surface);
-	border: 1px solid var(--color--deepteal);
-	border-bottom: none;
-	border-radius: 10px 10px 0 0;
+  flex: 1;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  height: 30px;
+  line-height: 30px;
+  color: var(--color-primary);
+  background: var(--color-surface);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
 }
 
 /* active 탭 */
 .tab-btn.active-tab-btn {
-	background: var(--color--green);
-	color: var(--color--white);
+  background: var(--color-primary-light);
 }
 
 .tab-contents.active-tab-contents {
-	background: var(--color--light-green);
-	display: table-row-group;
+  display: table-row-group;
 }
 
 .sidebar-contents {
-	background: var(--color-surface);
-	border: 1px solid var(--color--deepteal);
-	border-radius: 0 0 5px 5px;
-	border-top: none;
+  background: var(--color-primary-light);
+  border-radius: 0 0 5px 5px;
+  border-top: none;
 }
 
 .sidebar-contents table {
-	width: 100%;
-	table-layout: fixed;
-	border-collapse: collapse;
-	font-size: 0.75rem;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.75rem;
 }
 
 .tab-contents {
-	display: none;
-}
-
-.tab-content {
-	border-bottom: 1px dotted var(--color--deepteal);
-}
-
-table .tab-content:last-child {
-	border-bottom: none;
+  display: none;
 }
 
 .content-rank {
-	width: 30px;
-	text-align: center;
+  width: 30px;
+  text-align: center;
 }
 
 .content-title {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	padding: 9px 0 9px 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 9px 0 9px 13px;
 }
 
 .content-like {
-	width: 50px;
-	white-space: nowrap;
-	text-align: left;
+  width: 50px;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .content-like img {
-	display: inline-block;
-	width: 15px;
-	height: 15px;
-	vertical-align: middle;
-	margin: 3px;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
+  margin: 3px;
 }

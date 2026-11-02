@@ -10,7 +10,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>K-culture</title>
-
+<script src="https://code.jquery.com/jquery-4.0.0.js"></script>
 <!-- 공통 -->
 <link rel="stylesheet" href="${ctx}/resources/css/style.css" />
 
@@ -25,7 +25,7 @@
 <body>
 <!-- 헤더 -->
 	<div class="wrapper">
-		<nav>
+		<nav class="home-nav">
 			<div class="f-cc">
 				<div class="logo f-cc">
 					<img src="${ctx}/resources/assets/logo-mark.png" alt="" /> <img
