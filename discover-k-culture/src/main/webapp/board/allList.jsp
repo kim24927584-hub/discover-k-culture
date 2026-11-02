@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<% request.setAttribute("pageCss", "board/freeList.css"); %>
+<% request.setAttribute("pageCss", "board/common/listCommon.css"); %>
 
 <%@include file="/include/header.jsp" %>
   
 <main class="container">
-  <h1 class="board-title">자유게시판</h1>
+  <h1 class="board-title">전체게시글</h1>
 
 <form class="board-search" action="freeList.jsp" method="get">
 	<input type="search" class="board-search-input" placeholder="제목, 내용, 작성자 검색" name="keyword">
@@ -39,7 +39,7 @@
         <td class="col-board">
         	<span class="board-badge">자유</span>
         </td>
-        <td class="col-title"><a href="freeView.jsp">코르티스 신곡 나왔다</a></td>
+        <td class="col-title"><a href="allView.jsp">코르티스 신곡 나왔다</a></td>
         <td class="col-author">민지</td>
         <td class="col-views">120</td>
         <td class="col-like">1</td>
@@ -51,7 +51,7 @@
         <td class="col-board">
         	<span class="board-badge">자유</span>
         </td>
-        <td class="col-title"><a href="freeView.jsp">엽기떡볶이 후기</a></td>
+        <td class="col-title"><a href="allView.jsp">엽기떡볶이 후기</a></td>
         <td class="col-author">민지</td>
         <td class="col-views">120</td>
         <td class="col-like">1</td>

@@ -1,38 +1,111 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<% request.setAttribute("pageCss", "board/qnaView.css"); %>
+<% request.setAttribute("pageCss", "board/common/viewCommon.css"); %>
 
 <%@include file="/include/header.jsp" %>
-  <div class="container">
-    <h1 class="post-title"><span>[k-food]</span> 코르티스 신곡 나왔다</h1>
-    <span class="post-meta">이름 · 👀 3 · 2028-10-10 14:20</span>
+  <main class="container">
+    <h1 class="post-title"><span>[질문]</span> 한국음식 추천좀!</h1>
+    <p class="post-meta">작성자 <span class="post-writer">unknowun</span> · 조회 3 · 2028-10-10 14:20</p>
     
-    <video src="../resources/video/redred.mp4" controls poster="../resources/img/intro-thumb.png" width="640">
-  이 브라우저는 video 태그를 지원하지 않습니다.
-</video>
-    <p class="post-content">진짜 좋은데?</p>
-    <div class="post-like">
-      <span class="thumb-up">👍</span>
-      <span class="like-count">1</span>
+    <div class="post-body">
+	    
+	    <p class="post-content">한국에 가보려고 하는데 꼭 먹어봐야 하는 음식 있나요?</p>
+	    <div class="post-actions">
+		    <div class="like-box">
+			    <button type="button" class="action-btn post-reaction post-like active">
+				  <i class="fa-regular fa-thumbs-up fa-lg "></i>			  	     
+			      <span class="like-count">1</span>
+			    </button>
+			    <button type="button" class="action-btn post-reaction post-dislike">
+			      <i class="fa-regular fa-thumbs-down fa-lg"></i>
+			      <span class="like-count">1</span>
+			    </button>
+		    </div>
+		   	<button type="button" class="action-btn post-bookmark">
+			      <i class="fa-regular fa-star icon-off"></i>
+			      
+			      <i class="fa-solid fa-star icon-on" style="color: rgb(255, 212, 59);"></i>
+			      <span class="bookmark-text">북마크</span>
+			</button>
+			
+		</div>
     </div>
-    <a href="category.html" class="btn"><span class="btn-arrow">←</span>목록</a>
-    <h3 class="comments-title">Comments <span class="comment-count">(1)</span></h3>
+    <a href="qnaList.jsp" class="btn btn-primary btn-list"><span class="btn-arrow">←</span>목록</a>
+    <h2 class="comments-title">Comments <span class="comment-count">(1)</span></h2>
+    
+   	<form class="comment-write" method="post" action="commentProcess.jsp">
+   		<input type="text" name="commentContent" class="comment-write-input"
+   		placeholder="댓글을 입력하세요" aria-label="댓글입력">
+   		<button type="submit" class="btn comment-button">댓글 작성</button>
+   	</form>
+    
     <div class="comments">
       <div class="comment">
         <div class="comment-body">
-          <span class=""> 🎌 이름</span>
+          <span class="comment-name">unknown</span>
           <span class="comment-meta">2028-10-10 14:20</span>
-          <p class="comment-text">아 정말요?</p>
+          <p class="comment-text">엽떡은 꼭 먹어보세요!</p>
         </div>
-        <div class="comment-like">
-          <span class="thumb-up">👍</span>
+        <button  type="button" class="comment-like">
+          <span class="thumb-up">
+          	<i class="fa-regular fa-thumbs-up fa-lg"></i>
+          </span>
+          <span class="like-count">100</span>
+        </button>
+        
+      </div>
+      <div class="comment">
+        <div class="comment-body">
+          <span class="comment-name">unknown</span>
+          <span class="comment-meta">2028-10-10 14:20</span>
+          <p class="comment-text">김밥</p>
+        </div>
+        <div class="comment-like active">
+          <span class="thumb-up">
+          	<i class="fa-regular fa-thumbs-up fa-lg"></i>
+          </span>
           <span class="like-count">1</span>
         </div>
         
       </div>
 
-    </div>
-  </div>
-</body>
-</html>
+	 </div>
+  </main>
+<script type="text/javascript">
+	/* 북마크 버튼 토글 */
+	const bookmarkBtn = document.querySelector(".post-bookmark");
+	bookmarkBtn.addEventListener("click", function(){
+		bookmarkBtn.classList.toggle("active");
+	})
+	
+	/* 게시글 좋아요 버튼 토글 */
+	const postLikeBtns = document.querySelectorAll(".post-reaction");
+	postLikeBtns.forEach(function(btn){
+		btn.addEventListener("click", function(){
+			const isActive = btn.classList.contains("active");
+			postLikeBtns.forEach(function(each_btn){
+				each_btn.classList.remove("active");
+			});
+			if(!isActive){
+				btn.classList.add("active");
+			}
+			
+		})
+	})
+	
+	/* 댓글 좋아요 토글 */
+	const commentLikeBtns = document.querySelectorAll(".comment-like");
+	commentLikeBtns.forEach(function(btn){
+		btn.addEventListener("click", function(){
+			const isActive = btn.classList.contains("active");
+			btn.classList.remove("active");
+			if(!isActive){
+				btn.classList.add("active");
+			}
+			
+		})
+	})
+</script>
+<%@include file="/include/sidebar.jsp" %>
+<%@include file="/include/footer.jsp" %>

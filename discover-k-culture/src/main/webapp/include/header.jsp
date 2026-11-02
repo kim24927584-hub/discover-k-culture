@@ -63,16 +63,16 @@
 				<ul class="sub-menu">
 					<li><a href="${ctx}/index.jsp">Home</a></li>
 
-					<li><a href="${ctx}/post/list.jsp">All Posts</a></li>
+					<li><a href="${ctx}/board/allList.jsp">All Posts</a></li>
 
-					<li><a href="${ctx}/notice/list.jsp">Notice</a></li>
+					<li><a href="${ctx}/board/noticeList.jsp">Notice</a></li>
 
-					<li><a href="${ctx}/post/kculture.jsp"> Discover K-Culture
+					<li><a href="${ctx}/board/category.jsp"> Discover K-Culture
 					</a></li>
 
-					<li><a href="${ctx}/post/free.jsp">Free Board</a></li>
+					
 
-					<li><a href="${ctx}/post/question.jsp">Q&amp;A</a></li>
+					<li><a href="${ctx}/board/qnaList.jsp">Q&amp;A</a></li>
 				</ul>
 			</div>
 			<div class="new-post">
