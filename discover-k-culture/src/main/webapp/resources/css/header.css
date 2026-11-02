@@ -4,7 +4,6 @@ body > .wrapper {
   max-width: 1400px;
   min-height: 100vh;
   margin: 0 auto;
-  position: relative;
 }
 
 body > .wrapper > .layout {
@@ -12,6 +11,7 @@ body > .wrapper > .layout {
   flex-direction: column;
   flex: 1;
   margin-left: 270px;
+  min-width: 0;
 }
 
 .logo {
@@ -19,7 +19,7 @@ body > .wrapper > .layout {
   height: 75px;
   background-color: #d9d9d999;
   border-radius: 50%;
-  margin-top: 30px;
+  margin-top: 60px;
   margin-bottom: 50px;
 }
 
@@ -108,25 +108,16 @@ ul li a {
   display: block;
 }
 
-body > .wrapper > nav {
+nav {
   position: fixed;
   top: 0;
-
   width: 270px;
   height: 100vh;
-
   display: flex;
   flex-direction: column;
-
   overflow-y: auto;
   z-index: 100;
-
-  background: linear-gradient(
-    to bottom,
-    var(--color-primary) 0%,
-    var(--color-primary) 60%,
-    var(--color--white) 100%
-  );
+  background: var(--color-primary-light);
 }
 
 .main-menu li a {
@@ -134,9 +125,9 @@ body > .wrapper > nav {
   align-items: center;
   height: 45px;
   font-size: 1.4rem;
-  color: var(--color--white);
+  color: var(--color-primary);
   font-weight: 600;
-  border-bottom: 1px solid var(--color--border1);
+  border-bottom: 1px solid var(--color-border);
   margin-bottom: 15px;
 }
 
@@ -153,7 +144,7 @@ body > .wrapper > nav {
   height: 40px;
   padding-left: 10px;
   font-size: 1.1rem;
-  color: var(--color--light-text);
+  color: var(--color-text);
   font-weight: 500;
   border-radius: 12px;
   transition: background 0.2s ease;
@@ -180,8 +171,8 @@ body > .wrapper > nav {
   width: 200px;
   height: 40px;
   font-weight: 600;
-  background: var(--color--rose);
-  color: #8b4a5e;
+  background: var(--color-primary);
+  color: var(--color-text-white);
   border-radius: 30px;
   font-weight: 600;
   box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.16);
