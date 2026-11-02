@@ -1,5 +1,5 @@
 
-h1{
+.post-title{
 	margin: 20px 0;
 }
 
@@ -8,7 +8,7 @@ h1{
   color: #6e6e6e;
 	font-size: 12px;
 }
-.post-meta.writer{
+.post-writer{
 	font-weight: var(--font-weight-semibold);
 }
 .post-body{
@@ -41,6 +41,13 @@ h1{
   align-items: center;
   gap: 6px;
   justify-content: center;
+  
+  font: inherit;
+  cursor: pointer;
+}
+.post-like.active{                            /* 좋아요 버튼을 눌렀을 때 */
+  background-color: var(--color-primary);
+  color: var(--color-primary-light);
 }
 .post-bookmark{
 	justify-self:end;
@@ -52,17 +59,27 @@ h1{
   align-items: center;
   gap: 6px;
   justify-content: center;
+  
+  font: inherit;
+  cursor: pointer;
 }
 
-.post-like.active{                            /* 좋아요 버튼을 눌렀을 때 */
-  background-color: var(--color-primary);
-  color: var(--color-primary-light);
+.post-bookmark .icon-on{
+	display:none;
 }
+.post-bookmark.active .icon-on{
+	display:inline;
+}
+.post-bookmark.active .icon-off{
+	display: none;
+}
+
 .list.btn{
   padding: 8px 20px;
   background-color: var(--color-primary);
   border-radius: 10px;
   color: white;
+  font: inherit;
 }
 .btn-arrow{
   margin-right: 9px;
@@ -121,11 +138,13 @@ h1{
   justify-content: space-evenly;
   align-items: center;
   
-  padding-bottom: 3px;
+  
+  font: inherit;
+  cursor: pointer;
 }
 .comment-like.active{
 	background-color: var(--color-primary);
-	border: var(--color-primary);
+	border-color: var(--color-primary);
 	color: var(--color-primary-light);
 }
 

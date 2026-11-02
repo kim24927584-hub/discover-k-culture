@@ -6,7 +6,7 @@
 <%@include file="/include/header.jsp" %>
   <main class="container">
     <h1 class="post-title"><span>[k-food]</span> 코르티스 신곡 나왔다</h1>
-    <span class="post-meta">작성자 <span class="post-meta writer">unknowun</span> · 조회 3 · 2028-10-10 14:20</span>
+    <p class="post-meta">작성자 <span class="post-writer">unknowun</span> · 조회 3 · 2028-10-10 14:20</p>
     
     <div class="post-body">
 	    <video src="../resources/video/redred.mp4" controls poster="../resources/img/intro-thumb.png" width="640">
@@ -15,27 +15,28 @@
 	    <p class="post-content">진짜 좋은데?</p>
 	    <div class="row">
 		    <div class="like-box">
-			    <div class="post-like active">
+			    <button type="button" class="post-like active">
 				  <i class="fa-regular fa-thumbs-up fa-lg "></i>			  	     
 			      <span class="like-count">1</span>
-			    </div>
-			    <div class="post-like">
+			    </button>
+			    <button type="button" class="post-like">
 			      <i class="fa-regular fa-thumbs-down fa-lg"></i>
 			      <span class="like-count">1</span>
-			    </div>
+			    </button>
 		    </div>
-		   	<div class="post-bookmark">
-			      <i class="fa-regular fa-star"></i>
-			      <!-- 북마크 되어있을때 아래 아이콘 사용 -->
-			      <!-- <i class="fa-solid fa-star" style="color: rgb(255, 212, 59);"></i> -->
+		   	<button type="button" class="post-bookmark">
+			      <i class="fa-regular fa-star icon-off"></i>
+			      
+			      <i class="fa-solid fa-star icon-on" style="color: rgb(255, 212, 59);"></i>
 			      <span class="bookmark-text">북마크</span>
-			</div>
+			</button>
+			
 		</div>
     </div>
-    <a href="category.html" class="list btn"><span class="btn-arrow">←</span>목록</a>
-    <h3 class="comments-title">Comments <span class="comment-count">(1)</span></h3>
+    <a href="freeList.jsp" class="list btn"><span class="btn-arrow">←</span>목록</a>
+    <h2 class="comments-title">Comments <span class="comment-count">(1)</span></h2>
     
-   	<form class="comment-write" method="get" action="commentProcess.jsp">
+   	<form class="comment-write" method="post" action="commentProcess.jsp">
    		<input type="text" name="commentContent" class="comment-write-input"
    		placeholder="댓글을 입력하세요">
    		<button type="submit" class="btn comment-button">댓글 작성</button>
@@ -48,10 +49,12 @@
           <span class="comment-meta">2028-10-10 14:20</span>
           <p class="comment-text">아 정말요?</p>
         </div>
-        <div class="comment-like">
-          <span class="thumb-up">👍</span>
+        <button  type="button" class="comment-like">
+          <span class="thumb-up">
+          	<i class="fa-regular fa-thumbs-up fa-lg"></i>
+          </span>
           <span class="like-count">1</span>
-        </div>
+        </button>
         
       </div>
       <div class="comment">
@@ -61,7 +64,9 @@
           <p class="comment-text">아 정말요?</p>
         </div>
         <div class="comment-like active">
-          <span class="thumb-up">👍</span>
+          <span class="thumb-up">
+          	<i class="fa-regular fa-thumbs-up fa-lg"></i>
+          </span>
           <span class="like-count">1</span>
         </div>
         
@@ -69,6 +74,40 @@
 
 	 </div>
   </main>
-
+<script type="text/javascript">
+	/* 북마크 버튼 토글 */
+	const bookmarkBtn = document.querySelector(".post-bookmark");
+	bookmarkBtn.addEventListener("click", function(){
+		bookmarkBtn.classList.toggle("active");
+	})
+	
+	/* 게시글 좋아요 버튼 토글 */
+	const postLikeBtns = document.querySelectorAll(".post-like");
+	postLikeBtns.forEach(function(btn){
+		btn.addEventListener("click", function(){
+			const isActive = btn.classList.contains("active");
+			postLikeBtns.forEach(function(each_btn){
+				each_btn.classList.remove("active");
+			});
+			if(!isActive){
+				btn.classList.add("active");
+			}
+			
+		})
+	})
+	
+	/* 댓글 좋아요 토글 */
+	const commentLikeBtns = document.querySelectorAll(".comment-like");
+	commentLikeBtns.forEach(function(btn){
+		btn.addEventListener("click", function(){
+			const isActive = btn.classList.contains("active");
+			btn.classList.remove("active");
+			if(!isActive){
+				btn.classList.add("active");
+			}
+			
+		})
+	})
+</script>
 <%@include file="/include/sidebar.jsp" %>
 <%@include file="/include/footer.jsp" %>
