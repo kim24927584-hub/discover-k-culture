@@ -53,7 +53,7 @@
           <span class="thumb-up">
           	<i class="fa-regular fa-thumbs-up fa-lg"></i>
           </span>
-          <span class="like-count">1</span>
+          <span class="like-count">100</span>
         </button>
         
       </div>
