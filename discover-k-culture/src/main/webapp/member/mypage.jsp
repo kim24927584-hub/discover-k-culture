@@ -20,7 +20,7 @@
 			<li>상태: 활동</li>
 		
 		</ul>
-		<a href="profileFix.jsp" class="btn btn-primary">정보수정</a>
+		<a href="profileFix.jsp" class="btn ">정보수정</a>
 		
 		<hr>
 		
@@ -29,7 +29,7 @@
           
           <input type="file" name="imageFile" class="form-input" accept="image/*" required>
           <p class="form-hint">jpg, png 등 · 최대 5MB · 파일을 선택하면 저장 전에도 위 프로필 사진에서 바로 미리 볼 수 있습니다.</p>
-          <button type="submit" class="btn btn-primary">프로필 사진 저장</button>  
+          <button type="submit" class="btn">프로필 사진 저장</button>  
         </form>
 	</div>
 </section>

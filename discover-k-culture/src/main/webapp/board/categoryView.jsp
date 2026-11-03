@@ -9,7 +9,15 @@
     <p class="post-meta">작성자 <span class="post-writer">unknowun</span> · 조회 3 · 2028-10-10 14:20</p>
     
     <div class="post-body">
-	    <img src="${ctx }/resources/img/food1.png">
+    
+    	<!-- 비디오가 있는 경우 -->
+	    <%-- <video src="${ctx}/resources/video/redred.mp4" controls poster="../resources/img/intro-thumb.png">
+	  	이 브라우저는 video 태그를 지원하지 않습니다.
+		</video> --%>
+		
+		<!-- 이미지가 있는 경우 -->
+		<img src="${ctx }/resources/img/food1.png">
+		
 	    <p class="post-content">너무 매워요 ㅠ</p>
 	    <div class="post-actions">
 		    <div class="like-box">
