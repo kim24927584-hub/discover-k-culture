@@ -89,6 +89,10 @@
 	border-radius: var(--radius-pill);
 	font-size:11px;
 }
+.board-table-badge.answered{
+	background-color: var(--color-primary);
+	color: var(--color-primary-light);
+}
 
 
 /* 페이지 번호 */
