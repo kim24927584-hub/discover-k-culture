@@ -3,7 +3,7 @@
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-<% request.setAttribute("pageCss", "join.css"); %>
+<% request.setAttribute("pageCss", "member/join.css"); %>
 
 <%@include file="/include/header.jsp" %>
   <div class="join-page">
