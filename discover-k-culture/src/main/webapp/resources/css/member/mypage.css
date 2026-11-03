@@ -32,28 +32,54 @@ h1{
 .mypage-meta li{
 	margin-bottom: 3px;
 }
+.profile-edit-wrap{
+  display: grid;
+  grid-template-rows: 0fr;          /* 닫힘: 높이 0 */
+  visibility: hidden;
+  transition: grid-template-rows 0.3s ease, visibility 0.3s;
+}
+.profile-edit-wrap.is-open{
+  grid-template-rows: 1fr;          /* 열림: 내용 높이만큼 */
+  visibility: visible;
+}
+.profile-edit-form{
+  min-height: 0;                    /* 0fr까지 줄어들 수 있게 */
+  overflow: hidden;                 /* 줄어든 동안 넘치는 내용 숨김 */
+}
 
-.fix-meta{
+
+.form-field{
 	background-color: var(--color-primary-light);
 	padding: 20px;
 	border-radius: var(--radius-sm);
 	margin-top: 10px;
 }
-.fix-meta li{
+.form-field div{
 	margin-bottom: 5px;
 }
-.fix-meta input,
+.form-field input,
 .fix-language{
 	width:100%;
-	height: 24px;
+	height: 30px;
 	border: 1px solid var(--color-border);
-	border-radius: 5px;
+	border-radius: var(--radius-sm);
 	padding: 0 6px;
 	margin-top: 3px;
 }
+.form-field input[readonly]{
+	background-color:var(--color-bg-muted);
+	color:var(--color-text-muted);
+	
+	}
+.form-field label{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .fix-buttons{
 	display:flex;
-	gap: 3px;
+	gap: 8px;
 }
 
 /* 버튼  */

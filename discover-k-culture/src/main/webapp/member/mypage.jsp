@@ -20,42 +20,52 @@
 			<li>상태: 활동</li>
 		
 		</ul>
-		<button type="button" class="btn fix-btn">정보수정</button>
+		<button type="button" class="btn btn-edit">정보수정</button>
 		
-		
-		<form action="infoFixProcess.jsp" method="post" class="fix-form">
-			<ul class="fix-meta">
-				<li>
-					아이디 <br>
-					<input class="fix-name" name="fix-name" value="LOSA">
-				</li>
-				<li>
-					아이디 <br>
-					<input class="fix-id" name="fix-id" value="test">
-				</li>
-				<li>
-					이메일 <br>
-					<input class="fix-email" name="fix-email" value="test@naver.com">
-				</li>
-				<li>
-					국적 <br>
-					<input class="fix-nationality" name="fix-nationality" value="USA">
-				</li>
-				<li>
-					언어 <br>
-					<select name="fix-language" class="fix-language">
-						<option>한국어</option>
-						<option>English</option>
-					</select>
-				</li>
-			</ul>
-			<div class="fix-buttons">
-				<button type="submit" class="btn">저장</button>
-				<button type="button" class="btn cancle">취소</button>
-			</div>
-			
-		</form>
-		
+		<div class="profile-edit-wrap">
+			<form action="infoFixProcess.jsp" method="post" class="profile-edit-form">
+				<div class="form-field">
+					<div>
+						<label>
+							이름	 
+							<input class="fix-name" name="name" value="LOSA" required>
+						</label>
+					</div>
+					<div>
+						<label>
+							아이디
+							<input class="fix-id" name="id" value="test" readonly>
+						</label>
+					</div>
+					<div>
+						<label>
+							이메일 
+							<input type="email" class="fix-email" name="email" value="test@naver.com">
+						</label>
+					</div>
+					<div>
+						<label>
+							국적 
+							<input class="fix-nationality" name="nationality" value="USA">
+						</label>
+					</div>
+					<div>
+						<label>
+							언어 
+							<select name="languagelanguage" class="fix-language">
+								<option value="ko">한국어</option>
+								<option value="en">English</option>
+							</select>
+						</label>
+					</div>
+				</div>
+				<div class="fix-buttons">
+					<button type="submit" class="btn btn-primary">저장</button>
+					<button type="button" class="btn cancel">취소</button>
+				</div>
+				
+			</form>
+		</div>
 		<hr>
 		
 		<h2>프로필 사진 변경</h2>
@@ -154,19 +164,18 @@ fileInput.addEventListener('change', function () {
 
 /* 정보수정 버튼 눌렀을 때 */
  
-const fixForm = document.querySelector(".fix-form"); /* 수정폼 */
-fixForm.style.display="none";							/*  */
-const fixBtn =document.querySelector(".fix-btn");		/* 수정버튼 */
-const cancleBtn = document.querySelector(".cancle");	/* 취소버튼 */
+const editWrap = document.querySelector(".profile-edit-wrap"); /* 수정폼 */
+const editBtn =document.querySelector(".btn-edit");		/* 수정버튼 */
+const cancelBtn = document.querySelector(".cancel");	/* 취소버튼 */
 
 
-fixBtn.addEventListener("click", function(){
-	fixForm.style.display = "block";
-	this.style.display="none";
+editBtn.addEventListener("click", function(){
+	editWrap.classList.add("is-open");
+	editBtn.hidden = true;
 })
-cancleBtn.addEventListener("click", function(){
-	fixForm.style.display = "none";
-	fixBtn.style.display="block";
+cancelBtn.addEventListener("click", function(){
+	editWrap.classList.remove("is-open");
+	editBtn.hidden = false;
 })
 </script>
 
