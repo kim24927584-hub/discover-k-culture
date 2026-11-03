@@ -1,0 +1,4 @@
+# Copy to deepl.properties only for local development.
+# Prefer DEEPL_API_KEY environment variable in shared environments.
+deepl.api.key=PUT_YOUR_DEEPL_API_KEY_HERE
+deepl.api.url=https://api-free.deepl.com/v2/translate

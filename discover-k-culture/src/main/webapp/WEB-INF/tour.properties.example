@@ -1,0 +1,3 @@
+# Copy to tour.properties only for local development.
+# Prefer TOUR_API_KEY environment variable in shared environments.
+tour.api.key=PUT_YOUR_DATA_GO_KR_SERVICE_KEY_HERE
