@@ -18,6 +18,10 @@
 	border-top: 1px solid var(--color-border);
 	border-bottom: 1px solid var(--color-border);
 }
+.post-body video{
+	aspect-ratio:16/9;
+	background: black;
+}
 .post-content{
 	padding: 20px 0;
 }

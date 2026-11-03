@@ -9,7 +9,7 @@
     <p class="post-meta">작성자 <span class="post-writer">unknowun</span> · 조회 3 · 2028-10-10 14:20</p>
     
     <div class="post-body">
-	    <video src="../resources/video/redred.mp4" controls poster="../resources/img/intro-thumb.png" width="640">
+	    <video src="../resources/video/redred.mp4" controls poster="../resources/img/intro-thumb.png">
 	  	이 브라우저는 video 태그를 지원하지 않습니다.
 		</video>
 	    <p class="post-content">진짜 좋은데?</p>
