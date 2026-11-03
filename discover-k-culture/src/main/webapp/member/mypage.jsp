@@ -20,8 +20,52 @@
 			<li>상태: 활동</li>
 		
 		</ul>
-		<a href="profileFix.jsp" class="btn ">정보수정</a>
+		<button type="button" class="btn btn-edit">정보수정</button>
 		
+		<div class="profile-edit-wrap">
+			<form action="infoFixProcess.jsp" method="post" class="profile-edit-form">
+				<div class="form-field">
+					<div>
+						<label>
+							이름	 
+							<input class="fix-name" name="name" value="LOSA" required>
+						</label>
+					</div>
+					<div>
+						<label>
+							아이디
+							<input class="fix-id" name="id" value="test" readonly>
+						</label>
+					</div>
+					<div>
+						<label>
+							이메일 
+							<input type="email" class="fix-email" name="email" value="test@naver.com">
+						</label>
+					</div>
+					<div>
+						<label>
+							국적 
+							<input class="fix-nationality" name="nationality" value="USA">
+						</label>
+					</div>
+					<div>
+						<label>
+							언어 
+							<select name="languagelanguage" class="fix-language">
+								<option value="ko">한국어</option>
+								<option value="en">English</option>
+							</select>
+						</label>
+					</div>
+				</div>
+				<div class="fix-buttons">
+					<button type="submit" class="btn btn-primary">저장</button>
+					<button type="button" class="btn cancel">취소</button>
+				</div>
+				
+			</form>
+		</div>
 		<hr>
 		
 		<h2>프로필 사진 변경</h2>
@@ -116,6 +160,23 @@ fileInput.addEventListener('change', function () {
   var file = fileInput.files[0];
   if (file) avatar.src = URL.createObjectURL(file);
 });
+
+
+/* 정보수정 버튼 눌렀을 때 */
+ 
+const editWrap = document.querySelector(".profile-edit-wrap"); /* 수정폼 */
+const editBtn =document.querySelector(".btn-edit");		/* 수정버튼 */
+const cancelBtn = document.querySelector(".cancel");	/* 취소버튼 */
+
+
+editBtn.addEventListener("click", function(){
+	editWrap.classList.add("is-open");
+	editBtn.hidden = true;
+})
+cancelBtn.addEventListener("click", function(){
+	editWrap.classList.remove("is-open");
+	editBtn.hidden = false;
+})
 </script>
 
 <%@include file="/include/sidebar.jsp"%>

@@ -115,6 +115,9 @@ video
   border-color: var(--color-primary-hover);
   color: var(--color-text-white);
 }
+/* hidden한 테그에 display가  걸려있어도
+hidden이 적용될 수 있도록 */
+[hidden] { display: none !important; }  		
 
 .f-cc {
   display: flex;
