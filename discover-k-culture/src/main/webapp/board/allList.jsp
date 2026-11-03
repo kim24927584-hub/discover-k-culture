@@ -37,7 +37,7 @@
       <tr>
         <td class="col-num">3</td>
         <td class="col-board">
-        	<span class="board-badge">자유</span>
+        	<span class="board-table-badge">자유</span>
         </td>
         <td class="col-title"><a href="allView.jsp">코르티스 신곡 나왔다</a></td>
         <td class="col-author">민지</td>
@@ -49,7 +49,7 @@
       <tr>
         <td class="col-num">3</td>
         <td class="col-board">
-        	<span class="board-badge">자유</span>
+        	<span class="board-table-badge">자유</span>
         </td>
         <td class="col-title"><a href="allView.jsp">엽기떡볶이 후기</a></td>
         <td class="col-author">민지</td>
