@@ -20,7 +20,41 @@
 			<li>상태: 활동</li>
 		
 		</ul>
-		<a href="profileFix.jsp" class="btn ">정보수정</a>
+		<button type="button" class="btn fix-btn">정보수정</button>
+		
+		
+		<form action="infoFixProcess.jsp" method="post" class="fix-form">
+			<ul class="fix-meta">
+				<li>
+					아이디 <br>
+					<input class="fix-name" name="fix-name" value="LOSA">
+				</li>
+				<li>
+					아이디 <br>
+					<input class="fix-id" name="fix-id" value="test">
+				</li>
+				<li>
+					이메일 <br>
+					<input class="fix-email" name="fix-email" value="test@naver.com">
+				</li>
+				<li>
+					국적 <br>
+					<input class="fix-nationality" name="fix-nationality" value="USA">
+				</li>
+				<li>
+					언어 <br>
+					<select name="fix-language" class="fix-language">
+						<option>한국어</option>
+						<option>English</option>
+					</select>
+				</li>
+			</ul>
+			<div class="fix-buttons">
+				<button type="submit" class="btn">저장</button>
+				<button type="button" class="btn cancle">취소</button>
+			</div>
+			
+		</form>
 		
 		<hr>
 		
@@ -116,6 +150,24 @@ fileInput.addEventListener('change', function () {
   var file = fileInput.files[0];
   if (file) avatar.src = URL.createObjectURL(file);
 });
+
+
+/* 정보수정 버튼 눌렀을 때 */
+ 
+const fixForm = document.querySelector(".fix-form"); /* 수정폼 */
+fixForm.style.display="none";							/*  */
+const fixBtn =document.querySelector(".fix-btn");		/* 수정버튼 */
+const cancleBtn = document.querySelector(".cancle");	/* 취소버튼 */
+
+
+fixBtn.addEventListener("click", function(){
+	fixForm.style.display = "block";
+	this.style.display="none";
+})
+cancleBtn.addEventListener("click", function(){
+	fixForm.style.display = "none";
+	fixBtn.style.display="block";
+})
 </script>
 
 <%@include file="/include/sidebar.jsp"%>
