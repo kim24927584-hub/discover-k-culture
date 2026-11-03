@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<% request.setAttribute("pageCss", "mypage.css"); %>
+<% request.setAttribute("pageCss", "member/mypage.css"); %>
 
 <%@include file="/include/header.jsp" %>
 <main class="container">

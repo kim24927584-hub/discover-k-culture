@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%
-request.setAttribute("pageCss", "memberList.css");
+request.setAttribute("pageCss", "member/memberList.css");
 %>
 
 <%@ include file="/include/header.jsp"%>
