@@ -3,7 +3,7 @@
 
 <%-- header.jsp에서 write.css를 불러오도록 설정 --%>
 <%
-request.setAttribute("pageCss", "board/write.css");
+request.setAttribute("pageCss", "board/common/writeCommon.css");
 %>
 
 <%@ include file="/include/header.jsp" %>
