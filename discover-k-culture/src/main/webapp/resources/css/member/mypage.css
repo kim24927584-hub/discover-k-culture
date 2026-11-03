@@ -34,6 +34,7 @@ h1{
 }
 .btn{
 	margin:10px 0 20px 0 ;
+	padding: 10px 20px;	
 }
 
 /* 파일 업로드 */
@@ -106,7 +107,7 @@ h1{
 	margin: 0 0 10px 0;
 }
 .board-meta{
-	font-size: var(--font-size-sm);
+	font-size: 11px;
 	color: var(--color-text-muted);
 }
 /* 페이지네이션 */
@@ -130,12 +131,16 @@ h1{
 
 }
 .page{
+	display: flex;
+	justify-content:center;
+	align-items:center;
 	border: 2px transparent solid;
-	border-radius: var(--radius-pill);
-	padding: 10px 10px;
+	
+	width: 30px;height: 30px;
 	
 	
 }
 .page.is-active{
-	border: 2px var(--color-primary) solid;
+	border: 2px var(--color-primary-light) solid;
+	font-weight: bold;
 }
