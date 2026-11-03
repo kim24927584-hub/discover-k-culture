@@ -73,6 +73,7 @@
 					
 
 					<li><a href="${ctx}/board/qnaList.jsp">Q&amp;A</a></li>
+					<li><a href="${ctx}/board/inquiryList.jsp">1:1문의</a></li>
 				</ul>
 			</div>
 			<div class="new-post">
