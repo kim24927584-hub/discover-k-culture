@@ -85,7 +85,12 @@
 		</nav>
 		<div class="layout">
 			<header class="home-header">
-
+                <div class="user-menu">
+                    <a href="#" class="home-bookmark">
+                    <img src="${ctx}/resources/assets/icons8-star-48.png" alt="">북마크
+                    </a>
+                    <button class="log-out">Log out</button>
+                </div>
 				<div class="search-bar">
 					<form>
 						<input type="text" name="search" value="" placeholder="Search" />
