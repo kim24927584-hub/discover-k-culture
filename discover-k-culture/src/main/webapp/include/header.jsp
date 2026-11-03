@@ -20,10 +20,11 @@
 </c:if>
 
 <!-- 아이콘 사용 -->
-<script src="https://kit.fontawesome.com/0b6f7fb313.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/0b6f7fb313.js"
+	crossorigin="anonymous"></script>
 </head>
 <body>
-<!-- 헤더 -->
+	<!-- 헤더 -->
 	<div class="wrapper">
 		<nav class="home-nav">
 			<div class="f-cc">
@@ -67,10 +68,10 @@
 
 					<li><a href="${ctx}/board/noticeList.jsp">Notice</a></li>
 
-					<li><a href="${ctx}/board/category.jsp"> Discover K-Culture
-					</a></li>
+					<li><a href="${ctx}/board/category.jsp"> Discover
+							K-Culture </a></li>
 
-					
+
 
 					<li><a href="${ctx}/board/qnaList.jsp">Q&amp;A</a></li>
 					<li><a href="${ctx}/board/inquiryList.jsp">1:1문의</a></li>
@@ -85,12 +86,12 @@
 		</nav>
 		<div class="layout">
 			<header class="home-header">
-                <div class="user-menu">
-                    <a href="#" class="home-bookmark">
-                    <img src="${ctx}/resources/assets/icons8-star-48.png" alt="">북마크
-                    </a>
-                    <button class="log-out">Log out</button>
-                </div>
+				<div class="user-menu">
+					<a href="#" class="home-bookmark"> <img
+						src="${ctx}/resources/assets/icons8-star-48.png" alt="">북마크
+					</a>
+					<button class="log-out">Log out</button>
+				</div>
 				<div class="search-bar">
 					<form>
 						<input type="text" name="search" value="" placeholder="Search" />
@@ -100,5 +101,5 @@
 					</form>
 				</div>
 			</header>
-			
-<div class="content-wrapper">
+
+			<div class="content-wrapper">
