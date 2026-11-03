@@ -14,7 +14,6 @@
 <%@ page import="java.net.URLEncoder"%>
 <%@ page import="dao.UnifiedBoardDAO"%>
 <%@ page import="dto.UnifiedBoardDTO"%>
-// 화면에 출력할 문자열의 HTML 특수문자를 치환하여 XSS 위험을 줄입니다.
 <%!private String h(String value) {
 		if (value == null)
 			return "";
