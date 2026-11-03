@@ -21,7 +21,7 @@
 		감사합니다.</p>
 	   
     </div>
-    <div class="post-content answer">
+    <div class="post-body answer">
 	    
 	    <p class="post-content answer">
 			안녕하세요, travel_mina 님.
