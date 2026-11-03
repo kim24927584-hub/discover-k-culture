@@ -1,0 +1,6 @@
+# Copy this file to db.properties for local development,
+# or set DB_URL / DB_USERNAME / DB_PASSWORD environment variables.
+db.driver=com.mysql.cj.jdbc.Driver
+db.url=jdbc:mysql://localhost:3306/kculture_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+db.username=root
+db.password=PUT_YOUR_LOCAL_DB_PASSWORD_HERE

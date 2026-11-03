@@ -1,0 +1,9 @@
+# Prefer environment variables in shared/Git projects.
+google.client.id=
+google.client.secret=
+
+kakao.client.id=
+kakao.client.secret=
+
+naver.client.id=
+naver.client.secret=
