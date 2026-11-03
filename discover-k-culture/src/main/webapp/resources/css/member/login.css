@@ -1,45 +1,161 @@
+input {
+  border-style: none;
+}
 
-.login-page{
-	min-height:100vh;
-	display:flex;
-	justify-content:center;
-	align-items: center;
-	padding: 20px
-	
+.login-page {
+  min-height: 100vh;
+  width: 1400px;
+  min-width: 700px;
+  display: flex;
+  justify-content: center;
 }
-.login-box{
-	width: 100%;
-  	max-width: 400px;
-  	padding: 32px 28px;
-  	background: var(--color-surface);
-  	border: 1px solid var(--color-border);
-  	border-radius: var(--radius-md);
+
+.login-box {
+  width: 500px;
+  height: 750px;
+  padding: 45px 40px;
+  font-size: var(--font-size-base);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
-.login-logo{
-	
+
+.login-box h2 {
+  text-align: center;
 }
-.form-group{
-	margin-top: 12px;
+
+.login-form {
+  display: flex;
+  gap: 25px;
+  flex-direction: column;
+  margin-top: 35px;
 }
-.form-label{
-	display:block;
-	margin-bottom:6px;
+
+.form-input {
+  width: 100%;
+  height: 35px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
 }
-.form-input{
-	width: 100%;
-	height: 35px;
-	pdding: 0 12px;
-	border: 1px solid var(--color-border);
-	
-	border-radius: var(--radius-md);
-	background:var(--color-surface);
-	
-	font-size:1rem;
-	font-family:inherit;
-	
+
+.login-option {
+  display: flex;
+  gap: 20px;
 }
-.btn-primary{
-	width:100%;height: 50px;
-	margin-top: 20px;
-	border-radius: var(--radius-md);
+
+.login-option label {
+  display: flex;
+  gap: 10px;
+}
+
+/* 소셜 로그인 */
+.social-login {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.social-divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.social-divider::before,
+.social-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--color-border);
+}
+
+.social-desc {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.social-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.social-btn a {
+  width: 100%;
+  height: 50px;
+  border-radius: var(--radius-md);
+}
+
+.kakao-btn img,
+.naver-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.google-btn {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-direction: row;
+  align-items: center;
+  background: #f2f2f2;
+}
+
+.google-btn img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: none;
+}
+
+.kakao-btn {
+  background: #fee500;
+}
+
+.naver-btn {
+  background: #03a94d;
+}
+
+.btn-primary {
+  width: 100%;
+  height: 50px;
+  border-radius: var(--radius-md);
+}
+
+/* 아이디, 비밀번호 찾기 + 회원가입 */
+.login-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.login-links a::after {
+  content: "|";
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.login-links a:last-child::after {
+  content: "";
+}
+
+.login-links a {
+  color: var(--color-secondary-text);
+  font-size: var(--font-size-base);
+}
+
+.login-links a:last-child {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
 }
