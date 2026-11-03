@@ -22,7 +22,8 @@
 	   
     </div>
     <div class="post-body answer">
-	    
+	    <i class="fa-solid fa-screwdriver-wrench fa-sm"></i>
+	    <span class="post-meta">운영자의 답변 · 2026-11-03</span> 
 	    <p class="post-content answer">
 			안녕하세요, travel_mina 님.
 			
