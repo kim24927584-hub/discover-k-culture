@@ -1,0 +1,15 @@
+Twemoji graphics
+Copyright Twitter, Inc. and other contributors
+Graphics license: CC BY 4.0
+Source: https://github.com/twitter/twemoji
+
+Used icon files:
+- k-food.png   : U+1F37D plate with cutlery
+- k-pop.png    : U+1F3A4 microphone
+- k-drama.png  : U+1F3AC clapper board
+- k-beauty.png : U+1F484 lipstick
+- travel.png   : U+2708 airplane
+- culture.png  : U+1F1F0 U+1F1F7 South Korea flag
+- default.png  : U+2728 sparkles
+- warning.png  : U+26A0 warning sign
+- empty.png    : U+1F4ED open mailbox
