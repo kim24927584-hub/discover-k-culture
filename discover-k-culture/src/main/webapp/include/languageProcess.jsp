@@ -44,14 +44,16 @@ if (returnUrl == null || !returnUrl.startsWith(contextPath + "/")
 
 response.setHeader("Cache-Control", "no-store");
 
-/*
- * 좌측 언어 선택창의 비동기 변경 요청은 JSON만 반환합니다.
- * 일반 POST(자바스크립트 비활성화 등)는 기존처럼 리다이렉트합니다.
- */
+<%-- AJAX 요청이면 JSON 응답 반환 --%>
+<%
 if ("XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With"))) {
     response.setContentType("application/json; charset=UTF-8");
-    response.getWriter().write("{\"ok\":true,\"language\":\"" + language + "\"}");
+    response.getWriter().write(
+        "{\"ok\":true,\"language\":\"" + language + "\"}"
+    );
     return;
 }
+%>
+
 response.sendRedirect(returnUrl);
 %>

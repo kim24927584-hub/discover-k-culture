@@ -72,6 +72,17 @@
 	display: none;
 }
 
+
+/* ============= 뒤로가기와 글 관리 버튼 =============== */
+.post-footer{
+	display:flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.post-manage{
+	display:flex;
+	gap:10px;
+}
 .btn-list{
 
   padding: 8px 20px;
@@ -123,6 +134,9 @@
 	font-size: 11px;
 	color: var(--color-text-muted);
 }
+.comment-meta form{
+	display:inline /* 삭제버튼이 옆으로 붙게 */
+}
 .comment-text{
 	padding-top: 10px;
 }
@@ -142,5 +156,8 @@ padding: 4px 10px; min-width: 50px;
 	background-color: var(--color-primary);
 	border-color: var(--color-primary);
 	color: var(--color-primary-light);
+}
+.btn-comment-del{
+	padding: 4px 10px;
 }
 

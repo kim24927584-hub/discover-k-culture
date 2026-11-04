@@ -85,9 +85,10 @@
     var LETTER_PATTERN =
         /[A-Za-zÀ-ÖØ-öø-ÿ\u3040-\u30ff\u3400-\u9fff\uac00-\ud7a3]/;
 
+
     /*
      * 번역 선택창 옆에는 진행/완료 문구를 표시하지 않습니다.
-     * 실패 시에만 이유를 보여 사용자가 API 설정 문제를 확인할 수 있게 합니다.
+     * 실패 시에만 오류 내용을 표시합니다.
      * 번역 동작 및 요청은 변경하지 않습니다.
      */
     function setTranslationStatus(message, isError) {
@@ -95,15 +96,15 @@
         if (!element) return;
 
         var showError = Boolean(isError && message);
+
         element.textContent = showError ? message : "";
         element.style.display = showError ? "block" : "none";
         element.style.color = "#b42318";
     }
 
     /*
-     * 언어 변경은 CSRF 토큰을 포함한 POST 요청으로 세션에 저장합니다.
-     * 일반 form.submit()과 달리, 실패하면 현재 화면에서 오류를 안내합니다.
-     * 서버가 저장에 성공한 경우에만 화면을 다시 읽어 번역을 시작합니다.
+     * 언어 변경 시 CSRF 토큰을 포함한 POST 요청을 보냅니다.
+     * 서버에서 저장 성공 응답을 받은 후 페이지를 새로고침합니다.
      */
     function bindLanguageSelector() {
         var select = document.getElementById("siteLanguageSelect");
@@ -119,14 +120,15 @@
             var nextLanguage = select.value;
             if (nextLanguage === previousLanguage) return;
 
+            // 구형 브라우저에서는 일반 POST 방식 유지
             if (typeof window.fetch !== "function"
                     || typeof window.FormData !== "function"
                     || typeof window.URLSearchParams !== "function") {
-                form.submit(); // 구형 브라우저에서는 기존 POST 방식 유지
+                form.submit();
                 return;
             }
 
-            // FormData는 disabled 필드를 제외하므로 잠그기 전에 값을 수집해야 합니다.
+            // disabled 처리 전에 폼 데이터 수집
             var body = new URLSearchParams(new FormData(form));
 
             pending = true;
@@ -148,20 +150,34 @@
                         ? "언어 변경이 거부되었습니다. 새로고침 후 다시 시도하세요."
                         : "언어 설정 실패 (HTTP " + response.status + ")");
                 }
+
                 return response.json();
+
             }).then(function (result) {
-                if (!result || result.ok !== true || result.language !== nextLanguage) {
+                if (!result || result.ok !== true
+                        || result.language !== nextLanguage) {
                     throw new Error("서버의 언어 설정 응답이 올바르지 않습니다.");
                 }
+
+                // 언어 저장 성공 후 새로고침
                 window.location.reload();
+
             }).catch(function (error) {
                 pending = false;
                 select.disabled = false;
                 select.value = previousLanguage;
-                setTranslationStatus(error.message || "언어 설정에 실패했습니다.", true);
-                if (window.console) console.warn("[K-culture 번역] 언어 변경 실패", error);
+
+                setTranslationStatus(
+                    error.message || "언어 설정에 실패했습니다.",
+                    true
+                );
+
+                if (window.console) {
+                    console.warn("[K-culture 번역] 언어 변경 실패", error);
+                }
             });
         });
+
     }
 
     function boot() {
@@ -336,15 +352,19 @@
                     );
                 }
 
-                var statusMessage = "번역 실패 · DeepL 설정 확인";
-                if (error && error.apiCode === "DEEPL_NOT_CONFIGURED") {
-                    statusMessage = "DeepL API 키가 설정되지 않았습니다.";
-                } else if (error && error.httpStatus === 429) {
-                    statusMessage = "번역 사용량 제한 · 잠시 후 재시도";
-                } else if (error && error.httpStatus === 403) {
-                    statusMessage = "번역 요청 거부 · API 키 확인";
-                }
-                setTranslationStatus(statusMessage, true);
+
+var statusMessage = "번역 실패 · API 설정 확인";
+
+if (error && error.apiCode === "DEEPL_NOT_CONFIGURED") {
+    statusMessage = "DeepL API 키가 설정되지 않았습니다.";
+} else if (error && error.httpStatus === 429) {
+    statusMessage = "번역 사용량 제한 · 잠시 후 재시도";
+} else if (error && error.httpStatus === 403) {
+    statusMessage = "번역 요청 거부 · API 키 확인";
+}
+
+setTranslationStatus(statusMessage, true);
+
                 document.documentElement.classList.remove(
                     "deepl-translating"
                 );

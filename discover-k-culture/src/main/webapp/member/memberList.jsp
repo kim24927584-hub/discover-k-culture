@@ -295,5 +295,4 @@ request.setAttribute("activeMenu", "ADMIN");
 })();
 </script>
 
-<%@ include file="/include/sidebar.jsp"%>
 <%@ include file="/include/footer.jsp"%>
