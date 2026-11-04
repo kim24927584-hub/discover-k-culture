@@ -69,8 +69,10 @@
                     window.location.href = contextPath + "/board/qnaList.jsp";
                 } else if (value === "NOTICE") {
                     window.location.href = contextPath + "/board/noticeList.jsp";
-                } else {
+                } else if (value === "KCULTURE") {
                     window.location.href = contextPath + "/board/category.jsp";
+                } else {
+                    window.location.href = contextPath + "/board/allList.jsp";
                 }
             });
         }

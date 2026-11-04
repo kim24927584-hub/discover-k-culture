@@ -37,7 +37,7 @@ if (post == null || post.getMemberId() != memberId.longValue()) {
 
 MemberDTO member = new MemberDAO().selectById(memberId.longValue());
 if (member == null) {
-    response.sendRedirect(request.getContextPath() + "/member/logout.jsp");
+    response.sendRedirect(request.getContextPath() + "/member/logout");
     return;
 }
 
@@ -52,7 +52,7 @@ List<PostVideoDTO> existingVideos = new PostVideoDAO().selectByPostId(postId);
 
 request.setAttribute("editPost", post);
 request.setAttribute("pageTitle", "게시글 수정");
-request.setAttribute("pageCss", "board/write.css");
+request.setAttribute("pageCss", "board/common/writeCommon.css");
 
 if ("QUESTION".equals(post.getBoardType())) {
     request.setAttribute("activeMenu", "QUESTION");

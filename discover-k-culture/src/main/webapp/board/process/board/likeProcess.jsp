@@ -16,6 +16,12 @@ if (memberId == null) {
     response.sendRedirect(request.getContextPath() + "/member/login.jsp");
     return;
 }
+/* 데이터 변경 처리는 POST 요청만 허용합니다. */
+if (!"POST".equalsIgnoreCase(request.getMethod())) {
+    response.sendRedirect(request.getContextPath() + "/home.jsp");
+    return;
+}
+
 long postId;
 try { postId = Long.parseLong(request.getParameter("postId")); }
 catch (Exception e) { response.sendRedirect(request.getContextPath() + "/board/allList.jsp"); return; }

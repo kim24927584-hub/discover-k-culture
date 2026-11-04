@@ -155,6 +155,7 @@ public class AutoLoginFilter implements Filter {
 		Cookie cookie = new Cookie(COOKIE_NAME, "");
 
 		cookie.setHttpOnly(true);
+		cookie.setSecure(request.isSecure());
 		cookie.setMaxAge(0);
 
 		String path = request.getContextPath();

@@ -6,6 +6,18 @@
 <%@ page import="dto.PostDTO" %>
 <%@ page import="dto.UnifiedBoardDTO" %>
 
+<%!
+/* 사이드바는 모든 페이지에 포함되므로 게시글 제목을 HTML 이스케이프합니다. */
+private String sbH(String value) {
+    if (value == null) return "";
+    return value.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\"", "&quot;")
+        .replace("'", "&#39;");
+}
+%>
+
 <%
 List<UnifiedBoardDTO> sbAllPopular = new ArrayList<UnifiedBoardDTO>();
 List<UnifiedBoardDTO> sbAllViewed = new ArrayList<UnifiedBoardDTO>();
@@ -59,7 +71,7 @@ if (sbAllPopular.isEmpty()) {
 %>
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
-            <td class="content-title"><a href="<%=sbHref%>"><%=sbItem.getTitle()%></a></td>
+            <td class="content-title"><a href="<%=sbHref%>"><%=sbH(sbItem.getTitle())%></a></td>
             <td class="content-like"><img src="${ctx}/resources/assets/icons-like-96.png" alt="" /><%=sbItem.getLikeCount()%></td>
           </tr>
 <%
@@ -82,7 +94,7 @@ if (sbKPopular.isEmpty()) {
 %>
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
-            <td class="content-title"><a href="<%=request.getContextPath()%>/board/category-view.jsp?postId=<%=sbItem.getPostId()%>"><%=sbItem.getTitle()%></a></td>
+            <td class="content-title"><a href="<%=request.getContextPath()%>/board/category-view.jsp?postId=<%=sbItem.getPostId()%>"><%=sbH(sbItem.getTitle())%></a></td>
             <td class="content-like"><img src="${ctx}/resources/assets/icons-like-96.png" alt="" /><%=sbItem.getLikeCount()%></td>
           </tr>
 <%
@@ -105,7 +117,7 @@ if (sbQuestionPopular.isEmpty()) {
 %>
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
-            <td class="content-title"><a href="<%=request.getContextPath()%>/board/qnaView.jsp?id=<%=sbItem.getPostId()%>"><%=sbItem.getTitle()%></a></td>
+            <td class="content-title"><a href="<%=request.getContextPath()%>/board/qnaView.jsp?id=<%=sbItem.getPostId()%>"><%=sbH(sbItem.getTitle())%></a></td>
             <td class="content-like"><img src="${ctx}/resources/assets/icons-like-96.png" alt="" /><%=sbItem.getLikeCount()%></td>
           </tr>
 <%
@@ -146,7 +158,7 @@ if (sbAllViewed.isEmpty()) {
 %>
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
-            <td class="content-title"><a href="<%=sbHref%>"><%=sbItem.getTitle()%></a></td>
+            <td class="content-title"><a href="<%=sbHref%>"><%=sbH(sbItem.getTitle())%></a></td>
             <td class="content-like"><%=sbItem.getViewCount()%></td>
           </tr>
 <%
@@ -169,7 +181,7 @@ if (sbKViewed.isEmpty()) {
 %>
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
-            <td class="content-title"><a href="<%=request.getContextPath()%>/board/category-view.jsp?postId=<%=sbItem.getPostId()%>"><%=sbItem.getTitle()%></a></td>
+            <td class="content-title"><a href="<%=request.getContextPath()%>/board/category-view.jsp?postId=<%=sbItem.getPostId()%>"><%=sbH(sbItem.getTitle())%></a></td>
             <td class="content-like"><%=sbItem.getViewCount()%></td>
           </tr>
 <%
@@ -192,7 +204,7 @@ if (sbQuestionViewed.isEmpty()) {
 %>
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
-            <td class="content-title"><a href="<%=request.getContextPath()%>/board/qnaView.jsp?id=<%=sbItem.getPostId()%>"><%=sbItem.getTitle()%></a></td>
+            <td class="content-title"><a href="<%=request.getContextPath()%>/board/qnaView.jsp?id=<%=sbItem.getPostId()%>"><%=sbH(sbItem.getTitle())%></a></td>
             <td class="content-like"><%=sbItem.getViewCount()%></td>
           </tr>
 <%

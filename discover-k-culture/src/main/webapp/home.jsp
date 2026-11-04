@@ -129,7 +129,7 @@ request.setAttribute("pageCss", "home.css");
 				<table class="board board-notice">
 					<caption>
 						<div class="main-caption">
-							<a href="<%=ctxPath%>/board/noticeList.jsp">공지사항</a> <a href="#"> <img
+							<a href="<%=ctxPath%>/board/noticeList.jsp">공지사항</a> <a href="<%=ctxPath%>/board/noticeList.jsp"> <img
 								src="${ctx}/resources/assets/icon-arrow-right-6423875.png"
 								alt="" />
 							</a>
@@ -141,7 +141,7 @@ request.setAttribute("pageCss", "home.css");
 					%>
 					<tr>
 						<td class="notice-symbol notice">NOTICE</td>
-						<td class="notice-title"><a href="#"><%=noticeError%></a></td>
+						<td class="notice-title"><a href="<%=ctxPath%>/board/noticeList.jsp"><%=noticeError%></a></td>
 						<td class="notice-hits">-</td>
 					</tr>
 					<%
@@ -149,7 +149,7 @@ request.setAttribute("pageCss", "home.css");
 					%>
 					<tr>
 						<td class="notice-symbol notice">NOTICE</td>
-						<td class="notice-title"><a href="#">등록된 공지가 없습니다.</a></td>
+						<td class="notice-title"><a href="<%=ctxPath%>/board/noticeList.jsp">등록된 공지가 없습니다.</a></td>
 						<td class="notice-hits">0</td>
 					</tr>
 					<%
@@ -255,11 +255,11 @@ request.setAttribute("pageCss", "home.css");
 					<li class="picture-posts">
 						<dl class="p-post">
 							<dt class="p-img">
-								<a href="#"><img src="${ctx}/resources/img/no-image.jpg"
+								<a href="<%=ctxPath%>/board/allList.jsp"><img src="${ctx}/resources/img/no-image.jpg"
 									alt="" /></a>
 							</dt>
 							<dd class="p-title">
-								<a href="#"><%=postError != null ? postError : "등록된 게시글이 없습니다."%></a>
+								<a href="<%=ctxPath%>/board/allList.jsp"><%=postError != null ? postError : "등록된 게시글이 없습니다."%></a>
 							</dd>
 							<dd class="p-writer">-</dd>
 							<dd class="p-info">
@@ -335,7 +335,7 @@ request.setAttribute("pageCss", "home.css");
 					%>
 					<tr class="board-line">
 						<td class="notice-hits">-</td>
-						<td class="notice-title"><a href="#"><%=postError%></a></td>
+						<td class="notice-title"><a href="<%=ctxPath%>/board/allList.jsp"><%=postError%></a></td>
 						<td class="notice-hits">-</td>
 					</tr>
 					<%
@@ -343,7 +343,7 @@ request.setAttribute("pageCss", "home.css");
 					%>
 					<tr class="board-line">
 						<td class="notice-hits">-</td>
-						<td class="notice-title"><a href="#">등록된 게시글이 없습니다.</a></td>
+						<td class="notice-title"><a href="<%=ctxPath%>/board/allList.jsp">등록된 게시글이 없습니다.</a></td>
 						<td class="notice-hits">0</td>
 					</tr>
 					<%

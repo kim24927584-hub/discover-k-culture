@@ -10,6 +10,7 @@ import java.util.List;
 
 import dto.MemberDTO;
 import util.DBConnection;
+import util.PasswordUtil;
 
 public class MemberDAO {
 
@@ -19,17 +20,21 @@ public class MemberDAO {
             "suspension_reason, created_at, updated_at, " +
             "(SELECT l.name_native FROM language l WHERE l.language_id = member.language_id) AS language_name";
 
-    /** 일반 로그인 */
+    /**
+     * 일반 로그인.
+     *
+     * 새 계정은 PBKDF2 해시를 사용합니다. 기존 DB의 평문 비밀번호 계정은
+     * 기존 비밀번호로 한 번 정상 로그인하면 즉시 해시값으로 자동 전환합니다.
+     */
     public MemberDTO authenticate(String loginId, String password) throws Exception {
         String sql = "SELECT " + MEMBER_COLUMNS +
-                " FROM member WHERE login_id = ? AND password = ? " +
+                " FROM member WHERE login_id = ? " +
                 "AND status IN ('ACTIVE', 'SUSPENDED')";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, loginId);
-            ps.setString(2, password);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) {
@@ -37,7 +42,19 @@ public class MemberDAO {
                 }
 
                 long memberId = rs.getLong("member_id");
+                String storedPassword = rs.getString("password");
+
+                if (!PasswordUtil.verify(password, storedPassword)) {
+                    return null;
+                }
+
                 MemberDTO member = map(rs);
+
+                // 예전 평문 비밀번호는 정상 로그인 시 안전한 해시로 자동 전환합니다.
+                if (!PasswordUtil.isHashed(storedPassword)) {
+                    updatePasswordHash(memberId, PasswordUtil.hash(password));
+                    member.setPassword(null);
+                }
 
                 if (isExpiredSuspension(member)) {
                     releaseExpiredSuspension(memberId);
@@ -125,7 +142,9 @@ public class MemberDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, member.getLoginId());
-            ps.setString(2, member.getPassword());
+            ps.setString(2, PasswordUtil.isHashed(member.getPassword())
+                    ? member.getPassword()
+                    : PasswordUtil.hash(member.getPassword()));
             ps.setString(3, member.getNickname());
             ps.setString(4, member.getEmail());
             ps.setString(5, member.getNationality());
@@ -359,6 +378,19 @@ public class MemberDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.executeUpdate();
+        }
+    }
+
+
+    /** 기존 평문 비밀번호 계정을 로그인 시 해시로 전환할 때 사용합니다. */
+    private int updatePasswordHash(long memberId, String passwordHash) throws Exception {
+        String sql = "UPDATE member SET password=?, updated_at=CURRENT_TIMESTAMP WHERE member_id=?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, passwordHash);
+            ps.setLong(2, memberId);
+            return ps.executeUpdate();
         }
     }
 

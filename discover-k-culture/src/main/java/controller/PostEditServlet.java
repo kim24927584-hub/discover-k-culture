@@ -47,7 +47,7 @@ public class PostEditServlet extends HttpServlet {
 			MemberDTO currentMember = new MemberDAO().selectById(memberId);
 
 			if (currentMember == null) {
-				response.sendRedirect(request.getContextPath() + "/member/logout.jsp");
+				response.sendRedirect(request.getContextPath() + "/member/logout");
 				return;
 			}
 
@@ -76,7 +76,7 @@ public class PostEditServlet extends HttpServlet {
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
 
-			if (title == null || title.trim().isEmpty() || content == null || content.trim().isEmpty()) {
+			if (title == null || title.trim().isEmpty() || title.trim().length() > 200 || content == null || content.trim().isEmpty()) {
 				response.sendRedirect(request.getContextPath() + "/board/process/board/edit.jsp?id=" + postId + "&error=empty");
 				return;
 			}
@@ -222,6 +222,21 @@ public class PostEditServlet extends HttpServlet {
 
 			int dot = originalName.lastIndexOf('.');
 			String extension = dot >= 0 ? originalName.substring(dot).toLowerCase() : "";
+
+			// MIME 값과 함께 실제 확장자도 허용 목록으로 검사합니다.
+			if (image) {
+				if (!(".jpg".equals(extension) || ".jpeg".equals(extension)
+						|| ".png".equals(extension) || ".gif".equals(extension)
+						|| ".webp".equals(extension))) {
+					continue;
+				}
+			} else {
+				if (!(".mp4".equals(extension) || ".webm".equals(extension)
+						|| ".ogg".equals(extension) || ".mov".equals(extension))) {
+					continue;
+				}
+			}
+
 			String savedName = UUID.randomUUID().toString() + extension;
 
 			part.write(new File(dir, savedName).getAbsolutePath());
