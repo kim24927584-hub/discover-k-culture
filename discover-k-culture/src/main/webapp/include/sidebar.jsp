@@ -159,7 +159,7 @@ if (sbAllViewed.isEmpty()) {
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
             <td class="content-title"><a href="<%=sbHref%>"><%=sbH(sbItem.getTitle())%></a></td>
-            <td class="content-like"><%=sbItem.getViewCount()%></td>
+            <td class="content-like"><img src="${ctx}/resources/assets/icons-like-96.png" alt="" /><%=sbItem.getViewCount()%></td>
           </tr>
 <%
     }
@@ -182,7 +182,7 @@ if (sbKViewed.isEmpty()) {
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
             <td class="content-title"><a href="<%=request.getContextPath()%>/board/category-view.jsp?postId=<%=sbItem.getPostId()%>"><%=sbH(sbItem.getTitle())%></a></td>
-            <td class="content-like"><%=sbItem.getViewCount()%></td>
+            <td class="content-like"><img src="${ctx}/resources/assets/icons-like-96.png" alt="" /><%=sbItem.getViewCount()%></td>
           </tr>
 <%
     }
@@ -205,7 +205,7 @@ if (sbQuestionViewed.isEmpty()) {
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
             <td class="content-title"><a href="<%=request.getContextPath()%>/board/qnaView.jsp?id=<%=sbItem.getPostId()%>"><%=sbH(sbItem.getTitle())%></a></td>
-            <td class="content-like"><%=sbItem.getViewCount()%></td>
+            <td class="content-like"><img src="${ctx}/resources/assets/icons-like-96.png" alt="" /><%=sbItem.getViewCount()%></td>
           </tr>
 <%
     }

@@ -15,7 +15,8 @@ main {
 .board {
   line-height: 1.6;
   width: 100%;
-  padding: 10px 10px 10px 10px;
+  font-size: var(--font-size-sm);
+  padding: 10px 20px 10px 20px;
 }
 
 .main-caption {
@@ -24,8 +25,11 @@ main {
   align-items: center;
   font-size: var(--font-size-xl);
   font-weight: 650;
-  border-bottom: 2px solid var(--color-border);
-  padding: 6px 0 5px 10px;
+  background: var(--color-primary);
+  color: var(--color-text-white);
+  /* border-bottom: 2px solid var(--color-border); */
+  padding: 10px 7px 5px 20px;
+  border-radius: var(--radius-2xl) 0 0 0;
 }
 
 .main-caption a {
@@ -65,13 +69,21 @@ main {
 .notice-hits {
   color: var(--color-text-heading);
   font-size: var(--font-size-sm);
+  text-align: end;
 }
 
 /* 축제 api */
 .festival-api {
   width: 350px;
   height: 210px;
-  border: 1px solid var(--color-border);
+  background:var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+.festival-caption {
+  padding: 10px 7px 5px 20px;
+  font-size: var(--font-size-xl);
+  font-weight: 650;
 }
 
 /* 메인 - 사진 게시글 */
@@ -91,6 +103,7 @@ main {
 }
 
 .p-img a {
+  display:block;
   width: 132px;
   height: 132px;
 }
@@ -107,6 +120,9 @@ main {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   padding-top: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .picture-posts .p-writer {
@@ -140,7 +156,15 @@ main {
 .main-s4 {
   width: 350px;
   height: 430px;
-  border: 1px solid #333;
-  background: var(--color-surface);
   border-radius: var(--radius-md);
 }
+
+.board-line td {
+  border-bottom: 1px dotted var(--color-divider);
+}
+
+.main-s1,
+.main-s4 {
+  background: var(--color-surface);
+}
+

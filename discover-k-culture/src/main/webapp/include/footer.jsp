@@ -17,7 +17,10 @@
                 <span>김민성</span><span>이우민</span><span>양영준</span><span>송연희</span>
             </p>
             <p class="copyinfo">
-                <span>이용약관</span> <span>개인정보처리방침</span> <span>개인 정보 설정</span> <span>위치정보이용약관</span>
+                <span><a href="#">이용약관</a></span>
+                <span><a href="#">개인정보처리방침</a></span>
+                <span><a href="#">개인 정보 설정</a></span>
+                <span><a href="#">위치정보이용약관</a></span>
             </p>
         </div>
     </div>

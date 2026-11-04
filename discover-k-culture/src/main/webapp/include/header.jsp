@@ -396,7 +396,12 @@ request.setAttribute(
                         src="${ctx}/resources/assets/language-svgrepo-com.svg"
                         alt="언어" />
 
-                    KO
+                    <select class="choice-nation">
+                        <option value="">한국어</option>
+                        <option value="">日本語</option>
+                        <option value="">中文</option>
+                        <option value="">English</option>
+                    </select>
 
                 </div>
 

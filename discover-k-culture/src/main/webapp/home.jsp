@@ -178,7 +178,7 @@ request.setAttribute("pageCss", "home.css");
 
 			<section class="main-s2">
 				<div class="festival-api" id="tourRecommendation" style="position:relative; box-sizing:border-box; padding-bottom:46px; overflow:hidden;">
-					<div class="main-caption">
+					<div class="festival-caption">
 						<span>여행 추천</span>
 					</div>
 
@@ -226,20 +226,20 @@ request.setAttribute("pageCss", "home.css");
 						<div
                             class="tour-slider-controls"
                             aria-label="여행 추천 슬라이드 이동"
-                            style="position:absolute; left:10px; right:10px; bottom:8px; height:34px; display:flex; align-items:center; justify-content:center; gap:14px; background:var(--color-surface, #fff); z-index:5;">
+                            style="position:absolute; left:10px; right:10px; bottom:8px; height:34px; display:flex; align-items:center; justify-content:center; gap:14px; background:var(--color-bg-muted, #f1f3f4); color:var( --color-text, #333333); z-index:5;">
                             <button
                                 type="button"
                                 id="tourPrevButton"
                                 aria-label="이전 관광지"
                                 title="이전"
-                                style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer;">◀</button>
+                                style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var( --color-text, #333333); ">◀</button>
                             <span id="tourSlideCounter" style="min-width:48px; text-align:center; white-space:nowrap;">1 / <%=tourContents.size()%></span>
                             <button
                                 type="button"
                                 id="tourNextButton"
                                 aria-label="다음 관광지"
                                 title="다음"
-                                style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer;">▶</button>
+                                style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var( --color-text, #333333); ">▶</button>
                         </div>
 					<% } %>
 				</div>
@@ -284,7 +284,7 @@ request.setAttribute("pageCss", "home.css");
 							} else if (post.getVideoThumbnailPath() != null && !post.getVideoThumbnailPath().trim().isEmpty()) {
 								imageSrc = ctxPath + post.getVideoThumbnailPath();
 							} else {
-								imageSrc = ctxPath + "/resources/img/no-image.jpg";
+								imageSrc = ctxPath + "/resources/img/icon-no-img512.png";
 							}
 
 							String postLink;
