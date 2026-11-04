@@ -280,8 +280,7 @@ request.setAttribute(
     <% if (isAdmin && editNotice != null) { %>
 
     <section
-        class="write-card"
-        style="margin-bottom:30px;">
+        class="write-card">
 
         <div class="write-heading">
 
@@ -381,7 +380,6 @@ request.setAttribute(
   <%-- =====================================================
          관리자 전용 상단 버튼
          - 공지 작성
-         - 수정 중이면 수정 취소
          ===================================================== --%>
     <% if (isAdmin) { %>
 
@@ -389,7 +387,7 @@ request.setAttribute(
 
         <a
             href="<%=request.getContextPath()%>/board/write.jsp?boardType=NOTICE"
-            class="btn btn-primary write-notice-button">
+            class="btn btn-primary btn-notice-write">
             공지 작성
         </a>
 
