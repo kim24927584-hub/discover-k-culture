@@ -335,17 +335,44 @@ public class MemberDAO {
     }
 
     /**
-     * 회원 탈퇴 처리용. 실제 행은 보존합니다.
+     * 본인 회원탈퇴: 실제 게시글/댓글 및 회원 레코드는 보존(상태: WITHDRAWN)합니다.
+     * 자동로그인 토큰 삭제와 상태 변경을 같은 트랜잭션으로 처리합니다.
+     * 관리자 및 이미 탈퇴한 회원은 탈퇴 처리되지 않습니다.
      */
     public int withdraw(long memberId) throws Exception {
-        String sql =
-                "UPDATE member SET status='WITHDRAWN', suspended_until=NULL, suspension_reason=NULL, " +
-                "updated_at=CURRENT_TIMESTAMP WHERE member_id=? AND role <> 'ADMIN'";
+        try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                int updated;
+                String sql = "UPDATE member SET status='WITHDRAWN', " +
+                        "suspended_until=NULL, suspension_reason=NULL, " +
+                        "updated_at=CURRENT_TIMESTAMP " +
+                        "WHERE member_id=? AND role <> 'ADMIN' AND status IN ('ACTIVE','SUSPENDED')";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, memberId);
-            return ps.executeUpdate();
+                try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setLong(1, memberId);
+                    updated = ps.executeUpdate();
+                }
+
+                if (updated != 1) {
+                    conn.rollback();
+                    return 0;
+                }
+
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM remember_login WHERE member_id=?")) {
+                    ps.setLong(1, memberId);
+                    ps.executeUpdate();
+                }
+
+                conn.commit();
+                return updated;
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
         }
     }
 

@@ -18,7 +18,7 @@ private String memberListH(String value) {
 
 private String memberProfileSrc(String contextPath, String profileImage) {
     if (profileImage == null || profileImage.trim().isEmpty()) {
-        return contextPath + "/resources/assets/icon-user-profile-3682323.png";
+        return contextPath + "/resources/img/base.png";
     }
     if (profileImage.startsWith("http://") || profileImage.startsWith("https://")) {
         return profileImage;
