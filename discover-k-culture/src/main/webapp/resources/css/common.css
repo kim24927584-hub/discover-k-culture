@@ -147,4 +147,7 @@ main {
   flex: 1;
 }
 
-
+/* 폰트 크기가 다른 html 태그들 부모 폰트 크기 물려받도록 고정 */
+button, input, textarea, select {
+  font: inherit;
+}
