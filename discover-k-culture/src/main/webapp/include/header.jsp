@@ -18,6 +18,8 @@
 --%>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<%-- 언어 변경 후 현재 페이지(검색 조건 포함)로 돌아오기 위한 내부 URL --%>
+<c:set var="headerReturnUrl" value="${pageContext.request.requestURI}${empty pageContext.request.queryString ? '' : '?'}${pageContext.request.queryString}" />
 
 <%
 /* =========================================================
@@ -276,10 +278,13 @@ request.setAttribute(
 </script> -->
 <link rel="stylesheet" href="${ctx}/resources/fontawesome/css/all.min.css" />
 
+<%-- 기존 DeepL 페이지 번역 엔진을 공통 헤더에서 불러옵니다. --%>
+<script defer src="${ctx}/resources/js/deepl-translate.js"></script>
+
 </head>
 
 
-<body data-context-path="${ctx}">
+<body data-context-path="${ctx}" data-site-language="${empty sessionScope.siteLanguage ? 'ko' : sessionScope.siteLanguage}">
 
 
 <%-- ========================================================
@@ -397,12 +402,19 @@ request.setAttribute(
                         src="${ctx}/resources/assets/language-svgrepo-com.svg"
                         alt="언어" />
 
-                    <select class="choice-nation">
-                        <option value="">한국어</option>
-                        <option value="">日本語</option>
-                        <option value="">中文</option>
-                        <option value="">English</option>
-                    </select>
+                    <%-- 사이드 영역의 기존 언어 선택 UI도 동작하도록 연결 --%>
+                    <form action="${ctx}/include/languageProcess.jsp" method="post"
+                          class="site-language" data-deepl-ignore style="margin:0;">
+                        <input type="hidden" name="_csrf" value="<c:out value='${csrfToken}' />" />
+                        <input type="hidden" name="returnUrl" value="<c:out value='${headerReturnUrl}' />" />
+                        <select class="choice-nation" name="language" aria-label="사이트 번역 언어"
+                                onchange="this.form.submit()">
+                            <option value="ko" <c:if test="${empty sessionScope.siteLanguage or sessionScope.siteLanguage eq 'ko'}">selected</c:if>>한국어</option>
+                            <option value="ja" <c:if test="${sessionScope.siteLanguage eq 'ja'}">selected</c:if>>日本語</option>
+                            <option value="zh" <c:if test="${sessionScope.siteLanguage eq 'zh'}">selected</c:if>>中文</option>
+                            <option value="en" <c:if test="${sessionScope.siteLanguage eq 'en'}">selected</c:if>>English</option>
+                        </select>
+                    </form>
 
                 </div>
 
@@ -569,6 +581,7 @@ request.setAttribute(
              ================================================= --%>
         <header class="home-header">
 
+            <%-- 번역 언어 선택은 좌측 프로필 영역에만 표시합니다. --%>
 
             <%-- 로그인했을 때만 북마크/로그아웃 표시 --%>
             <c:if test="${not empty sessionScope.memberId}">

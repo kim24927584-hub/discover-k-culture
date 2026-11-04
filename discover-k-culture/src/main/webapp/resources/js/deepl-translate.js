@@ -63,6 +63,12 @@
     var LETTER_PATTERN =
         /[A-Za-zÀ-ÖØ-öø-ÿ\u3040-\u30ff\u3400-\u9fff\uac00-\ud7a3]/;
 
+    /* 헤더의 번역 상태 안내는 번역 대상에서 제외됩니다. */
+    function setTranslationStatus(message) {
+        var element = document.getElementById("translationStatus");
+        if (element) element.textContent = message;
+    }
+
     function boot() {
         var shell =
             document.querySelector(".site-shell[data-site-language]")
@@ -83,8 +89,10 @@
             LANGUAGE_HTML[language] || language;
 
         if (language === "ko") {
+            setTranslationStatus("");
             return;
         }
+        setTranslationStatus("번역 중...");
 
         var endpoint =
             contextPath + "/api/deepl/translate";
@@ -105,6 +113,7 @@
             collectTargets(shell);
 
         if (targets.length === 0) {
+            setTranslationStatus("번역할 내용 없음");
             return;
         }
 
@@ -162,6 +171,7 @@
         }
 
         if (pending.length === 0) {
+            setTranslationStatus("번역 완료");
             return;
         }
 
@@ -188,6 +198,7 @@
 
         chain.then(
             function () {
+                setTranslationStatus("번역 완료");
                 document.documentElement.classList.add(
                     "deepl-translated"
                 );
@@ -212,6 +223,7 @@
                     );
                 }
 
+                setTranslationStatus("번역 실패 · API 설정 확인");
                 document.documentElement.classList.remove(
                     "deepl-translating"
                 );
