@@ -179,8 +179,10 @@ MemberDTO member =
         memberId.longValue()
     );
 
-if (member == null) {
+if (member == null || "WITHDRAWN".equals(member.getStatus())) {
 
+    // 탈퇴 처리된 회원은 이전 세션이 남아 있어도 마이페이지에 접근할 수 없습니다.
+    session.invalidate();
     response.sendRedirect(
         request.getContextPath()
         + "/member/logout"
@@ -192,10 +194,16 @@ if (member == null) {
 
 /* =========================================================
    3. 프로필 이미지 주소 결정
+   ---------------------------------------------------------
+   가입 후 프로필 사진을 등록하지 않은 회원은
+   /resources/img/base.png를 기본 프로필 이미지로 사용합니다.
+   DB의 profile_image 값은 비워 두고 화면 출력에서만 기본값을 적용합니다.
    ========================================================= */
-String profileSrc =
+String defaultProfileSrc =
     request.getContextPath()
-    + "/resources/assets/icon-user-profile-3682323.png";
+    + "/resources/img/base.png";
+
+String profileSrc = defaultProfileSrc;
 
 if (
     member.getProfileImage() != null
@@ -339,9 +347,10 @@ request.setAttribute(
 
 
         <img
-            src="<%=profileSrc%>"
+            src="<%=h(profileSrc)%>"
             alt="프로필 이미지"
-            class="mypage-avatar">
+            class="mypage-avatar"
+            onerror="this.onerror=null;this.src='<%=defaultProfileSrc%>';">
 
 
         <div class="mypage-info">
@@ -516,6 +525,50 @@ request.setAttribute(
         </div>
 
     </section>
+
+    <%-- =====================================================
+         회원탈퇴 (일반 회원만 표시)
+         -----------------------------------------------------
+         실수로 탈퇴하지 않도록 본인 로그인 아이디를 다시 입력하고,
+         한 번 더 확인한 후 POST로 /member/withdraw에 요청합니다.
+         기존 버튼 CSS를 사용하고 별도의 CSS 변경은 하지 않습니다.
+         ===================================================== --%>
+    <% if (!"ADMIN".equals(member.getRole())) { %>
+    <section aria-labelledby="withdrawTitle" style="margin:28px 0 16px;">
+        <h2 id="withdrawTitle">계정 관리</h2>
+        <p class="form-hint">
+            회원탈퇴 시 계정이 비활성화되며, 다시 로그인할 수 없습니다.
+            기존 게시글과 댓글은 보존됩니다.
+        </p>
+
+        <button type="button" class="btn" id="withdrawOpenButton"
+                aria-expanded="<%=request.getParameter("withdrawError") != null%>" aria-controls="withdrawPanel">
+            회원탈퇴
+        </button>
+
+        <div id="withdrawPanel" <%=request.getParameter("withdrawError") == null ? "hidden" : ""%>>
+            <p class="form-hint">
+                탈퇴를 진행하려면 아래 입력칸에 자신의 로그인 아이디를 정확히 입력하세요.
+            </p>
+            <% if (request.getParameter("withdrawError") != null) { %>
+                <p role="alert">회원탈퇴를 처리하지 못했습니다. 아이디와 로그인 상태를 확인해 주세요.</p>
+            <% } %>
+            <form method="post"
+                  action="<%=request.getContextPath()%>/member/withdraw"
+                  id="withdrawForm">
+                <label for="withdrawLoginId">로그인 아이디 확인</label>
+                <input type="text" id="withdrawLoginId" name="confirmLoginId"
+                       maxlength="50" required autocomplete="off"
+                       placeholder="<%=h(member.getLoginId())%>"
+                       style="display:block;max-width:320px;width:100%;padding:10px;margin:8px 0;">
+                <button type="submit" class="btn" style="color:#b42318;">
+                    탈퇴 확정
+                </button>
+                <button type="button" class="btn" id="withdrawCancelButton">취소</button>
+            </form>
+        </div>
+    </section>
+    <% } %>
 
 
     <%-- =====================================================
@@ -945,6 +998,32 @@ request.setAttribute(
         profileEditCancel.addEventListener("click", function () {
             profileEditWrap.classList.remove("is-open");
             profileEditButton.hidden = false;
+        });
+    }
+
+    /* 회원탈퇴 입력창 열기/닫기 및 최종 확인 */
+    var withdrawButton = document.getElementById("withdrawOpenButton");
+    var withdrawPanel = document.getElementById("withdrawPanel");
+    var withdrawCancelButton = document.getElementById("withdrawCancelButton");
+    var withdrawForm = document.getElementById("withdrawForm");
+
+    if (withdrawButton && withdrawPanel) {
+        withdrawButton.addEventListener("click", function () {
+            withdrawPanel.hidden = !withdrawPanel.hidden;
+            withdrawButton.setAttribute("aria-expanded", String(!withdrawPanel.hidden));
+        });
+    }
+    if (withdrawCancelButton && withdrawPanel && withdrawButton) {
+        withdrawCancelButton.addEventListener("click", function () {
+            withdrawPanel.hidden = true;
+            withdrawButton.setAttribute("aria-expanded", "false");
+        });
+    }
+    if (withdrawForm) {
+        withdrawForm.addEventListener("submit", function (event) {
+            if (!window.confirm("정말 탈퇴하시겠습니까? 탈퇴 후에는 다시 로그인할 수 없습니다.")) {
+                event.preventDefault();
+            }
         });
     }
 })();

@@ -129,7 +129,7 @@ if (
    ========================================================= */
 String headerProfileSrc =
     request.getContextPath()
-    + "/resources/assets/icon-user-profile-3682323.png";
+    + "/resources/img/base.png";
 
 if (
     headerProfileImage != null
