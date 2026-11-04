@@ -1,0 +1,5 @@
+@charset "UTF-8";
+@import url("./common/listCommon.css");
+.btn-inquiry-write{
+	padding: 3px 12px;
+}

@@ -63,7 +63,7 @@ int blockSize = 5;
 int startPage = ((currentPage - 1) / blockSize) * blockSize + 1;
 int endPage = Math.min(startPage + blockSize - 1, totalPages);
 
-request.setAttribute("pageCss", "board/common/listCommon.css");
+request.setAttribute("pageCss", "board/inquiryList.css");
 request.setAttribute("pageTitle", "1:1 문의");
 request.setAttribute("activeMenu", "INQUIRY");
 %>
@@ -74,7 +74,7 @@ request.setAttribute("activeMenu", "INQUIRY");
     <h1 class="board-title"><%=admin ? "1:1 문의 관리" : "1:1 문의"%></h1>
 
     <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-        <a href="<%=request.getContextPath()%>/board/inquiryWrite.jsp" class="btn btn-primary">문의 작성</a>
+        <a href="<%=request.getContextPath()%>/board/inquiryWrite.jsp" class="btn btn-primary btn-inquiry-write">문의 작성</a>
     </div>
 
     <table class="board-table">

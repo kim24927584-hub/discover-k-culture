@@ -1,2 +1,14 @@
 @charset "UTF-8";
+@import url("./common/viewCommon.css");
 
+.post-body textarea{
+	width:100%; min-height:160px;
+	resize:vertical;
+	border: var(--color-border) 1px solid;
+	border-radius: var(--radius-sm);
+	padding: 5px 10px;
+	margin:10px 0;
+}
+.btn-answer{
+	padding: 3px 12px;
+}
