@@ -346,17 +346,11 @@ request.setAttribute(
     <section class="mypage-profile">
 
 
-        <img
-            src="<%=h(profileSrc)%>"
-            alt="프로필 이미지"
-            class="mypage-avatar"
-            id="profileAvatar"
-            data-default-src="<%=h(defaultProfileSrc)%>"
-            onerror="this.onerror=null;this.src='<%=h(defaultProfileSrc)%>';">
+        
 
 
         <div class="mypage-info">
-
+<%-- 
             <h2>
                 <%=h(member.getNickname())%>님
             </h2>
@@ -389,15 +383,21 @@ request.setAttribute(
                     <%=h(member.getStatus())%>
                 </li>
 
-            </ul>
+            </ul> --%>
 
             <%-- =============================================
                  회원 정보 수정
                  기존 updateProcess.jsp를 실제 화면과 연결합니다.
                  ============================================= --%>
-            <button type="button" class="btn btn-edit" id="profileEditButton">정보 수정</button>
 
             <div class="profile-edit-wrap" id="profileEditWrap">
+	            <img
+	            src="<%=h(profileSrc)%>"
+	            alt="프로필 이미지"
+	            class="mypage-avatar"
+	            id="profileAvatar"
+	            data-default-src="<%=h(defaultProfileSrc)%>"
+	            onerror="this.onerror=null;this.src='<%=h(defaultProfileSrc)%>';">
                 <form action="<%=request.getContextPath()%>/member/updateProcess.jsp"
                       method="post" class="profile-edit-form">
                     <div class="form-field">
@@ -433,8 +433,7 @@ request.setAttribute(
                         </div>
                     </div>
                     <div class="fix-buttons">
-                        <button type="submit" class="btn btn-primary">저장</button>
-                        <button type="button" class="btn cancel" id="profileEditCancel">취소</button>
+                        <button type="submit" class="btn">정보 수정</button>
                     </div>
                 </form>
             </div>
@@ -996,7 +995,7 @@ request.setAttribute(
     }
 
     /* 기존 프로필 정보 수정 폼 열기/닫기는 그대로 유지 */
-    const profileEditButton = document.getElementById("profileEditButton");
+    /* const profileEditButton = document.getElementById("profileEditButton");
     const profileEditWrap = document.getElementById("profileEditWrap");
     const profileEditCancel = document.getElementById("profileEditCancel");
 
@@ -1012,7 +1011,7 @@ request.setAttribute(
             profileEditWrap.classList.remove("is-open");
             profileEditButton.hidden = false;
         });
-    }
+    } */
 
     /* 회원탈퇴 입력창 열기/닫기 및 최종 확인 */
     var withdrawButton = document.getElementById("withdrawOpenButton");
