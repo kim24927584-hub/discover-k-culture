@@ -45,7 +45,7 @@ if (inquiry == null || (!admin && inquiry.getMemberId() != memberId.longValue())
     return;
 }
 
-request.setAttribute("pageCss", "board/common/viewCommon.css");
+request.setAttribute("pageCss", "board/inquiryView.css");
 request.setAttribute("pageTitle", "1:1 문의 상세보기");
 request.setAttribute("activeMenu", "INQUIRY");
 %>
@@ -84,9 +84,8 @@ request.setAttribute("activeMenu", "INQUIRY");
             <form action="<%=request.getContextPath()%>/board/process/inquiry/answerProcess.jsp" method="post">
                 <input type="hidden" name="inquiryId" value="<%=inquiryId%>">
                 <label for="answer"><strong>운영자 답변</strong></label>
-                <textarea id="answer" name="answer" maxlength="5000" required
-                          style="width:100%; min-height:160px;"><%=inquiryViewH(inquiry.getAnswer())%></textarea>
-                <button type="submit" class="btn btn-primary">답변 저장</button>
+                <textarea id="answer" name="answer" maxlength="5000" required><%=inquiryViewH(inquiry.getAnswer())%></textarea>
+                <button type="submit" class="btn btn-primary btn-answer">답변 저장</button>
             </form>
         </div>
     <% } %>

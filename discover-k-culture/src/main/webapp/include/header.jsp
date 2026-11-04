@@ -270,10 +270,11 @@ request.setAttribute(
 
 
 <%-- 기존 아이콘 사용 유지 --%>
-<script
+<!-- <script
     src="https://kit.fontawesome.com/0b6f7fb313.js"
     crossorigin="anonymous">
-</script>
+</script> -->
+<link rel="stylesheet" href="${ctx}/resources/fontawesome/css/all.min.css" />
 
 </head>
 
