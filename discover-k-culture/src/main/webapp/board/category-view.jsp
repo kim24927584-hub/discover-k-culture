@@ -191,7 +191,7 @@ request.setAttribute("pageCss", "board/common/viewCommon.css");
   %>
     <div class="comment" id="comment-<%=comment.getCommentId()%>">
       <div class="comment-body">
-        <span><%=h(comment.getMemberNickname())%></span>
+        <span class="comment-author" data-deepl-ignore><%=h(comment.getMemberNickname())%></span>
         <span class="comment-meta"><%=comment.getCreatedAt() == null ? "-" : comment.getCreatedAt().toString().substring(0, 16)%></span>
         <p class="comment-text"><%=h(comment.getContent()).replace("\n", "<br>")%></p>
         <% if (canDelete) { %>

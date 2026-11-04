@@ -350,12 +350,14 @@ request.setAttribute(
             src="<%=h(profileSrc)%>"
             alt="프로필 이미지"
             class="mypage-avatar"
-            onerror="this.onerror=null;this.src='<%=defaultProfileSrc%>';">
+            id="profileAvatar"
+            data-default-src="<%=h(defaultProfileSrc)%>"
+            onerror="this.onerror=null;this.src='<%=h(defaultProfileSrc)%>';">
 
 
         <div class="mypage-info">
 
-            <h2>
+            <h2 data-deepl-ignore>
                 <%=h(member.getNickname())%>님
             </h2>
 
@@ -364,27 +366,27 @@ request.setAttribute(
 
                 <li>
                     아이디 :
-                    <%=h(member.getLoginId())%>
+                    <span data-deepl-ignore><%=h(member.getLoginId())%></span>
                 </li>
 
                 <li>
                     이메일 :
-                    <%=h(member.getEmail())%>
+                    <span data-deepl-ignore><%=h(member.getEmail())%></span>
                 </li>
 
                 <li>
                     국적 :
-                    <%=member.getNationality() == null
+                    <span data-deepl-ignore><%=member.getNationality() == null
                         || member.getNationality()
                             .trim()
                             .isEmpty()
                         ? "-"
-                        : h(member.getNationality())%>
+                        : h(member.getNationality())%></span>
                 </li>
 
                 <li>
                     회원 상태 :
-                    <%=h(member.getStatus())%>
+                    <span data-deepl-ignore><%=h(member.getStatus())%></span>
                 </li>
 
             </ul>
@@ -452,15 +454,26 @@ request.setAttribute(
                  /member/profile-image 주소를 그대로 사용합니다.
                  ============================================= --%>
             <form
+                id="profileImageForm"
                 action="<%=request.getContextPath()%>/member/profile-image"
                 method="post"
                 enctype="multipart/form-data">
 
                 <input
                     type="file"
+                    id="profileImageInput"
                     name="profileImage"
                     accept="image/jpeg,image/png,image/gif,image/webp"
+                    aria-describedby="profilePreviewMessage"
                     required>
+
+                <%-- 실제 저장 전에는 DB를 수정하지 않고 화면에만 표시합니다. --%>
+                <p id="profilePreviewMessage" class="form-hint" aria-live="polite">
+                    파일을 선택하면 위 프로필 사진에서 미리볼 수 있습니다.
+                </p>
+                <button type="button" class="btn" id="profilePreviewCancel" hidden>
+                    선택 취소
+                </button>
 
                 <button
                     type="submit"
@@ -797,7 +810,7 @@ request.setAttribute(
                         <div class="board-meta">
 
                             작성자
-                            <%=h(post.getMemberNickname())%>
+                            <span data-deepl-ignore><%=h(post.getMemberNickname())%></span>
 
                             · 조회
                             <%=post.getViewCount()%>
@@ -901,7 +914,7 @@ request.setAttribute(
                             </a>
 
                             <div class="board-meta">
-                                작성자 <%=h(likedPost.getMemberNickname())%>
+                                작성자 <span data-deepl-ignore><%=h(likedPost.getMemberNickname())%></span>
                                 · 조회 <%=likedPost.getViewCount()%>
                                 · 추천 <%=likedPost.getLikeCount()%>
                                 · 댓글 <%=likedPost.getCommentCount()%>
@@ -1029,5 +1042,106 @@ request.setAttribute(
 })();
 </script>
 
+<%--
+프로필 이미지 저장 전 미리보기
+- 이미지 파일을 선택하면 기존 .mypage-avatar에 즉시 표시합니다.
+- 취소하거나 잘못된 파일을 선택하면 저장된 프로필 사진으로 되돌립니다.
+- 미리보기는 브라우저에서만 진행되며 실제 저장은 업로드 버튼을 눌러야 합니다.
+--%>
+<script>
+(function () {
+    "use strict";
+
+    var avatar = document.getElementById("profileAvatar");
+    var input = document.getElementById("profileImageInput");
+    var cancelButton = document.getElementById("profilePreviewCancel");
+    var message = document.getElementById("profilePreviewMessage");
+
+    if (!avatar || !input || !cancelButton || !message) return;
+
+    // 미리보기 전의 실제 프로필 이미지(또는 base.png)를 보존합니다.
+    var savedSrc = avatar.getAttribute("src") || avatar.getAttribute("data-default-src");
+    var defaultSrc = avatar.getAttribute("data-default-src") || savedSrc;
+    var previewUrl = null;
+    var maxSize = 5 * 1024 * 1024;
+    var allowedTypes = {
+        "image/jpeg": true,
+        "image/png": true,
+        "image/gif": true,
+        "image/webp": true
+    };
+
+    function clearPreview() {
+        if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+            previewUrl = null;
+        }
+        avatar.onerror = function () {
+            avatar.onerror = null;
+            avatar.src = defaultSrc;
+        };
+        avatar.src = savedSrc;
+        input.value = "";
+        cancelButton.hidden = true;
+        message.textContent = "파일을 선택하면 위 프로필 사진에서 미리볼 수 있습니다.";
+    }
+
+    input.addEventListener("change", function () {
+        var file = input.files && input.files[0];
+
+        if (!file) {
+            clearPreview();
+            return;
+        }
+
+        if (!allowedTypes[file.type]) {
+            clearPreview();
+            message.textContent = "JPG, PNG, GIF, WEBP 이미지만 선택할 수 있습니다.";
+            return;
+        }
+
+        if (file.size > maxSize) {
+            clearPreview();
+            message.textContent = "이미지 크기는 5MB 이하여야 합니다.";
+            return;
+        }
+
+        // 먼저 이미지로 로딩 가능한 파일인지 확인합니다.
+        var candidateUrl = URL.createObjectURL(file);
+        var checker = new Image();
+        checker.onload = function () {
+            // 다른 파일을 다시 선택한 경우 이전 작업은 무시합니다.
+            if (!input.files || input.files[0] !== file) {
+                URL.revokeObjectURL(candidateUrl);
+                return;
+            }
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
+            previewUrl = candidateUrl;
+            avatar.onerror = function () {
+                clearPreview();
+                message.textContent = "이미지를 미리볼 수 없습니다. 다른 파일을 선택해 주세요.";
+            };
+            avatar.src = previewUrl;
+            cancelButton.hidden = false;
+            message.textContent = "저장 전 미리보기입니다. '프로필 이미지 변경'을 눌러야 적용됩니다.";
+        };
+        checker.onerror = function () {
+            URL.revokeObjectURL(candidateUrl);
+            if (input.files && input.files[0] === file) {
+                clearPreview();
+                message.textContent = "올바른 이미지 파일을 선택해 주세요.";
+            }
+        };
+        checker.src = candidateUrl;
+    });
+
+    cancelButton.addEventListener("click", clearPreview);
+
+    // 사용자가 저장하지 않고 페이지를 떠날 때 미리보기 Blob URL을 해제합니다.
+    window.addEventListener("pagehide", function () {
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+    });
+})();
+</script>
 
 <%@ include file="/include/footer.jsp" %>

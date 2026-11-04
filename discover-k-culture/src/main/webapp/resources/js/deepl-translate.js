@@ -10,47 +10,69 @@
 
     var MAX_BATCH_ITEMS = 20;
     var MAX_BATCH_CHARS = 24000;
-    var CACHE_KEY_PREFIX = "kculture.deepl.cache.v1.";
+    var CACHE_KEY_PREFIX = "kculture.deepl.cache.v2.";
     var CACHE_MAX_ENTRIES = 220;
     var CACHE_MAX_TEXT_LENGTH = 1200;
 
+    /*
+     * 화면의 안내 문구와 일반 게시글은 번역하되,
+     * 개인 식별 정보·서비스 식별자·사용자 입력 영역은 API에 보내지 않습니다.
+     * 새 HTML/JSP 요소도 data-deepl-ignore 또는 translate="no"로
+     * 별도의 JavaScript 수정 없이 보호할 수 있습니다.
+     */
     var BLOCKED_TAGS = [
-        "SCRIPT",
-        "STYLE",
-        "NOSCRIPT",
-        "CODE",
-        "PRE",
-        "SVG",
-        "PATH",
-        "INPUT",
-        "TEXTAREA"
+        "SCRIPT", "STYLE", "NOSCRIPT", "CODE", "PRE",
+        "KBD", "SAMP", "VAR", "SVG", "MATH",
+        "IFRAME", "OBJECT", "TEMPLATE", "INPUT", "TEXTAREA"
     ];
 
     var IGNORE_SELECTOR = [
         "[data-deepl-ignore]",
+        "[data-private-content]",
+        "[translate='no']",
+        ".notranslate",
+        "[contenteditable]",
+        "[aria-hidden='true']",
         ".site-language",
         ".site-logo",
         ".footer-logo",
+        ".logo",
+        ".login-user",          // 헤더 프로필 닉네임
         ".member-profile",
-        ".member-table tbody",
+        ".member-table tbody",  // 관리자 회원 식별 정보 및 정지 사유
         ".top-card-author",
         ".member-login-id",
+        ".member-login",
         ".member-nickname",
         ".member-id",
-        ".social-icon-wrap"
+        ".post-writer",
+        ".post-author",
+        ".comment-author",
+        ".col-author",
+        ".social-icon-wrap",
+        "#translationStatus"
     ].join(",");
 
     var BRAND_PATTERN =
-        /^(K-culture|K-POP|K-FOOD|K-DRAMA|K-BEAUTY|TRAVEL|CULTURE|TOUR API)$/i;
+        /^(?:K[- ]?culture|K-POP|K-FOOD|K-DRAMA|K-BEAUTY|TRAVEL|CULTURE|TOUR API|DeepL|Google|Kakao|Naver|GitHub)$/i;
 
     var EMAIL_PATTERN =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     var URL_PATTERN =
-        /^(https?:\/\/|www\.)/i;
+        /^(?:https?:\/\/|www\.|mailto:|tel:|\/[^\s]*\/)/i;
 
+    /* 순수한 숫자, 날짜, 시간, 조회수 수치 등은 번역할 이유가 없습니다. */
     var DATE_NUMBER_PATTERN =
         /^[\d\s.,:+\-/()%#]+$/;
+
+    /* 파일명, 계정 핸들, API 오류코드, 기술적 식별자를 보존합니다. */
+    var IDENTIFIER_PATTERN =
+        /^(?:@[\w.-]+|[\w.-]+\.(?:jpg|jpeg|png|gif|webp|mp4|webm|pdf|jsp|java|js|css|json|xml|sql|properties)|[a-z0-9]+_[a-z0-9_.-]+|KOE\d{3,}|ERR_[A-Z0-9_]+|[A-F0-9]{16,})$/i;
+
+    /* 이메일/전화번호/URL이 문장 안에 있어도 외부 번역 서버로 보내지 않습니다. */
+    var SENSITIVE_TEXT_PATTERN =
+        /(?:[^\s@]+@[^\s@]+\.[^\s@]+|https?:\/\/\S+|www\.\S+|01[016789][-\s]?\d{3,4}[-\s]?\d{4}|[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})/;
 
     /*
      * Eclipse의 오래된 JavaScript Validator는
@@ -63,10 +85,106 @@
     var LETTER_PATTERN =
         /[A-Za-zÀ-ÖØ-öø-ÿ\u3040-\u30ff\u3400-\u9fff\uac00-\ud7a3]/;
 
+    /*
+     * 번역 선택창 옆에는 진행/완료 문구를 표시하지 않습니다.
+     * 실패 시에만 이유를 보여 사용자가 API 설정 문제를 확인할 수 있게 합니다.
+     * 번역 동작 및 요청은 변경하지 않습니다.
+     */
+    function setTranslationStatus(message, isError) {
+        var element = document.getElementById("translationStatus");
+        if (!element) return;
+
+        var showError = Boolean(isError && message);
+        element.textContent = showError ? message : "";
+        element.style.display = showError ? "block" : "none";
+        element.style.color = "#b42318";
+    }
+
+    /*
+     * 언어 변경은 CSRF 토큰을 포함한 POST 요청으로 세션에 저장합니다.
+     * 일반 form.submit()과 달리, 실패하면 현재 화면에서 오류를 안내합니다.
+     * 서버가 저장에 성공한 경우에만 화면을 다시 읽어 번역을 시작합니다.
+     */
+    function bindLanguageSelector() {
+        var select = document.getElementById("siteLanguageSelect");
+        if (!select || !select.form) return;
+
+        var form = select.form;
+        var previousLanguage = select.value;
+        var pending = false;
+
+        select.addEventListener("change", function () {
+            if (pending) return;
+
+            var nextLanguage = select.value;
+            if (nextLanguage === previousLanguage) return;
+
+            if (typeof window.fetch !== "function"
+                    || typeof window.FormData !== "function"
+                    || typeof window.URLSearchParams !== "function") {
+                form.submit(); // 구형 브라우저에서는 기존 POST 방식 유지
+                return;
+            }
+
+            // FormData는 disabled 필드를 제외하므로 잠그기 전에 값을 수집해야 합니다.
+            var body = new URLSearchParams(new FormData(form));
+
+            pending = true;
+            select.disabled = true;
+            setTranslationStatus("언어 설정 중...");
+
+            fetch(form.action, {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Accept": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+                },
+                body: body.toString()
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error(response.status === 403
+                        ? "언어 변경이 거부되었습니다. 새로고침 후 다시 시도하세요."
+                        : "언어 설정 실패 (HTTP " + response.status + ")");
+                }
+                return response.json();
+            }).then(function (result) {
+                if (!result || result.ok !== true || result.language !== nextLanguage) {
+                    throw new Error("서버의 언어 설정 응답이 올바르지 않습니다.");
+                }
+                window.location.reload();
+            }).catch(function (error) {
+                pending = false;
+                select.disabled = false;
+                select.value = previousLanguage;
+                setTranslationStatus(error.message || "언어 설정에 실패했습니다.", true);
+                if (window.console) console.warn("[K-culture 번역] 언어 변경 실패", error);
+            });
+        });
+    }
+
     function boot() {
+        bindLanguageSelector();
+        /*
+         * 이전 버전은 1:1 문의나 회원 정보를 캐시에 담았을 수 있습니다.
+         * 새 보호 규칙을 적용하기 전에 구버전 세션 캐시를 정리합니다.
+         */
+        try {
+            var legacyLanguages = ["ko", "ja", "zh", "en"];
+            var legacyIndex;
+            for (legacyIndex = 0; legacyIndex < legacyLanguages.length; legacyIndex++) {
+                sessionStorage.removeItem("kculture.deepl.cache.v1." + legacyLanguages[legacyIndex]);
+            }
+        } catch (ignored) {
+            // 세션 저장소 차단 상태라도 번역 기능은 계속 사용합니다.
+        }
+
+        // 공통 헤더는 body에 data-site-language를 설정합니다.
+        // 내부의 임의 wrapper가 선택되더라도 문서 전체 텍스트를 수집하도록 body를 우선합니다.
         var shell =
-            document.querySelector(".site-shell[data-site-language]")
-            || document.querySelector("body[data-site-language]");
+            document.querySelector("body[data-site-language]")
+            || document.querySelector(".site-shell[data-site-language]");
 
         if (!shell) {
             return;
@@ -83,17 +201,20 @@
             LANGUAGE_HTML[language] || language;
 
         if (language === "ko") {
+            setTranslationStatus("");
             return;
         }
+        setTranslationStatus("번역 중...");
 
         var endpoint =
             contextPath + "/api/deepl/translate";
 
-        translatePage(
-            shell,
-            language,
-            endpoint
-        );
+        try {
+            translatePage(shell, language, endpoint);
+        } catch (error) {
+            setTranslationStatus("번역 초기화 오류 · F12 콘솔 확인", true);
+            if (window.console) console.error("[K-culture 번역] 초기화 실패", error);
+        }
     }
 
     function translatePage(
@@ -105,6 +226,7 @@
             collectTargets(shell);
 
         if (targets.length === 0) {
+            setTranslationStatus("번역할 내용 없음");
             return;
         }
 
@@ -162,6 +284,7 @@
         }
 
         if (pending.length === 0) {
+            setTranslationStatus("번역 완료");
             return;
         }
 
@@ -188,6 +311,7 @@
 
         chain.then(
             function () {
+                setTranslationStatus("번역 완료");
                 document.documentElement.classList.add(
                     "deepl-translated"
                 );
@@ -212,6 +336,15 @@
                     );
                 }
 
+                var statusMessage = "번역 실패 · DeepL 설정 확인";
+                if (error && error.apiCode === "DEEPL_NOT_CONFIGURED") {
+                    statusMessage = "DeepL API 키가 설정되지 않았습니다.";
+                } else if (error && error.httpStatus === 429) {
+                    statusMessage = "번역 사용량 제한 · 잠시 후 재시도";
+                } else if (error && error.httpStatus === 403) {
+                    statusMessage = "번역 요청 거부 · API 키 확인";
+                }
+                setTranslationStatus(statusMessage, true);
                 document.documentElement.classList.remove(
                     "deepl-translating"
                 );
@@ -450,39 +583,20 @@
     }
 
     function shouldIgnoreElement(element) {
-        if (arrayContains(
-                BLOCKED_TAGS,
-                element.tagName
-            )) {
-
-            return true;
-        }
-
-        if (typeof element.closest === "function") {
-            return Boolean(
-                element.closest(IGNORE_SELECTOR)
-            );
-        }
-
         /*
-         * 아주 오래된 브라우저용 fallback.
-         * 최신 Chrome에서는 closest()가 사용됩니다.
+         * 텍스트의 직접 부모가 span이라도 상위에 code/pre/textarea 등이
+         * 있으면 번역하지 않아야 합니다. 기존 코드는 부모 태그만 검사해서
+         * <code><span>...</span></code> 내부가 번역될 가능성이 있었습니다.
          */
         var current = element;
 
-        while (current
-                && current.nodeType === 1) {
-
-            if (matchesSelector(
-                    current,
-                    IGNORE_SELECTOR
-                )) {
-
+        while (current && current.nodeType === 1) {
+            if (arrayContains(BLOCKED_TAGS, current.tagName)
+                    || matchesSelector(current, IGNORE_SELECTOR)) {
                 return true;
             }
 
-            current =
-                current.parentElement;
+            current = current.parentElement;
         }
 
         return false;
@@ -498,7 +612,9 @@
         if (BRAND_PATTERN.test(text)
                 || EMAIL_PATTERN.test(text)
                 || URL_PATTERN.test(text)
-                || DATE_NUMBER_PATTERN.test(text)) {
+                || DATE_NUMBER_PATTERN.test(text)
+                || IDENTIFIER_PATTERN.test(text)
+                || SENSITIVE_TEXT_PATTERN.test(text)) {
 
             return false;
         }
@@ -598,7 +714,10 @@
                                     : "HTTP "
                                         + response.status;
 
-                            throw new Error(message);
+                            var problem = new Error(message);
+                            problem.apiCode = data && data.code ? data.code : "";
+                            problem.httpStatus = response.status;
+                            throw problem;
                         }
 
                         return data.translations;
