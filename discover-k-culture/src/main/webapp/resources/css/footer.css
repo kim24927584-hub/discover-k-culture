@@ -2,7 +2,8 @@
 footer {
   position: relative;
   width: 100%;
-  padding: 20px 0;
+  padding: 25px 0 15px 55px;
+  margin-top: 70px;
 }
 
 footer::after {
@@ -17,9 +18,16 @@ footer::after {
   z-index: -1;
 }
 
+.f-section {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
 .f-logo {
   width: 90px;
   height: 90px;
+  flex-shrink: 0;
 }
 
 .f-logo img {
@@ -28,15 +36,11 @@ footer::after {
   height: 100%;
 }
 
-.f-section {
-  display: flex;
-  gap: 40px;
-}
-
 .copy {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  flex-shrink: 0;
 }
 
 .copyright {
