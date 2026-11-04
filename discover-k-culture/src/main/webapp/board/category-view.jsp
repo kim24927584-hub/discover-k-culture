@@ -153,18 +153,21 @@ request.setAttribute("pageCss", "board/common/viewCommon.css");
   </div>
 
   <%-- ===== 목록 이동 및 작성자 전용 수정/삭제 ===== --%>
-  <a href="<%=request.getContextPath()%>/board/category.jsp" class="btn btn-list"><span class="btn-arrow">←</span>목록</a>
-  <% if (owner && !suspended) { %>
-    <a href="<%=request.getContextPath()%>/board/process/board/edit.jsp?id=<%=postId%>" class="btn">수정</a>
-  <% } %>
-  <% if (owner) { %>
-    <form action="<%=request.getContextPath()%>/board/process/board/deleteProcess.jsp" method="post"
-          onsubmit="return confirm('삭제하시겠습니까?');">
-      <input type="hidden" name="id" value="<%=postId%>">
-      <button type="submit" class="btn">삭제</button>
-    </form>
-  <% } %>
-
+  <div class="post-footer">
+    <a href="<%=request.getContextPath()%>/board/category.jsp" class="btn btn-list"><span class="btn-arrow">←</span>목록</a>
+  	<div class="post-manage">
+	  <% if (owner && !suspended) { %>
+	    <a href="<%=request.getContextPath()%>/board/process/board/edit.jsp?id=<%=postId%>" class="btn btn-list">수정</a>
+	  <% } %>
+	  <% if (owner) { %>
+	    <form action="<%=request.getContextPath()%>/board/process/board/deleteProcess.jsp" method="post"
+	          onsubmit="return confirm('삭제하시겠습니까?');">
+	      <input type="hidden" name="id" value="<%=postId%>">
+	      <button type="submit" class="btn btn-list">삭제</button>
+	    </form>
+	  <% } %>
+  	</div>
+  </div>
   <%-- ===== 댓글 영역 ===== --%>
   <h3 class="comments-title">Comments <span class="comment-count">(<%=comments == null ? 0 : comments.size()%>)</span></h3>
 
@@ -192,16 +195,21 @@ request.setAttribute("pageCss", "board/common/viewCommon.css");
     <div class="comment" id="comment-<%=comment.getCommentId()%>">
       <div class="comment-body">
         <span><%=h(comment.getMemberNickname())%></span>
-        <span class="comment-meta"><%=comment.getCreatedAt() == null ? "-" : comment.getCreatedAt().toString().substring(0, 16)%></span>
+        <span class="comment-meta">
+        	<%=comment.getCreatedAt() == null ? "-" : comment.getCreatedAt().toString().substring(0, 16)%>
+        	<% if (canDelete) { %>
+	          <form action="<%=request.getContextPath()%>/board/process/comment/deleteProcess.jsp" method="post"
+	                onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+	            <input type="hidden" name="commentId" value="<%=comment.getCommentId()%>">
+	            <input type="hidden" name="postId" value="<%=postId%>">
+	            <button type="submit" class="btn btn-list btn-comment-del">삭제</button>
+	          </form>
+	        <% } %>
+        
+        </span>
+        
         <p class="comment-text"><%=h(comment.getContent()).replace("\n", "<br>")%></p>
-        <% if (canDelete) { %>
-          <form action="<%=request.getContextPath()%>/board/process/comment/deleteProcess.jsp" method="post"
-                onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
-            <input type="hidden" name="commentId" value="<%=comment.getCommentId()%>">
-            <input type="hidden" name="postId" value="<%=postId%>">
-            <button type="submit" class="btn">삭제</button>
-          </form>
-        <% } %>
+        
       </div>
       <div>
         <% if (loggedIn && !suspended) { %>
