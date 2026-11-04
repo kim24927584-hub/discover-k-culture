@@ -252,14 +252,10 @@ request.setAttribute(
 );
 %>
 
+<% request.setAttribute("pageCss", "board/noticeList.css"); %>
 <%@include file="/include/header.jsp" %>
 
-<%--
-수정 폼은 기존 write.css의 디자인을 그대로 사용합니다.
-목록은 listCommon.css를 사용하므로 두 CSS를 함께 불러옵니다.
---%>
-<link rel="stylesheet"
-      href="<%=request.getContextPath()%>/resources/css/board/common/writeCommon.css">
+
 
 
 <main class="container">
@@ -272,40 +268,7 @@ request.setAttribute(
     </h1>
 
 
-    <%-- =====================================================
-         관리자 전용 상단 버튼
-         - 공지 작성
-         - 수정 중이면 수정 취소
-         ===================================================== --%>
-    <% if (isAdmin) { %>
-
-    <div style="
-        display:flex;
-        justify-content:flex-end;
-        gap:8px;
-        margin-bottom:10px;
-        flex-wrap:wrap;
-    ">
-
-        <% if (editNotice != null) { %>
-
-        <a
-            href="<%=request.getContextPath()%>/board/noticeList.jsp?page=<%=currentPage%>"
-            class="btn btn-list">
-            수정 취소
-        </a>
-
-        <% } %>
-
-        <a
-            href="<%=request.getContextPath()%>/board/write.jsp?boardType=NOTICE"
-            class="btn btn-primary">
-            공지 작성
-        </a>
-
-    </div>
-
-    <% } %>
+  
 
 
     <%-- =====================================================
@@ -317,8 +280,7 @@ request.setAttribute(
     <% if (isAdmin && editNotice != null) { %>
 
     <section
-        class="write-card"
-        style="margin-bottom:30px;">
+        class="write-card">
 
         <div class="write-heading">
 
@@ -330,9 +292,6 @@ request.setAttribute(
                 공지사항 수정
             </h2>
 
-            <p>
-                제목, 내용, 이미지, 영상을 수정할 수 있습니다.
-            </p>
 
         </div>
 
@@ -392,207 +351,20 @@ request.setAttribute(
             </div>
 
 
-            <%-- =================================================
-                 기존 이미지
-                 체크한 이미지 ID만 deleteImageIds로 서버에 전달합니다.
-                 ================================================= --%>
-            <%
-            if (
-                editImages != null
-                && !editImages.isEmpty()
-            ) {
-            %>
-
-            <div class="write-field">
-
-                <label>
-                    기존 이미지
-                </label>
-
-                <div class="write-upload">
-
-                    <p>
-                        삭제할 이미지만 체크해 주세요.
-                    </p>
-
-                    <%
-                    for (
-                        NoticeImageDTO image
-                        : editImages
-                    ) {
-                    %>
-
-                    <label style="
-                        display:inline-block;
-                        margin:0 14px 14px 0;
-                        vertical-align:top;
-                    ">
-
-                        <img
-                            src="<%=request.getContextPath() + image.getImagePath()%>"
-                            alt="<%=h(image.getImageName())%>"
-                            style="
-                                display:block;
-                                width:140px;
-                                height:100px;
-                                object-fit:cover;
-                                margin-bottom:6px;
-                            ">
-
-                        <input
-                            type="checkbox"
-                            name="deleteImageIds"
-                            value="<%=image.getImageId()%>">
-
-                        이 이미지 삭제
-
-                    </label>
-
-                    <%
-                    }
-                    %>
-
-                </div>
-
-            </div>
-
-            <%
-            }
-            %>
-
-
-            <%-- ===== 새 이미지 추가 ===== --%>
-            <div class="write-field">
-
-                <label for="noticeImages">
-                    이미지 추가
-                </label>
-
-                <div class="write-upload">
-
-                    <p>
-                        새로 추가할 이미지를 선택해 주세요.
-                    </p>
-
-                    <input
-                        type="file"
-                        id="noticeImages"
-                        name="images"
-                        accept="image/*"
-                        multiple>
-
-                </div>
-
-            </div>
-
-
-            <%-- =================================================
-                 기존 영상
-                 체크한 영상 ID만 deleteVideoIds로 서버에 전달합니다.
-                 ================================================= --%>
-            <%
-            if (
-                editVideos != null
-                && !editVideos.isEmpty()
-            ) {
-            %>
-
-            <div class="write-field">
-
-                <label>
-                    기존 영상
-                </label>
-
-                <div class="write-upload">
-
-                    <p>
-                        삭제할 영상만 체크해 주세요.
-                    </p>
-
-                    <%
-                    for (
-                        NoticeVideoDTO video
-                        : editVideos
-                    ) {
-                    %>
-
-                    <label style="
-                        display:block;
-                        margin-bottom:16px;
-                    ">
-
-                        <video
-                            src="<%=request.getContextPath() + video.getVideoPath()%>"
-                            controls
-                            preload="metadata"
-                            style="
-                                display:block;
-                                width:260px;
-                                max-width:100%;
-                                margin-bottom:6px;
-                            ">
-                        </video>
-
-                        <input
-                            type="checkbox"
-                            name="deleteVideoIds"
-                            value="<%=video.getVideoId()%>">
-
-                        이 영상 삭제
-
-                    </label>
-
-                    <%
-                    }
-                    %>
-
-                </div>
-
-            </div>
-
-            <%
-            }
-            %>
-
-
-            <%-- ===== 새 영상 추가 ===== --%>
-            <div class="write-field">
-
-                <label for="noticeVideos">
-                    영상 추가
-                </label>
-
-                <div class="write-upload">
-
-                    <p>
-                        새로 추가할 영상을 선택해 주세요.
-                    </p>
-
-                    <input
-                        type="file"
-                        id="noticeVideos"
-                        name="videos"
-                        accept="video/mp4,video/webm,video/ogg,video/quicktime"
-                        multiple>
-
-                </div>
-
-            </div>
-
 
             <%-- ===== 수정 취소 / 저장 ===== --%>
             <div class="write-actions">
 
                 <button
                     type="button"
-                    class="write-button write-button-cancel"
+                    class="btn write-button write-button-cancel"
                     onclick="location.href='<%=request.getContextPath()%>/board/noticeList.jsp?page=<%=currentPage%>'">
                     취소
                 </button>
 
                 <button
                     type="submit"
-                    class="write-button write-button-submit">
+                    class="btn btn-primary write-button write-button-submit">
                     수정 저장
                 </button>
 
@@ -604,6 +376,24 @@ request.setAttribute(
 
     <% } %>
 
+
+  <%-- =====================================================
+         관리자 전용 상단 버튼
+         - 공지 작성
+         ===================================================== --%>
+    <% if (isAdmin) { %>
+
+    <div class="notice-button-box">
+
+        <a
+            href="<%=request.getContextPath()%>/board/write.jsp?boardType=NOTICE"
+            class="btn btn-primary btn-notice-write">
+            공지 작성
+        </a>
+
+    </div>
+
+    <% } %>
 
     <%-- =====================================================
          공지사항 목록
