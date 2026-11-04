@@ -171,12 +171,22 @@ if (
 String headerWriteBoardType = "FREE";
 
 if ("KCULTURE".equals(headerActiveMenu)) {
-
     headerWriteBoardType = "KCULTURE";
-
 } else if ("QUESTION".equals(headerActiveMenu)) {
-
     headerWriteBoardType = "QUESTION";
+}
+
+/*
+ * 새 글 작성 버튼은 현재 메뉴에 맞는 실제 작성 화면으로 연결합니다.
+ * 문의는 inquiryWrite.jsp, 관리자의 공지사항은 NOTICE 글쓰기 화면을 사용합니다.
+ */
+String headerWriteUrl = request.getContextPath()
+        + "/board/write.jsp?boardType=" + headerWriteBoardType;
+
+if ("INQUIRY".equals(headerActiveMenu)) {
+    headerWriteUrl = request.getContextPath() + "/board/inquiryWrite.jsp";
+} else if ("NOTICE".equals(headerActiveMenu) && headerAdmin) {
+    headerWriteUrl = request.getContextPath() + "/board/write.jsp?boardType=NOTICE";
 }
 
 
@@ -194,6 +204,11 @@ request.setAttribute(
 request.setAttribute(
     "headerWriteBoardType",
     headerWriteBoardType
+);
+
+request.setAttribute(
+    "headerWriteUrl",
+    headerWriteUrl
 );
 %>
 
@@ -263,7 +278,7 @@ request.setAttribute(
 </head>
 
 
-<body>
+<body data-context-path="${ctx}">
 
 
 <%-- ========================================================
@@ -278,20 +293,28 @@ request.setAttribute(
     <nav class="home-nav">
 
 
-        <%-- 로고 --%>
+        <%-- ====================================================
+             로고 두 이미지를 하나의 가로줄로 정렬합니다.
+             CSS 파일은 수정하지 않고, 링크의 flex 속성과 이미지 여백만
+             이 부분에서 지정합니다. 기존 클릭 시 홈으로 이동하는 기능은 유지.
+             ==================================================== --%>
         <div class="f-cc">
 
             <div class="logo f-cc">
 
-                <a href="${ctx}/index.jsp">
+                <a href="${ctx}/index.jsp"
+                   aria-label="K-컬처 홈"
+                   style="display:flex; align-items:center; justify-content:center; flex-wrap:nowrap; white-space:nowrap; width:100%;">
 
                     <img
                         src="${ctx}/resources/assets/logo-mark.png"
-                        alt="" />
+                        alt=""
+                        style="flex:0 0 56px;" />
 
                     <img
                         src="${ctx}/resources/assets/logo-text.png"
-                        alt="K-culture" />
+                        alt="K-culture"
+                        style="flex:0 0 180px; margin-bottom:0;" />
 
                 </a>
 
@@ -460,7 +483,7 @@ request.setAttribute(
 
                     <li class="${headerActiveMenu eq 'ADMIN' ? 'active-menu' : ''}">
 
-                        <a href="${ctx}/admin/memberList.jsp">
+                        <a href="${ctx}/member/memberList.jsp">
                             관리자
                         </a>
 
@@ -486,7 +509,7 @@ request.setAttribute(
                 <c:when test="${not empty sessionScope.memberId}">
 
                     <a
-                        href="${ctx}/post/write.jsp?boardType=${headerWriteBoardType}"
+                        href="${headerWriteUrl}"
                         class="f-cc">
 
                         <img
@@ -550,11 +573,11 @@ request.setAttribute(
                     <%-- =====================================
                          북마크 버튼
                          -------------------------------------------------
-                         클릭하면 현재 로그인 사용자의
-                         북마크 목록 페이지로 이동합니다.
+                         클릭하면 별도 목록 페이지가 아니라
+                         마이페이지의 내 북마크 탭으로 이동합니다.
                          ===================================== --%>
                     <a
-                        href="${ctx}/member/bookmarkList.jsp"
+                        href="${ctx}/member/mypage.jsp?tab=bookmark#bookmarkSection"
                         class="home-bookmark">
 
                         <img
@@ -570,13 +593,13 @@ request.setAttribute(
                          로그아웃 버튼
                          -------------------------------------------------
                          기존 button + 빈 기능을 제거하고
-                         실제 logout.jsp 링크로 연결합니다.
+                         실제 LogoutServlet(/member/logout)로 연결합니다.
 
                          class="log-out"은 그대로 유지하므로
                          기존 CSS 위치/디자인을 그대로 사용합니다.
                          ===================================== --%>
                     <a
-                        href="${ctx}/member/logout.jsp"
+                        href="${ctx}/member/logout"
                         class="log-out">
 
                         로그아웃
@@ -623,6 +646,36 @@ request.setAttribute(
 
         </header>
 
+
+        <%--
+        CSRF 보호: CsrfFilter가 만든 토큰을 현재 페이지의 모든 POST 폼에 자동으로 추가합니다.
+        CSS/레이아웃에는 영향을 주지 않습니다.
+        --%>
+        <script>
+        (function () {
+            var token = "${csrfToken}";
+            if (!token) return;
+
+            function attachCsrfToken() {
+                document.querySelectorAll('form').forEach(function (form) {
+                    if (String(form.method || '').toLowerCase() !== 'post') return;
+                    if (form.querySelector('input[name="_csrf"]')) return;
+
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = '_csrf';
+                    input.value = token;
+                    form.appendChild(input);
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', attachCsrfToken, { once: true });
+            } else {
+                attachCsrfToken();
+            }
+        })();
+        </script>
 
         <%-- 각 페이지의 내용이 시작되는 영역 --%>
         <div class="content-wrapper">

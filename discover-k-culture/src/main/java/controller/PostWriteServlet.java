@@ -27,7 +27,7 @@ public class PostWriteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private boolean isValidBoardType(String boardType) {
-		return "KCULTURE".equals(boardType) || "QUESTION".equals(boardType);
+		return "KCULTURE".equals(boardType) || "FREE".equals(boardType) || "QUESTION".equals(boardType);
 	}
 
 	@Override
@@ -62,7 +62,13 @@ public class PostWriteServlet extends HttpServlet {
 
 			MemberDTO currentMember = new MemberDAO().selectById(memberId.longValue());
 
-			if (currentMember != null && "SUSPENDED".equals(currentMember.getStatus())) {
+			/* 세션은 남아 있지만 회원이 삭제된 경우에는 로그아웃 처리합니다. */
+			if (currentMember == null) {
+				response.sendRedirect(request.getContextPath() + "/member/logout");
+				return;
+			}
+
+			if ("SUSPENDED".equals(currentMember.getStatus())) {
 
 				response.sendRedirect(request.getContextPath() + "/member/mypage.jsp?restricted=post");
 
@@ -72,7 +78,7 @@ public class PostWriteServlet extends HttpServlet {
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
 
-			if (title == null || title.trim().isEmpty() || content == null || content.trim().isEmpty()) {
+			if (title == null || title.trim().isEmpty() || title.trim().length() > 200 || content == null || content.trim().isEmpty()) {
 				response.sendRedirect(request.getContextPath() + "/board/write.jsp?boardType=" + boardType);
 				return;
 			}
@@ -105,7 +111,9 @@ public class PostWriteServlet extends HttpServlet {
 
 			String detailPath;
 
-			if ("QUESTION".equals(boardType)) {
+			if ("FREE".equals(boardType)) {
+				detailPath = "/board/allView.jsp?id=" + postId;
+			} else if ("QUESTION".equals(boardType)) {
 				detailPath = "/board/qnaView.jsp?id=" + postId;
 			} else {
 				detailPath = "/board/category-view.jsp?postId=" + postId;
@@ -148,6 +156,21 @@ public class PostWriteServlet extends HttpServlet {
 
 			int dot = originalName.lastIndexOf('.');
 			String extension = dot >= 0 ? originalName.substring(dot).toLowerCase() : "";
+
+			// 브라우저가 보내는 MIME 값만 믿지 않고 확장자도 허용 목록으로 검사합니다.
+			if (image) {
+				if (!(".jpg".equals(extension) || ".jpeg".equals(extension)
+						|| ".png".equals(extension) || ".gif".equals(extension)
+						|| ".webp".equals(extension))) {
+					continue;
+				}
+			} else {
+				if (!(".mp4".equals(extension) || ".webm".equals(extension)
+						|| ".ogg".equals(extension) || ".mov".equals(extension))) {
+					continue;
+				}
+			}
+
 			String savedName = UUID.randomUUID().toString() + extension;
 			part.write(new File(dir, savedName).getAbsolutePath());
 

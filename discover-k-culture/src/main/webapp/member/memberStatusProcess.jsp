@@ -5,6 +5,12 @@
 <%
 request.setCharacterEncoding("UTF-8");
 
+/* 데이터 변경 처리는 POST 요청만 허용합니다. */
+if (!"POST".equalsIgnoreCase(request.getMethod())) {
+    response.sendRedirect(request.getContextPath() + "/member/memberList.jsp");
+    return;
+}
+
 Long adminId = (Long) session.getAttribute("memberId");
 if (adminId == null || !"ADMIN".equals(session.getAttribute("role"))) {
     response.sendRedirect(request.getContextPath() + "/home.jsp");
@@ -38,11 +44,20 @@ try {
         }
 
         Date suspendedUntil = Date.valueOf(untilRaw);
+        Date today = new Date(System.currentTimeMillis());
+        if (suspendedUntil.before(today)) {
+            response.sendRedirect(redirectUrl + "&error=suspendDate");
+            return;
+        }
+
         int updated = dao.updateStatus(memberId, "SUSPENDED", suspendedUntil, reason.trim());
         if (updated == 0) {
             response.sendRedirect(redirectUrl + "&error=invalidSuspend");
             return;
         }
+    } else {
+        response.sendRedirect(redirectUrl + "&error=statusValue");
+        return;
     }
 } catch (Exception e) {
     application.log("회원 상태 변경 실패", e);

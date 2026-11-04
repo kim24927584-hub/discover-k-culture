@@ -259,7 +259,7 @@ request.setAttribute(
 목록은 listCommon.css를 사용하므로 두 CSS를 함께 불러옵니다.
 --%>
 <link rel="stylesheet"
-      href="<%=request.getContextPath()%>/css/board/write.css">
+      href="<%=request.getContextPath()%>/resources/css/board/common/writeCommon.css">
 
 
 <main class="container">

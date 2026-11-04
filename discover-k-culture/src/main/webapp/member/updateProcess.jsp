@@ -7,6 +7,11 @@
 <%
 request.setCharacterEncoding("UTF-8");
 
+if (!"POST".equalsIgnoreCase(request.getMethod())) {
+    response.sendRedirect(request.getContextPath() + "/member/mypage.jsp");
+    return;
+}
+
 Long memberId = (Long) session.getAttribute("memberId");
 if (memberId == null) {
     response.sendRedirect(request.getContextPath() + "/member/login.jsp");

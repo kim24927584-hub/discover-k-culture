@@ -7,6 +7,7 @@
 <%@ page import="dao.MemberDAO" %>
 <%@ page import="dao.PostDAO" %>
 <%@ page import="dao.BookmarkListDAO" %>
+<%@ page import="dao.PostLikeDAO" %>
 
 <%@ page import="dto.MemberDTO" %>
 <%@ page import="dto.PostDTO" %>
@@ -182,7 +183,7 @@ if (member == null) {
 
     response.sendRedirect(
         request.getContextPath()
-        + "/member/logout.jsp"
+        + "/member/logout"
     );
 
     return;
@@ -262,7 +263,22 @@ List<BookmarkPostDTO> myBookmarks =
 
 
 /* =========================================================
-   6. 처음 표시할 탭
+   6. 내가 추천한 게시글 조회
+   ---------------------------------------------------------
+   기존 PostLikeDAO.selectPostsByMemberId()를 재사용합니다.
+   post_like 테이블에서 현재 로그인 회원의 추천 기록만 조회하고,
+   추천을 가장 최근에 누른 게시글부터 표시합니다.
+   ========================================================= */
+PostLikeDAO myPostLikeDAO = new PostLikeDAO();
+
+List<PostDTO> myLikedPosts =
+    myPostLikeDAO.selectPostsByMemberId(
+        memberId.longValue()
+    );
+
+
+/* =========================================================
+   7. 처음 표시할 탭
    ---------------------------------------------------------
    상단 헤더의 북마크 버튼에서
 
@@ -274,13 +290,14 @@ String selectedTab =
     request.getParameter("tab");
 
 boolean showBookmarkTab =
-    "bookmark".equals(
-        selectedTab
-    );
+    "bookmark".equals(selectedTab);
+
+boolean showLikeTab =
+    "likes".equals(selectedTab);
 
 
 /* =========================================================
-   7. 공통 헤더 설정
+   8. 공통 헤더 설정
    ---------------------------------------------------------
    기존 mypage.css를 그대로 사용합니다.
    CSS 파일은 변경하지 않습니다.
@@ -292,7 +309,7 @@ request.setAttribute(
 
 request.setAttribute(
     "pageCss",
-    "mypage.css"
+    "member/mypage.css"
 );
 %>
 
@@ -362,6 +379,61 @@ request.setAttribute(
                 </li>
 
             </ul>
+
+            <%-- =============================================
+                 회원 정보 수정
+                 기존 updateProcess.jsp를 실제 화면과 연결합니다.
+                 ============================================= --%>
+            <button type="button" class="btn btn-edit" id="profileEditButton">정보 수정</button>
+
+            <div class="profile-edit-wrap" id="profileEditWrap">
+                <form action="<%=request.getContextPath()%>/member/updateProcess.jsp"
+                      method="post" class="profile-edit-form">
+                    <div class="form-field">
+                        <div>
+                            <label>닉네임
+                                <input name="nickname" value="<%=h(member.getNickname())%>" maxlength="50" required>
+                            </label>
+                        </div>
+                        <div>
+                            <label>아이디
+                                <input value="<%=h(member.getLoginId())%>" readonly>
+                            </label>
+                        </div>
+                        <div>
+                            <label>이메일
+                                <input type="email" name="email" value="<%=h(member.getEmail())%>" maxlength="100" required>
+                            </label>
+                        </div>
+                        <div>
+                            <label>국적
+                                <input name="nationality" value="<%=h(member.getNationality())%>" maxlength="50">
+                            </label>
+                        </div>
+                        <div>
+                            <label>언어
+                                <select name="languageId" class="fix-language" required>
+                                    <option value="1" <%=member.getLanguageId() == 1 ? "selected" : ""%>>한국어</option>
+                                    <option value="2" <%=member.getLanguageId() == 2 ? "selected" : ""%>>日本語</option>
+                                    <option value="3" <%=member.getLanguageId() == 3 ? "selected" : ""%>>中文</option>
+                                    <option value="4" <%=member.getLanguageId() == 4 ? "selected" : ""%>>English</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="fix-buttons">
+                        <button type="submit" class="btn btn-primary">저장</button>
+                        <button type="button" class="btn cancel" id="profileEditCancel">취소</button>
+                    </div>
+                </form>
+            </div>
+
+            <% if ("1".equals(request.getParameter("updated"))) { %>
+                <p class="form-hint">회원 정보가 수정되었습니다.</p>
+            <% } %>
+            <% if (request.getParameter("updateError") != null) { %>
+                <p class="form-hint">회원 정보를 수정하지 못했습니다. 닉네임/이메일 중복 또는 입력값을 확인해 주세요.</p>
+            <% } %>
 
 
             <%-- =============================================
@@ -453,13 +525,16 @@ request.setAttribute(
 
          1. 내 게시글
          2. 내 북마크
+         3. 내가 추천한 게시글
          ===================================================== --%>
     <div class="tabs">
 
         <button
             type="button"
             id="myPostTabButton"
-            class="tab-btn <%=showBookmarkTab ? "" : "is-active"%>">
+            class="tab-btn <%=(!showBookmarkTab && !showLikeTab) ? "is-active" : ""%>"
+            aria-controls="myPostSection"
+            aria-selected="<%=!showBookmarkTab && !showLikeTab%>">
 
             내 게시글
             (<%=myPosts == null ? 0 : myPosts.size()%>)
@@ -470,10 +545,25 @@ request.setAttribute(
         <button
             type="button"
             id="bookmarkTabButton"
-            class="tab-btn <%=showBookmarkTab ? "is-active" : ""%>">
+            class="tab-btn <%=showBookmarkTab ? "is-active" : ""%>"
+            aria-controls="bookmarkSection"
+            aria-selected="<%=showBookmarkTab%>">
 
             ★ 내 북마크
             (<%=myBookmarks == null ? 0 : myBookmarks.size()%>)
+
+        </button>
+
+        <%-- 기존 추천 기능과 연결: 내 추천 게시글 수와 목록을 표시합니다. --%>
+        <button
+            type="button"
+            id="likeTabButton"
+            class="tab-btn <%=showLikeTab ? "is-active" : ""%>"
+            aria-controls="likesSection"
+            aria-selected="<%=showLikeTab%>">
+
+            내가 추천한 게시글
+            (<%=myLikedPosts.size()%>)
 
         </button>
 
@@ -485,7 +575,7 @@ request.setAttribute(
          ===================================================== --%>
     <section
         id="myPostSection"
-        <%=showBookmarkTab ? "hidden" : ""%>>
+        <%=showBookmarkTab || showLikeTab ? "hidden" : ""%>>
 
         <h2>
             내가 작성한 게시글
@@ -711,6 +801,74 @@ request.setAttribute(
 
     </section>
 
+
+    <%-- =====================================================
+         내가 추천한 게시글
+         -----------------------------------------------------
+         PostLikeDAO에서 로그인 회원의 post_like 기록을 조회합니다.
+         추천한 게시글의 제목을 클릭하면 원래 상세화면으로 이동하며,
+         추천을 취소한 글은 다음 조회에서 자동으로 제외됩니다.
+
+         별도 CSS 추가 없이 기존 board-list 스타일을 재사용합니다.
+         ===================================================== --%>
+    <section
+        id="likesSection"
+        <%=showLikeTab ? "" : "hidden"%>>
+
+        <h2>내가 추천한 게시글</h2>
+
+        <div class="board-list">
+
+            <% if (myLikedPosts.isEmpty()) { %>
+
+                <div class="board-item">
+                    <div class="board-body">
+                        <span class="board-title">아직 추천한 게시글이 없습니다.</span>
+                    </div>
+                </div>
+
+            <% } else { %>
+
+                <% for (PostDTO likedPost : myLikedPosts) { %>
+
+                    <div class="board-item">
+
+                        <%-- 해당 게시글의 게시판/카테고리 정보를 표시 --%>
+                        <span class="board-category">
+                            <%=h(boardName(likedPost.getBoardType(), likedPost.getCategoryName()))%>
+                        </span>
+
+                        <div class="board-body">
+
+                            <%-- 원래 게시글 상세보기로 이동 --%>
+                            <a
+                                class="board-title"
+                                href="<%=postDetailUrl(request.getContextPath(), likedPost)%>">
+                                <%=h(likedPost.getTitle())%>
+                            </a>
+
+                            <div class="board-meta">
+                                작성자 <%=h(likedPost.getMemberNickname())%>
+                                · 조회 <%=likedPost.getViewCount()%>
+                                · 추천 <%=likedPost.getLikeCount()%>
+                                · 댓글 <%=likedPost.getCommentCount()%>
+                                · 작성일
+                                <%=likedPost.getCreatedAt() == null
+                                    ? "-"
+                                    : likedPost.getCreatedAt().toString().substring(0, 10)%>
+                            </div>
+
+                        </div>
+                    </div>
+
+                <% } %>
+
+            <% } %>
+
+        </div>
+
+    </section>
+
 </main>
 
 
@@ -718,119 +876,77 @@ request.setAttribute(
 
 
 <%-- ========================================================
-     탭 전환 JavaScript
+     마이페이지 세 가지 탭 전환
      --------------------------------------------------------
-     별도 CSS 추가 없이 hidden 속성만 변경합니다.
-
-     URL에 ?tab=bookmark가 있거나
-     #bookmarkSection으로 접근하면 북마크 탭을 활성화합니다.
+     hidden 속성으로 내용 표시 여부를 변경하므로 기존 CSS는 그대로입니다.
+     URL의 tab=bookmark / tab=likes 값으로 바로 진입할 수 있습니다.
      ======================================================== --%>
 <script>
 (function () {
+    const sections = {
+        posts: document.getElementById("myPostSection"),
+        bookmark: document.getElementById("bookmarkSection"),
+        likes: document.getElementById("likesSection")
+    };
 
-    const myPostButton =
-        document.getElementById(
-            "myPostTabButton"
-        );
+    const buttons = {
+        posts: document.getElementById("myPostTabButton"),
+        bookmark: document.getElementById("bookmarkTabButton"),
+        likes: document.getElementById("likeTabButton")
+    };
 
-    const bookmarkButton =
-        document.getElementById(
-            "bookmarkTabButton"
-        );
+    /* 하나의 탭만 활성화하고 나머지 패널은 숨깁니다. */
+    function showTab(tabName, scrollToSection) {
+        if (!sections[tabName]) tabName = "posts";
 
-    const myPostSection =
-        document.getElementById(
-            "myPostSection"
-        );
+        Object.keys(sections).forEach(function (name) {
+            const active = (name === tabName);
+            sections[name].hidden = !active;
+            buttons[name].classList.toggle("is-active", active);
+            buttons[name].setAttribute("aria-selected", String(active));
+        });
 
-    const bookmarkSection =
-        document.getElementById(
-            "bookmarkSection"
-        );
-
-
-    /*
-     * 내 게시글 탭 표시
-     */
-    function showMyPosts() {
-
-        myPostSection.hidden =
-            false;
-
-        bookmarkSection.hidden =
-            true;
-
-        myPostButton.classList.add(
-            "is-active"
-        );
-
-        bookmarkButton.classList.remove(
-            "is-active"
-        );
-    }
-
-
-    /*
-     * 북마크 탭 표시
-     */
-    function showBookmarks() {
-
-        myPostSection.hidden =
-            true;
-
-        bookmarkSection.hidden =
-            false;
-
-        bookmarkButton.classList.add(
-            "is-active"
-        );
-
-        myPostButton.classList.remove(
-            "is-active"
-        );
-    }
-
-
-    myPostButton.addEventListener(
-        "click",
-        showMyPosts
-    );
-
-
-    bookmarkButton.addEventListener(
-        "click",
-        function () {
-
-            showBookmarks();
-
-            /*
-             * 북마크 영역 위치로 부드럽게 이동
-             */
-            bookmarkSection.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
+        if (scrollToSection) {
+            sections[tabName].scrollIntoView({ behavior: "smooth", block: "start" });
         }
-    );
-
-
-    /*
-     * 상단 헤더의 북마크 버튼으로 들어온 경우
-     * 자동으로 북마크 탭을 엽니다.
-     */
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-    if (
-        params.get("tab") === "bookmark"
-        || window.location.hash === "#bookmarkSection"
-    ) {
-
-        showBookmarks();
     }
 
+    /* 탭 클릭 시 해당 목록 표시 */
+    Object.keys(buttons).forEach(function (name) {
+        buttons[name].addEventListener("click", function () {
+            showTab(name, name !== "posts");
+        });
+    });
+
+    /* 헤더의 북마크 링크 및 직접 탭 URL 접근 지원 */
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get("tab");
+    if (tabParam === "bookmark" || window.location.hash === "#bookmarkSection") {
+        showTab("bookmark", false);
+    } else if (tabParam === "likes" || window.location.hash === "#likesSection") {
+        showTab("likes", false);
+    } else {
+        showTab("posts", false);
+    }
+
+    /* 기존 프로필 정보 수정 폼 열기/닫기는 그대로 유지 */
+    const profileEditButton = document.getElementById("profileEditButton");
+    const profileEditWrap = document.getElementById("profileEditWrap");
+    const profileEditCancel = document.getElementById("profileEditCancel");
+
+    if (profileEditButton && profileEditWrap) {
+        profileEditButton.addEventListener("click", function () {
+            profileEditWrap.classList.add("is-open");
+            profileEditButton.hidden = true;
+        });
+    }
+
+    if (profileEditCancel && profileEditWrap && profileEditButton) {
+        profileEditCancel.addEventListener("click", function () {
+            profileEditWrap.classList.remove("is-open");
+            profileEditButton.hidden = false;
+        });
+    }
 })();
 </script>
 
