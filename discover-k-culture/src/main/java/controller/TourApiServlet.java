@@ -33,39 +33,58 @@ public class TourApiServlet extends HttpServlet {
 
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType("application/json; charset=UTF-8");
+        // 30분 캐시는 브라우저가 아니라 서버에서 공유합니다.
         response.setHeader("Cache-Control", "no-store");
 
         long now = System.currentTimeMillis();
-        String cache = cachedJson;
-
-        if (cache != null && now < cacheExpiresAt) {
-            response.getWriter().write(cache);
+        String result = cachedJson;
+        if (result != null && now < cacheExpiresAt) {
+            response.setHeader("X-Tour-Cache", "HIT");
+            response.getWriter().write(result);
             return;
         }
 
-        try {
-            String serviceKey = loadServiceKey();
-
-            if (serviceKey == null || serviceKey.isBlank()) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().write(errorJson("TourAPI 키가 설정되지 않았습니다."));
+        // 최초 방문과 캐시 만료 직후 동시 요청이 겹쳐도 외부 API는 1회만 호출합니다.
+        synchronized (this) {
+            now = System.currentTimeMillis();
+            result = cachedJson;
+            if (result != null && now < cacheExpiresAt) {
+                response.setHeader("X-Tour-Cache", "HIT");
+                response.getWriter().write(result);
                 return;
             }
+            try {
+                String serviceKey = loadServiceKey();
+                if (serviceKey == null || serviceKey.isBlank()) {
+                    throw new IllegalStateException("TOUR_API_KEY_NOT_CONFIGURED");
+                }
 
-            List<TourContentDTO> items =
-                tourApiService.selectHomeRecommendations(serviceKey, HOME_ITEM_COUNT);
-
-            String json = buildJson(serviceKey, items);
-
-            cachedJson = json;
-            cacheExpiresAt = now + CACHE_MILLIS;
-
-            response.getWriter().write(json);
-
-        } catch (Exception e) {
-            getServletContext().log("TourAPI 홈 슬라이드 조회 오류", e);
-            response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
-            response.getWriter().write(errorJson("관광 정보를 불러오지 못했습니다."));
+                List<TourContentDTO> items =
+                    tourApiService.selectHomeRecommendations(serviceKey, HOME_ITEM_COUNT);
+                // 데이터가 정상적으로 조회된 경우에만 캐시를 갱신합니다.
+                if (items == null || items.isEmpty()) {
+                    throw new IllegalStateException("TourAPI returned an empty list");
+                }
+                String freshJson = buildJson(serviceKey, items);
+                cachedJson = freshJson;
+                cacheExpiresAt = System.currentTimeMillis() + CACHE_MILLIS;
+                response.setHeader("X-Tour-Cache", "MISS");
+                response.getWriter().write(freshJson);
+                return;
+            } catch (Exception e) {
+                getServletContext().log("TourAPI 홈 슬라이드 조회 오류", e);
+                // 일시적인 API 장애일 때 마지막 정상 데이터를 보여줍니다.
+                if (cachedJson != null) {
+                    // 실패 직후 반복적인 API 재호출을 1분 동안 억제합니다.
+                    cacheExpiresAt = System.currentTimeMillis() + 60_000L;
+                    response.setHeader("X-Tour-Cache", "STALE");
+                    response.getWriter().write(cachedJson);
+                    return;
+                }
+                response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
+                response.setHeader("X-Tour-Cache", "ERROR");
+                response.getWriter().write(errorJson("관광 정보를 불러오지 못했습니다."));
+            }
         }
     }
 

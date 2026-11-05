@@ -224,7 +224,7 @@ request.setAttribute(
         </thead>
 
 
-        <tbody>
+        <tbody data-bookmark-list>
 
         <%
         if (
@@ -233,7 +233,7 @@ request.setAttribute(
         ) {
         %>
 
-            <tr>
+            <tr data-bookmark-empty>
 
                 <td colspan="8">
                     북마크한 게시글이 없습니다.
@@ -253,11 +253,11 @@ request.setAttribute(
             ) {
         %>
 
-            <tr>
+            <tr data-bookmark-item>
 
 
                 <%-- 화면 순번 --%>
-                <td class="col-num">
+                <td class="col-num" data-bookmark-number>
                     <%=number--%>
                 </td>
 
@@ -319,7 +319,8 @@ request.setAttribute(
 
                     <form
                         action="<%=request.getContextPath()%>/member/bookmarkRemoveProcess.jsp"
-                        method="post">
+                        method="post" data-ajax-bookmark="remove"
+                        data-login-url="<%=request.getContextPath()%>/member/login.jsp">
 
                         <input
                             type="hidden"
@@ -361,4 +362,5 @@ request.setAttribute(
 
 
 <%@ include file="/include/sidebar.jsp" %>
+<script defer src="<%=request.getContextPath()%>/resources/js/bookmark-ajax.js?v=20261105-1"></script>
 <%@ include file="/include/footer.jsp" %>

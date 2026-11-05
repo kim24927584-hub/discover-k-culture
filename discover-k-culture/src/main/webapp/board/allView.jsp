@@ -100,7 +100,7 @@ request.setAttribute("pageCss", "board/common/viewCommon.css");
   <h1 class="post-title"><%=h(post.getTitle())%></h1>
   <span class="post-meta">
     <span class="post-writer"><%=h(post.getMemberNickname())%></span> · 조회 <%=post.getViewCount()%> ·
-    추천 <%=post.getLikeCount()%> · 비추천 <%=post.getDislikeCount()%> ·
+    추천 <span data-post-meta-reaction="like"><%=post.getLikeCount()%></span> · 비추천 <span data-post-meta-reaction="dislike"><%=post.getDislikeCount()%></span> ·
     <%=post.getCreatedAt() == null ? "-" : post.getCreatedAt().toString().substring(0, 16)%>
   </span>
 
@@ -122,15 +122,15 @@ request.setAttribute("pageCss", "board/common/viewCommon.css");
 
     <%-- ===== 게시글 추천/비추천/북마크 ===== --%>
     <div class="post-actions">
-      <div class="like-box">
+      <div class="like-box" data-reaction-group="post">
         <% if (loggedIn && !suspended) { %>
-          <form action="<%=request.getContextPath()%>/board/process/board/likeProcess.jsp" method="post">
+          <form action="<%=request.getContextPath()%>/board/process/board/likeProcess.jsp" method="post" data-ajax-reaction data-reaction="like">
             <input type="hidden" name="postId" value="<%=postId%>">
-            <button type="submit" class="action-btn post-reaction <%=postLiked ? "active" : ""%>">👍 <%=post.getLikeCount()%></button>
+            <button type="submit" aria-pressed="<%=postLiked ? "true" : "false"%>" class="action-btn post-reaction <%=postLiked ? "active" : ""%>">👍 <span data-reaction-count="like"><%=post.getLikeCount()%></span></button>
           </form>
-          <form action="<%=request.getContextPath()%>/board/process/board/dislikeProcess.jsp" method="post">
+          <form action="<%=request.getContextPath()%>/board/process/board/dislikeProcess.jsp" method="post" data-ajax-reaction data-reaction="dislike">
             <input type="hidden" name="postId" value="<%=postId%>">
-            <button type="submit" class="action-btn post-reaction <%=postDisliked ? "active" : ""%>">👎 <%=post.getDislikeCount()%></button>
+            <button type="submit" aria-pressed="<%=postDisliked ? "true" : "false"%>" class="action-btn post-reaction <%=postDisliked ? "active" : ""%>">👎 <span data-reaction-count="dislike"><%=post.getDislikeCount()%></span></button>
           </form>
         <% } else { %>
           <span class="action-btn post-reaction">👍 <%=post.getLikeCount()%></span>
@@ -140,9 +140,11 @@ request.setAttribute("pageCss", "board/common/viewCommon.css");
 
       <% if (loggedIn) { %>
       <form action="<%=request.getContextPath()%>/board/process/board/bookmarkProcess.jsp" method="post"
-            class="post-bookmark <%=bookmarked ? "active" : ""%>">
+            class="post-bookmark <%=bookmarked ? "active" : ""%>" data-ajax-bookmark="toggle"
+            data-login-url="<%=request.getContextPath()%>/member/login.jsp">
         <input type="hidden" name="postId" value="<%=postId%>">
-        <button type="submit" class="action-btn">
+        <button type="submit" class="action-btn" aria-pressed="<%=bookmarked ? "true" : "false"%>"
+                aria-label="<%=bookmarked ? "북마크 해제" : "북마크 추가"%>">
           <span class="icon-off">☆</span><span class="icon-on">★</span> 북마크
         </button>
       </form>
@@ -201,17 +203,17 @@ request.setAttribute("pageCss", "board/common/viewCommon.css");
           </form>
         <% } %>
       </div>
-      <div>
+      <div data-reaction-group="comment">
         <% if (loggedIn && !suspended) { %>
-          <form action="<%=request.getContextPath()%>/board/process/comment/likeProcess.jsp" method="post">
+          <form action="<%=request.getContextPath()%>/board/process/comment/likeProcess.jsp" method="post" data-ajax-reaction data-reaction="like">
             <input type="hidden" name="commentId" value="<%=comment.getCommentId()%>">
             <input type="hidden" name="postId" value="<%=postId%>">
-            <button type="submit" class="comment-like <%=commentLiked ? "active" : ""%>">👍 <%=comment.getLikeCount()%></button>
+            <button type="submit" aria-pressed="<%=commentLiked ? "true" : "false"%>" class="comment-like <%=commentLiked ? "active" : ""%>">👍 <span data-reaction-count="like"><%=comment.getLikeCount()%></span></button>
           </form>
-          <form action="<%=request.getContextPath()%>/board/process/comment/dislikeProcess.jsp" method="post">
+          <form action="<%=request.getContextPath()%>/board/process/comment/dislikeProcess.jsp" method="post" data-ajax-reaction data-reaction="dislike">
             <input type="hidden" name="commentId" value="<%=comment.getCommentId()%>">
             <input type="hidden" name="postId" value="<%=postId%>">
-            <button type="submit" class="comment-like <%=commentDisliked ? "active" : ""%>">👎 <%=comment.getDislikeCount()%></button>
+            <button type="submit" aria-pressed="<%=commentDisliked ? "true" : "false"%>" class="comment-like <%=commentDisliked ? "active" : ""%>">👎 <span data-reaction-count="dislike"><%=comment.getDislikeCount()%></span></button>
           </form>
         <% } else { %>
           <span class="comment-like">👍 <%=comment.getLikeCount()%></span>
@@ -224,4 +226,6 @@ request.setAttribute("pageCss", "board/common/viewCommon.css");
 </main>
 
 <%@include file="/include/sidebar.jsp" %>
+<script defer src="<%=request.getContextPath()%>/resources/js/post-reaction-ajax.js?v=20261105-1"></script>
+<script defer src="<%=request.getContextPath()%>/resources/js/bookmark-ajax.js?v=20261105-1"></script>
 <%@include file="/include/footer.jsp" %>

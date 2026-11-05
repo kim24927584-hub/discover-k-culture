@@ -3,14 +3,10 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.text.SimpleDateFormat"%>
-<%@ page import="java.io.InputStream"%>
-<%@ page import="java.util.Properties"%>
 <%@ page import="dao.NoticeDAO"%>
 <%@ page import="dao.UnifiedBoardDAO"%>
 <%@ page import="dto.NoticeDTO"%>
 <%@ page import="dto.UnifiedBoardDTO"%>
-<%@ page import="dto.TourContentDTO"%>
-<%@ page import="service.TourApiService"%>
 
 
 <%!
@@ -38,12 +34,9 @@ request.setCharacterEncoding("UTF-8");
 List<NoticeDTO> notices = new ArrayList<NoticeDTO>();
 List<UnifiedBoardDTO> topViewed = new ArrayList<UnifiedBoardDTO>();
 List<UnifiedBoardDTO> latestAll = new ArrayList<UnifiedBoardDTO>();
-List<TourContentDTO> tourContents = new ArrayList<TourContentDTO>();
-List<String> tourDescriptions = new ArrayList<String>();
 
 String noticeError = null;
 String postError = null;
-String tourError = null;
 
 
 try {
@@ -60,56 +53,6 @@ try {
 } catch (Exception e) {
 	postError = "게시글을 불러오지 못했습니다.";
 	application.log("home.jsp 게시글 조회 오류", e);
-}
-
-/*
- * TourAPI 키는 브라우저에 노출하지 않고 WEB-INF에서 읽습니다.
- * Eclipse Dynamic Web Project에서는 WEB-INF 아래 파일이 Tomcat에 그대로 배포됩니다.
- */
-String tourApiKey = System.getenv("TOUR_API_KEY");
-
-if (tourApiKey == null || tourApiKey.trim().isEmpty()) {
-	Properties tourProperties = new Properties();
-	try (InputStream tourIn = application.getResourceAsStream("/WEB-INF/tour.properties")) {
-		if (tourIn != null) {
-			tourProperties.load(tourIn);
-			tourApiKey = tourProperties.getProperty("tour.api.key");
-		}
-	} catch (Exception e) {
-		application.log("TourAPI 설정파일 읽기 오류", e);
-	}
-}
-
-if (tourApiKey == null || tourApiKey.trim().isEmpty()) {
-	tourError = "TourAPI 키가 설정되지 않았습니다.";
-} else {
-	try {
-		TourApiService tourService = new TourApiService();
-		tourContents = tourService.selectHomeRecommendations(tourApiKey.trim(), 5);
-
-		for (TourContentDTO item : tourContents) {
-			String overview = "";
-			try {
-				overview = tourService.selectOverview(tourApiKey.trim(), item.getContentId());
-			} catch (Exception detailError) {
-				application.log("TourAPI 상세설명 조회 오류: " + item.getContentId(), detailError);
-			}
-
-			if (overview == null || overview.trim().isEmpty()) {
-				overview = item.getAddress() == null ? "" : item.getAddress();
-			}
-			tourDescriptions.add(overview);
-		}
-
-		if (tourContents == null || tourContents.isEmpty()) {
-			tourError = "표시할 관광 정보가 없습니다.";
-		}
-	} catch (Exception e) {
-		String message = e.getMessage();
-		tourError = "관광 정보를 불러오지 못했습니다."
-			+ (message == null || message.trim().isEmpty() ? "" : " (" + message + ")");
-		application.log("home.jsp TourAPI 조회 오류", e);
-	}
 }
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yy.MM.dd");
@@ -172,73 +115,27 @@ request.setAttribute("pageCss", "home.css");
 			</section>
 
 			<section class="main-s2">
-				<div class="festival-api" id="tourRecommendation" style="position:relative; box-sizing:border-box; padding-bottom:46px; overflow:hidden;">
-					<div class="festival-caption">
-						<span>여행 추천</span>
-					</div>
-
-					<% if (tourError != null) { %>
-						<table class="board">
-							<tr>
-								<td><%=tourError%></td>
-							</tr>
-						</table>
-					<% } else { %>
-						<div id="tourSlider" style="padding-bottom:4px;">
-							<%
-							for (int i = 0; i < tourContents.size(); i++) {
-								TourContentDTO item = tourContents.get(i);
-								String description = i < tourDescriptions.size() ? tourDescriptions.get(i) : "";
-								String imageUrl = item.getImageUrl();
-								if (imageUrl == null || imageUrl.trim().isEmpty()) {
-									imageUrl = ctxPath + "/resources/img/no-image.jpg";
-								}
-							%>
-                            <div class="tour-slide" <%=i == 0 ? "" : "hidden"%>>
-                                <table class="board">
-                                    <tbody>
-                                        <tr>
-                                            <td width="105" valign="top">
-                                                <img
-                                                    src="<%=imageUrl%>"
-                                                    alt="<%=h(item.getTitle())%>"
-                                                    width="95"
-                                                    height="80"
-                                                    onerror="this.onerror=null;this.src='<%=ctxPath%>/resources/img/no-image.jpg';">
-                                            </td>
-                                            <td valign="top">
-                                                <strong title="<%=h(item.getTitle())%>"><%=h(shortText(item.getTitle(), 18))%></strong><br>
-                                                <span title="<%=h(description)%>"><%=h(shortText(description, 34))%></span><br>
-                                                <small title="<%=h(item.getAddress())%>"><%=h(shortText(item.getAddress(), 24))%></small>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <% } %>
-						</div>
-
-						<div
-                            class="tour-slider-controls"
-                            aria-label="여행 추천 슬라이드 이동"
-                            style="position:absolute; left:10px; right:10px; bottom:8px; height:34px; display:flex; align-items:center; justify-content:center; gap:14px; background:var(--color-bg-muted, #f1f3f4); color:var( --color-text, #333333); z-index:5;">
-                            <button
-                                type="button"
-                                id="tourPrevButton"
-                                aria-label="이전 관광지"
-                                title="이전"
-                                style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var( --color-text, #333333); ">◀</button>
-                            <span id="tourSlideCounter" style="min-width:48px; text-align:center; white-space:nowrap;">1 / <%=tourContents.size()%></span>
-                            <button
-                                type="button"
-                                id="tourNextButton"
-                                aria-label="다음 관광지"
-                                title="다음"
-                                style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var( --color-text, #333333); ">▶</button>
-                        </div>
-					<% } %>
-				</div>
-			</section>
+                <%-- 홈 HTML을 관광 API 네트워크 응답보다 먼저 출력합니다.
+                     데이터는 /api/tour/home(서버 30분 캐시)에서 비동기로 수신합니다. --%>
+                <div class="festival-api" id="tourRecommendation"
+                     data-api-url="<%=ctxPath%>/api/tour/home"
+                     data-fallback-image="<%=ctxPath%>/resources/img/no-image.jpg"
+                     style="position:relative; box-sizing:border-box; padding-bottom:46px; overflow:hidden;">
+                    <div class="festival-caption"><span>여행 추천</span></div>
+                    <div id="tourSlider" style="padding-bottom:4px;">
+                        <table class="board"><tbody><tr><td>여행 정보를 불러오는 중...</td></tr></tbody></table>
+                    </div>
+                    <div class="tour-slider-controls"
+                         aria-label="여행 추천 슬라이드 이동" hidden
+                         style="position:absolute; left:10px; right:10px; bottom:8px; height:34px; display:flex; align-items:center; justify-content:center; gap:14px; background:var(--color-bg-muted, #f1f3f4); color:var(--color-text, #333333); z-index:5;">
+                        <button type="button" id="tourPrevButton" aria-label="이전 관광지" title="이전"
+                                style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--color-text, #333333);">◀</button>
+                        <span id="tourSlideCounter" style="min-width:48px; text-align:center; white-space:nowrap;">0 / 0</span>
+                        <button type="button" id="tourNextButton" aria-label="다음 관광지" title="다음"
+                                style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--color-text, #333333);">▶</button>
+                    </div>
+                </div>
+            </section>
 		</div>
 
 		<div class="wrapper">
@@ -383,7 +280,7 @@ request.setAttribute("pageCss", "home.css");
 		</div>
 	</main>
 
-	<script src="<%=ctxPath%>/resources/js/tour-home-slider.js" defer></script>
+	<script src="<%=ctxPath%>/resources/js/tour-home-slider.js?v=20261105-1" defer></script>
 
 	<%@ include file="/include/sidebar.jsp"%>
 	<%@ include file="/include/footer.jsp"%>
