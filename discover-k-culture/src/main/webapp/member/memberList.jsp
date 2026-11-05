@@ -36,7 +36,7 @@ request.setCharacterEncoding("UTF-8");
 /* =========================================================
    1. 관리자 권한 확인
    ========================================================= */
-Long adminId = (Long) session.getAttribute("memberId");
+Object adminId = session.getAttribute("memberId");
 if (adminId == null || !"ADMIN".equals(session.getAttribute("role"))) {
     response.sendRedirect(request.getContextPath() + "/home.jsp");
     return;
@@ -91,7 +91,18 @@ int endPage = Math.min(startPage + blockSize - 1, totalPages);
 String encodedKeyword = URLEncoder.encode(keyword, StandardCharsets.UTF_8);
 String baseQuery = "keyword=" + encodedKeyword + "&pageSize=" + pageSize;
 
-request.setAttribute("pageCss", "member/memberList.css");
+/*
+ * header.jsp의 개별 CSS 링크는 /resources/css/${pageCss} 형식입니다.
+ * 기존 회원관리 CSS의 내용은 변경하지 않고 실제 배포 위치만 확인합니다.
+ * memberList.css를 /resources/css/에 놓으면 그대로 적용됩니다.
+ */
+String memberListCss = "memberList.css";
+if (application.getResource("/resources/css/memberList.css") == null
+        && application.getResource("/resources/css/member/memberList.css") != null) {
+    memberListCss = "member/memberList.css";
+}
+// CSS가 브라우저에 캐시되어 이전 디자인이 나타나는 현상 방지
+request.setAttribute("pageCss", memberListCss + "?v=20261105");
 request.setAttribute("pageTitle", "회원 관리");
 request.setAttribute("activeMenu", "ADMIN");
 %>
@@ -121,12 +132,12 @@ request.setAttribute("activeMenu", "ADMIN");
     <% } %>
 
     <div class="member-toolbar">
-        <form class="member-search" action="<%=request.getContextPath()%>/member/memberList.jsp" method="get">
+        <form class="member-search" action="<%=memberListH(request.getRequestURI())%>" method="get">
             <input type="text" name="keyword" value="<%=memberListH(keyword)%>"
                    aria-label="회원 검색" placeholder="로그인 ID, 닉네임, 이메일 검색">
             <input type="hidden" name="pageSize" value="<%=pageSize%>">
             <button type="submit" class="member-btn member-btn-primary">검색</button>
-            <a href="<%=request.getContextPath()%>/member/memberList.jsp" class="member-btn member-btn-reset">초기화</a>
+            <a href="<%=memberListH(request.getRequestURI())%>" class="member-btn member-btn-reset">초기화</a>
         </form>
 
         <div class="member-count">
@@ -134,7 +145,7 @@ request.setAttribute("activeMenu", "ADMIN");
             <strong><%=totalCount%>명</strong>
         </div>
 
-        <form class="member-page-size" action="<%=request.getContextPath()%>/member/memberList.jsp" method="get">
+        <form class="member-page-size" action="<%=memberListH(request.getRequestURI())%>" method="get">
             <input type="hidden" name="keyword" value="<%=memberListH(keyword)%>">
             <label for="memberPageSize">페이지당</label>
             <select id="memberPageSize" name="pageSize" onchange="this.form.submit()">
@@ -172,7 +183,7 @@ request.setAttribute("activeMenu", "ADMIN");
                     <td class="member-number">#<%=member.getMemberId()%></td>
                     <td>
                         <span class="member-avatar">
-                            <img src="<%=memberProfileSrc(request.getContextPath(), member.getProfileImage())%>" alt="프로필">
+                            <img src="<%=memberListH(memberProfileSrc(request.getContextPath(), member.getProfileImage()))%>" alt="프로필">
                         </span>
                     </td>
                     <td class="member-name-cell">

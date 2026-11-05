@@ -280,7 +280,7 @@ request.setAttribute("pageCss", "home.css");
 		</div>
 	</main>
 
-	<script src="<%=ctxPath%>/resources/js/tour-home-slider.js?v=20261105-1" defer></script>
+	<script src="<%=ctxPath%>/resources/js/tour-home-slider.js?v=20261105-board-only-1" defer></script>
 
 	<%@ include file="/include/sidebar.jsp"%>
 	<%@ include file="/include/footer.jsp"%>

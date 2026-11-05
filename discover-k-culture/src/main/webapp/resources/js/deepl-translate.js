@@ -14,6 +14,15 @@
     var CACHE_MAX_ENTRIES = 220;
     var CACHE_MAX_TEXT_LENGTH = 1200;
 
+    // 최초 렌더링된 한국어 원문을 보관하여 언어를 여러 번 바꿔도
+    // 번역문을 다시 번역하지 않도록 합니다.
+    var originalTargets = [];
+    var translationRevision = 0;
+    // 비동기로 추가된 관광정보에도 현재 선택한 언어를 적용하기 위한 상태입니다.
+    var activeLanguage = "ko";
+    var activeShell = null;
+    var activeEndpoint = "";
+
     /*
      * 화면의 안내 문구와 일반 게시글은 번역하되,
      * 개인 식별 정보·서비스 식별자·사용자 입력 영역은 API에 보내지 않습니다.
@@ -23,7 +32,8 @@
     var BLOCKED_TAGS = [
         "SCRIPT", "STYLE", "NOSCRIPT", "CODE", "PRE",
         "KBD", "SAMP", "VAR", "SVG", "MATH",
-        "IFRAME", "OBJECT", "TEMPLATE", "INPUT", "TEXTAREA"
+        "IFRAME", "OBJECT", "TEMPLATE", "INPUT", "TEXTAREA",
+        "SELECT", "OPTION", "OPTGROUP"
     ];
 
     var IGNORE_SELECTOR = [
@@ -85,26 +95,33 @@
     var LETTER_PATTERN =
         /[A-Za-zÀ-ÖØ-öø-ÿ\u3040-\u30ff\u3400-\u9fff\uac00-\ud7a3]/;
 
-
     /*
      * 번역 선택창 옆에는 진행/완료 문구를 표시하지 않습니다.
-     * 실패 시에만 오류 내용을 표시합니다.
+     * 실패 시에만 이유를 보여 사용자가 API 설정 문제를 확인할 수 있게 합니다.
      * 번역 동작 및 요청은 변경하지 않습니다.
      */
     function setTranslationStatus(message, isError) {
         var element = document.getElementById("translationStatus");
-        if (!element) return;
-
         var showError = Boolean(isError && message);
+        if (element) {
+            element.textContent = showError ? message : "";
+            element.style.display = showError ? "block" : "none";
+            element.style.color = "#b42318";
+        }
 
-        element.textContent = showError ? message : "";
-        element.style.display = showError ? "block" : "none";
-        element.style.color = "#b42318";
+        // 회원가입에서는 헤더의 프로필/번역 상태 영역이 보이지 않을 수 있어
+        // 언어 선택 입력칸 근처에도 오류만 보여줍니다.
+        var previewError = document.getElementById("languagePreviewError");
+        if (previewError) {
+            previewError.textContent = showError ? message : "";
+            previewError.style.display = showError ? "block" : "none";
+        }
     }
 
     /*
-     * 언어 변경 시 CSRF 토큰을 포함한 POST 요청을 보냅니다.
-     * 서버에서 저장 성공 응답을 받은 후 페이지를 새로고침합니다.
+     * 언어 변경은 CSRF 토큰을 포함한 POST 요청으로 세션에 저장합니다.
+     * 일반 form.submit()과 달리, 실패하면 현재 화면에서 오류를 안내합니다.
+     * 서버가 저장에 성공한 경우에만 화면을 다시 읽어 번역을 시작합니다.
      */
     function bindLanguageSelector() {
         var select = document.getElementById("siteLanguageSelect");
@@ -120,15 +137,14 @@
             var nextLanguage = select.value;
             if (nextLanguage === previousLanguage) return;
 
-            // 구형 브라우저에서는 일반 POST 방식 유지
             if (typeof window.fetch !== "function"
                     || typeof window.FormData !== "function"
                     || typeof window.URLSearchParams !== "function") {
-                form.submit();
+                form.submit(); // 구형 브라우저에서는 기존 POST 방식 유지
                 return;
             }
 
-            // disabled 처리 전에 폼 데이터 수집
+            // FormData는 disabled 필드를 제외하므로 잠그기 전에 값을 수집해야 합니다.
             var body = new URLSearchParams(new FormData(form));
 
             pending = true;
@@ -150,34 +166,112 @@
                         ? "언어 변경이 거부되었습니다. 새로고침 후 다시 시도하세요."
                         : "언어 설정 실패 (HTTP " + response.status + ")");
                 }
-
                 return response.json();
-
             }).then(function (result) {
-                if (!result || result.ok !== true
-                        || result.language !== nextLanguage) {
+                if (!result || result.ok !== true || result.language !== nextLanguage) {
                     throw new Error("서버의 언어 설정 응답이 올바르지 않습니다.");
                 }
-
-                // 언어 저장 성공 후 새로고침
                 window.location.reload();
-
             }).catch(function (error) {
                 pending = false;
                 select.disabled = false;
                 select.value = previousLanguage;
-
-                setTranslationStatus(
-                    error.message || "언어 설정에 실패했습니다.",
-                    true
-                );
-
-                if (window.console) {
-                    console.warn("[K-culture 번역] 언어 변경 실패", error);
-                }
+                setTranslationStatus(error.message || "언어 설정에 실패했습니다.", true);
+                if (window.console) console.warn("[K-culture 번역] 언어 변경 실패", error);
             });
         });
+    }
 
+    /*
+     * 회원가입/마이페이지에서 '사용 언어'를 선택하는 순간 번역 미리보기.
+     * 여기서는 DB 및 세션의 사이트 언어를 변경하지 않습니다.
+     * 실제 기본 언어 저장은 joinProcess.jsp / updateProcess.jsp에서 처리합니다.
+     *
+     * 따라서 가입 폼에 입력한 아이디·이메일·비밀번호를 잃지 않고
+     * 같은 페이지에서 화면 안내/메뉴만 번역할 수 있습니다.
+     */
+    function bindMemberLanguagePreview(shell, contextPath) {
+        var selectors = document.querySelectorAll('select[data-language-preview="true"]');
+        var languageMap = { "1": "ko", "2": "ja", "3": "zh", "4": "en" };
+        var i;
+
+        for (i = 0; i < selectors.length; i++) {
+            (function (select) {
+                var savedValue = select.value;
+                select.addEventListener("change", function () {
+                    var nextLanguage = languageMap[select.value];
+                    if (!nextLanguage) return;
+                    previewLanguage(shell, contextPath, nextLanguage);
+                });
+
+                // 마이페이지의 '취소'는 미리보기와 선택값만 원래대로 복원합니다.
+                var editForm = select.closest(".profile-edit-form");
+                var cancel = document.getElementById("profileEditCancel");
+                if (editForm && cancel && editForm.contains(select)) {
+                    cancel.addEventListener("click", function () {
+                        select.value = savedValue;
+                        var bodyLanguage = shell.getAttribute("data-site-language") || "ko";
+                        previewLanguage(shell, contextPath, bodyLanguage);
+                    });
+                }
+            })(selectors[i]);
+        }
+    }
+
+    function restoreOriginalTargets() {
+        var i;
+        for (i = 0; i < originalTargets.length; i++) {
+            var target = originalTargets[i];
+            if (target.kind === "text" && target.node) {
+                target.node.nodeValue = target.prefix + target.original + target.suffix;
+            } else if (target.kind === "attribute" && target.element) {
+                target.element.setAttribute(target.attribute, target.original);
+            }
+        }
+    }
+
+    function previewLanguage(shell, contextPath, language) {
+        // 회원가입/마이페이지 미리보기의 선택 언어도 동적 관광정보에 반영합니다.
+        activeLanguage = language;
+        // 이전 번역 요청이 나중에 도착하더라도 오래된 결과가 화면을 덮지 못하게 합니다.
+        translationRevision++;
+        restoreOriginalTargets();
+        document.documentElement.classList.remove("deepl-translated", "deepl-translating");
+        document.documentElement.lang = LANGUAGE_HTML[language] || language;
+        setTranslationStatus("");
+
+        if (language !== "ko") {
+            translatePage(shell, language, contextPath + "/api/deepl/translate", originalTargets);
+        }
+    }
+
+    /*
+     * /api/tour/home 응답처럼 최초 페이지 로딩 이후에 나타난 DOM도 번역합니다.
+     * 콘텐츠를 새로 그리는 스크립트에서 kculture:content-updated 이벤트를 보냅니다.
+     * 기존 페이지의 텍스트는 다시 수집하지 않아 번역문 재번역/중복 요청을 방지합니다.
+     */
+    function bindDynamicContentTranslation() {
+        document.addEventListener("kculture:content-updated", function (event) {
+            var root = event && event.detail ? event.detail.root : null;
+            if (!activeShell || !root || root.nodeType !== 1
+                    || !activeShell.contains(root)) return;
+
+            var addedTargets = [];
+            collectTextNodes(root, addedTargets);
+            collectAttributes(root, addedTargets);
+            if (!addedTargets.length) return;
+
+            // 새 콘텐츠의 한국어 원문을 기억해 두면 언어 미리보기 변경/취소 시 복원됩니다.
+            for (var i = 0; i < addedTargets.length; i++) {
+                originalTargets.push(addedTargets[i]);
+            }
+
+            if (activeLanguage !== "ko") {
+                // 초기 화면의 번역과 동시에 실행되어도 기존 요청을 취소하지 않습니다.
+                translatePage(activeShell, activeLanguage, activeEndpoint,
+                        addedTargets, true);
+            }
+        });
     }
 
     function boot() {
@@ -213,6 +307,16 @@
         var contextPath =
             shell.getAttribute("data-context-path") || "";
 
+        activeShell = shell;
+        activeLanguage = language;
+        activeEndpoint = contextPath + "/api/deepl/translate";
+        bindDynamicContentTranslation();
+
+        // 서버에서 출력된 최초 원문을 보관한 후 번역합니다.
+        // 현재 번역 제외 규칙이 이 수집 작업에도 그대로 적용됩니다.
+        originalTargets = collectTargets(shell);
+        bindMemberLanguagePreview(shell, contextPath);
+
         document.documentElement.lang =
             LANGUAGE_HTML[language] || language;
 
@@ -226,7 +330,7 @@
             contextPath + "/api/deepl/translate";
 
         try {
-            translatePage(shell, language, endpoint);
+            translatePage(shell, language, endpoint, originalTargets);
         } catch (error) {
             setTranslationStatus("번역 초기화 오류 · F12 콘솔 확인", true);
             if (window.console) console.error("[K-culture 번역] 초기화 실패", error);
@@ -236,10 +340,15 @@
     function translatePage(
         shell,
         language,
-        endpoint
+        endpoint,
+        suppliedTargets,
+        keepCurrentRevision
     ) {
-        var targets =
-            collectTargets(shell);
+        // 동적 콘텐츠는 기존 화면의 번역 요청을 무효화하면 안 됩니다.
+        var revision = keepCurrentRevision
+            ? translationRevision
+            : ++translationRevision;
+        var targets = suppliedTargets || collectTargets(shell);
 
         if (targets.length === 0) {
             setTranslationStatus("번역할 내용 없음");
@@ -321,12 +430,14 @@
                     batches[i],
                     endpoint,
                     cache,
-                    language
+                    language,
+                    revision
                 );
         }
 
         chain.then(
             function () {
+                if (revision !== translationRevision) return;
                 setTranslationStatus("번역 완료");
                 document.documentElement.classList.add(
                     "deepl-translated"
@@ -337,6 +448,7 @@
                 );
             },
             function (error) {
+                if (revision !== translationRevision) return;
                 if (window.console
                         && typeof console.warn === "function") {
 
@@ -352,19 +464,15 @@
                     );
                 }
 
-
-var statusMessage = "번역 실패 · API 설정 확인";
-
-if (error && error.apiCode === "DEEPL_NOT_CONFIGURED") {
-    statusMessage = "DeepL API 키가 설정되지 않았습니다.";
-} else if (error && error.httpStatus === 429) {
-    statusMessage = "번역 사용량 제한 · 잠시 후 재시도";
-} else if (error && error.httpStatus === 403) {
-    statusMessage = "번역 요청 거부 · API 키 확인";
-}
-
-setTranslationStatus(statusMessage, true);
-
+                var statusMessage = "번역 실패 · DeepL 설정 확인";
+                if (error && error.apiCode === "DEEPL_NOT_CONFIGURED") {
+                    statusMessage = "DeepL API 키가 설정되지 않았습니다.";
+                } else if (error && error.httpStatus === 429) {
+                    statusMessage = "번역 사용량 제한 · 잠시 후 재시도";
+                } else if (error && error.httpStatus === 403) {
+                    statusMessage = "번역 요청 거부 · API 키 확인";
+                }
+                setTranslationStatus(statusMessage, true);
                 document.documentElement.classList.remove(
                     "deepl-translating"
                 );
@@ -377,10 +485,12 @@ setTranslationStatus(statusMessage, true);
         batch,
         endpoint,
         cache,
-        language
+        language,
+        revision
     ) {
         return chain.then(
             function () {
+                if (revision !== translationRevision) return;
                 var texts = [];
                 var i;
 
@@ -392,9 +502,11 @@ setTranslationStatus(statusMessage, true);
 
                 return requestBatch(
                     endpoint,
-                    texts
+                    texts,
+                    language
                 ).then(
                     function (translations) {
+                        if (revision !== translationRevision) return;
                         if (!translations
                                 || !Array.isArray(translations)
                                 || translations.length !== batch.length) {
@@ -681,10 +793,14 @@ setTranslationStatus(statusMessage, true);
 
     function requestBatch(
         endpoint,
-        texts
+        texts,
+        language
     ) {
-        var body =
-            new URLSearchParams();
+        var body = new URLSearchParams();
+        // 미리보기는 저장되지 않은 선택 언어로 번역할 수 있어야 합니다.
+        if (language === "ko" || language === "ja" || language === "zh" || language === "en") {
+            body.append("language", language);
+        }
 
         var i;
 

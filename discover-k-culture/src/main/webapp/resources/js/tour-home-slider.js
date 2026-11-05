@@ -32,6 +32,15 @@
         while (element.firstChild) element.removeChild(element.firstChild);
     }
 
+    // 새로 삽입된 관광 API 텍스트를 공통 DeepL 번역기에 알립니다.
+    function notifyTranslation() {
+        if (typeof window.CustomEvent === "function") {
+            document.dispatchEvent(new CustomEvent("kculture:content-updated", {
+                detail: { root: slider }
+            }));
+        }
+    }
+
     function message(text) {
         clear(slider);
         var table = document.createElement("table");
@@ -46,6 +55,7 @@
         slider.appendChild(table);
         controls.hidden = true;
         controls.style.display = "none";
+        notifyTranslation();
     }
 
     function shortText(text, max) {
@@ -177,6 +187,8 @@
         controls.style.display = "flex";
         render();
         startAutoPlay();
+        // 서버 캐시 HIT/MISS와 관계없이 화면에 나타난 제목/설명/주소를 번역합니다.
+        notifyTranslation();
     }).catch(function (error) {
         if (window.console && console.warn) console.warn("K-Culture 관광정보 로딩 오류:", error);
         message("관광 정보를 불러오지 못했습니다.");
