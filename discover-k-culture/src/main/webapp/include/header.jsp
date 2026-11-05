@@ -279,7 +279,9 @@ request.setAttribute(
 <link rel="stylesheet" href="${ctx}/resources/fontawesome/css/all.min.css" />
 
 <%-- 기존 DeepL 페이지 번역 엔진을 공통 헤더에서 불러옵니다. --%>
-<script defer src="${ctx}/resources/js/deepl-translate.js"></script>
+
+<script defer src="${ctx}/resources/js/deepl-translate.js?v=20261104-status-hidden"></script>
+
 
 </head>
 
@@ -407,14 +409,45 @@ request.setAttribute(
                           class="site-language" data-deepl-ignore style="margin:0;">
                         <input type="hidden" name="_csrf" value="<c:out value='${csrfToken}' />" />
                         <input type="hidden" name="returnUrl" value="<c:out value='${headerReturnUrl}' />" />
-                        <select class="choice-nation" name="language" aria-label="사이트 번역 언어"
-                                onchange="this.form.submit()">
-                            <option value="ko" <c:if test="${empty sessionScope.siteLanguage or sessionScope.siteLanguage eq 'ko'}">selected</c:if>>한국어</option>
-                            <option value="ja" <c:if test="${sessionScope.siteLanguage eq 'ja'}">selected</c:if>>日本語</option>
-                            <option value="zh" <c:if test="${sessionScope.siteLanguage eq 'zh'}">selected</c:if>>中文</option>
-                            <option value="en" <c:if test="${sessionScope.siteLanguage eq 'en'}">selected</c:if>>English</option>
-                        </select>
-                    </form>
+
+<%-- JavaScript가 언어 선택 이벤트를 처리하고,
+     서버 저장 후 현재 페이지를 갱신합니다. --%>
+<select class="choice-nation"
+        id="siteLanguageSelect"
+        name="language"
+        aria-label="사이트 번역 언어"
+        aria-describedby="translationStatus">
+
+    <option value="ko"
+        <c:if test="${empty sessionScope.siteLanguage or sessionScope.siteLanguage eq 'ko'}">selected</c:if>>
+        한국어
+    </option>
+
+    <option value="ja"
+        <c:if test="${sessionScope.siteLanguage eq 'ja'}">selected</c:if>>
+        日本語
+    </option>
+
+    <option value="zh"
+        <c:if test="${sessionScope.siteLanguage eq 'zh'}">selected</c:if>>
+        中文
+    </option>
+
+    <option value="en"
+        <c:if test="${sessionScope.siteLanguage eq 'en'}">selected</c:if>>
+        English
+    </option>
+</select>
+</form>
+
+<%-- 번역 실패 및 API 설정 문제 안내 --%>
+<span id="translationStatus"
+      data-deepl-ignore
+      role="status"
+      aria-live="polite"
+      style="display:none; margin-top:4px; font-size:11px; line-height:1.3;">
+</span>
+
 
                 </div>
 

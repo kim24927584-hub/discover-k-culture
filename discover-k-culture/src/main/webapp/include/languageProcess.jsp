@@ -43,5 +43,17 @@ if (returnUrl == null || !returnUrl.startsWith(contextPath + "/")
 }
 
 response.setHeader("Cache-Control", "no-store");
+
+<%-- AJAX 요청이면 JSON 응답 반환 --%>
+<%
+if ("XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With"))) {
+    response.setContentType("application/json; charset=UTF-8");
+    response.getWriter().write(
+        "{\"ok\":true,\"language\":\"" + language + "\"}"
+    );
+    return;
+}
+%>
+
 response.sendRedirect(returnUrl);
 %>

@@ -194,20 +194,39 @@ request.setAttribute("pageCss", "board/common/viewCommon.css");
   %>
     <div class="comment" id="comment-<%=comment.getCommentId()%>">
       <div class="comment-body">
-        <span><%=h(comment.getMemberNickname())%></span>
-        <span class="comment-meta">
-        	<%=comment.getCreatedAt() == null ? "-" : comment.getCreatedAt().toString().substring(0, 16)%>
-        	<% if (canDelete) { %>
-	          <form action="<%=request.getContextPath()%>/board/process/comment/deleteProcess.jsp" method="post"
-	                onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
-	            <input type="hidden" name="commentId" value="<%=comment.getCommentId()%>">
-	            <input type="hidden" name="postId" value="<%=postId%>">
-	            <button type="submit" class="btn btn-list btn-comment-del">삭제</button>
-	          </form>
-	        <% } %>
-        
-        </span>
-        
+
+<span class="comment-author" data-deepl-ignore>
+    <%=h(comment.getMemberNickname())%>
+</span>
+
+<span class="comment-meta">
+    <%=comment.getCreatedAt() == null
+        ? "-"
+        : comment.getCreatedAt().toString().substring(0, 16)%>
+</span>
+
+<% if (canDelete) { %>
+    <form
+        action="<%=request.getContextPath()%>/board/process/comment/deleteProcess.jsp"
+        method="post"
+        style="display:inline-block; margin-left:8px;"
+        onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+
+        <input type="hidden"
+               name="commentId"
+               value="<%=comment.getCommentId()%>">
+
+        <input type="hidden"
+               name="postId"
+               value="<%=postId%>">
+
+        <button type="submit"
+                class="btn btn-list btn-comment-del">
+            삭제
+        </button>
+    </form>
+<% } %>
+
         <p class="comment-text"><%=h(comment.getContent()).replace("\n", "<br>")%></p>
         
       </div>

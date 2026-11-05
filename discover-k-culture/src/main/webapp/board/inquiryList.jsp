@@ -97,10 +97,10 @@ request.setAttribute("activeMenu", "INQUIRY");
             <tr>
                 <td class="col-num"><%=inquiry.getInquiryId()%></td>
                 <% if (admin) { %>
-                    <td class="col-author"><%=inquiryListH(inquiry.getMemberNickname())%></td>
+                    <td class="col-author" data-deepl-ignore><%=inquiryListH(inquiry.getMemberNickname())%></td>
                 <% } %>
                 <td class="col-title">
-                    <a href="<%=request.getContextPath()%>/board/inquiryView.jsp?id=<%=inquiry.getInquiryId()%>">
+                    <a href="<%=request.getContextPath()%>/board/inquiryView.jsp?id=<%=inquiry.getInquiryId()%>" data-deepl-ignore>
                         <%=inquiryListH(inquiry.getTitle())%>
                     </a>
                 </td>

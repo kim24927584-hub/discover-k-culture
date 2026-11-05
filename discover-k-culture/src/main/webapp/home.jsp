@@ -140,7 +140,7 @@ request.setAttribute("pageCss", "home.css");
 					if (noticeError != null) {
 					%>
 					<tr>
-						<td class="notice-symbol notice">NOTICE</td>
+						<td class="notice-symbol notice">공지사항</td>
 						<td class="notice-title"><a href="<%=ctxPath%>/board/noticeList.jsp"><%=noticeError%></a></td>
 						<td class="notice-hits">-</td>
 					</tr>
@@ -148,21 +148,16 @@ request.setAttribute("pageCss", "home.css");
 					} else if (notices == null || notices.isEmpty()) {
 					%>
 					<tr>
-						<td class="notice-symbol notice">NOTICE</td>
+						<td class="notice-symbol notice">공지사항</td>
 						<td class="notice-title"><a href="<%=ctxPath%>/board/noticeList.jsp">등록된 공지가 없습니다.</a></td>
 						<td class="notice-hits">0</td>
 					</tr>
 					<%
 					} else {
-					int noticeIndex = 0;
 					for (NoticeDTO notice : notices) {
-						noticeIndex++;
 					%>
 					<tr>
-						<td
-							class="notice-symbol <%=noticeIndex == 1 ? "must-read" : "notice"%>">
-							<%=noticeIndex == 1 ? "MUST-READ" : "NOTICE"%>
-						</td>
+						<td class="notice-symbol notice">공지사항</td>
 						<td class="notice-title"><a
                                 href="<%=ctxPath%>/board/noticeView.jsp?id=<%=notice.getNoticeId()%>"
                                 title="<%=h(notice.getTitle())%>"><%=h(shortText(notice.getTitle(), 26))%></a>
@@ -348,9 +343,20 @@ request.setAttribute("pageCss", "home.css");
 					</tr>
 					<%
 					} else {
-					int latestIndex = 0;
 					for (UnifiedBoardDTO item : latestAll) {
-						latestIndex++;
+                            /* 순번 대신 실제 게시판 종류를 왼쪽에 표시합니다. */
+                            String boardLabel;
+                            if ("NOTICE".equals(item.getSourceType())) {
+                                boardLabel = "공지사항";
+                            } else if ("KCULTURE".equals(item.getBoardType())) {
+                                boardLabel = "K-컬처";
+                            } else if ("QUESTION".equals(item.getBoardType())) {
+                                boardLabel = "질문게시판";
+                            } else if ("FREE".equals(item.getBoardType())) {
+                                boardLabel = "자유게시판";
+                            } else {
+                                boardLabel = "기타";
+                            }
 
 						String itemLink = "#";
 						if ("NOTICE".equals(item.getSourceType())) {
@@ -364,7 +370,7 @@ request.setAttribute("pageCss", "home.css");
 						}
 					%>
 					<tr class="board-line">
-						<td class="notice-hits"><%=latestIndex%></td>
+						<td class="notice-hits" style="text-align:left; white-space:nowrap; font-size:11px;"><%=h(boardLabel)%></td>
 						<td class="notice-title"><a href="<%=itemLink%>" title="<%=h(item.getTitle())%>"><%=h(shortText(item.getTitle(), 24))%></a></td>
 						<td class="notice-hits"><%=item.getViewCount()%></td>
 					</tr>

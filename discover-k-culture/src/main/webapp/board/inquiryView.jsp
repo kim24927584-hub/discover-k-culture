@@ -53,7 +53,7 @@ request.setAttribute("activeMenu", "INQUIRY");
 <%@include file="/include/header.jsp" %>
 
 <main class="container">
-    <h1 class="post-title"><span>[1:1 문의]</span> <%=inquiryViewH(inquiry.getTitle())%></h1>
+    <h1 class="post-title"><span>[1:1 문의]</span> <span data-deepl-ignore><%=inquiryViewH(inquiry.getTitle())%></span></h1>
 
     <p class="post-meta">
         <% if (admin) { %>
@@ -64,17 +64,17 @@ request.setAttribute("activeMenu", "INQUIRY");
     </p>
 
     <div class="post-body">
-        <p class="post-content"><%=inquiryViewH(inquiry.getContent()).replace("\n", "<br>")%></p>
+        <p class="post-content" data-deepl-ignore><%=inquiryViewH(inquiry.getContent()).replace("\n", "<br>")%></p>
     </div>
 
     <% if (inquiry.getAnswer() != null && !inquiry.getAnswer().trim().isEmpty()) { %>
         <div class="post-body answer">
             <i class="fa-solid fa-screwdriver-wrench fa-sm"></i>
             <span class="post-meta">
-                <%=inquiry.getAdminNickname() == null ? "운영자" : inquiryViewH(inquiry.getAdminNickname())%>의 답변
+                <span data-deepl-ignore><%=inquiry.getAdminNickname() == null ? "운영자" : inquiryViewH(inquiry.getAdminNickname())%></span>의 답변
                 · <%=inquiry.getAnsweredAt() == null ? "-" : inquiry.getAnsweredAt().toString().substring(0, 16)%>
             </span>
-            <p class="post-content answer"><%=inquiryViewH(inquiry.getAnswer()).replace("\n", "<br>")%></p>
+            <p class="post-content answer" data-deepl-ignore><%=inquiryViewH(inquiry.getAnswer()).replace("\n", "<br>")%></p>
         </div>
     <% } %>
 

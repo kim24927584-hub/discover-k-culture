@@ -346,12 +346,22 @@ request.setAttribute(
     <section class="mypage-profile">
 
 
-        
+
+<%-- 프로필 이미지 표시 --%>
+<img
+    src="<%=h(profileSrc)%>"
+    alt="프로필 이미지"
+    class="mypage-avatar"
+    id="profileAvatar"
+    data-default-src="<%=h(defaultProfileSrc)%>"
+    onerror="this.onerror=null;this.src='<%=h(defaultProfileSrc)%>';">
 
 
-        <div class="mypage-info">
-<%-- 
-            <h2>
+<%-- 사용자 정보 영역 --%>
+<div class="mypage-info">
+
+    <h2 data-deepl-ignore>
+
                 <%=h(member.getNickname())%>님
             </h2>
 
@@ -360,27 +370,27 @@ request.setAttribute(
 
                 <li>
                     아이디 :
-                    <%=h(member.getLoginId())%>
+                    <span data-deepl-ignore><%=h(member.getLoginId())%></span>
                 </li>
 
                 <li>
                     이메일 :
-                    <%=h(member.getEmail())%>
+                    <span data-deepl-ignore><%=h(member.getEmail())%></span>
                 </li>
 
                 <li>
                     국적 :
-                    <%=member.getNationality() == null
+                    <span data-deepl-ignore><%=member.getNationality() == null
                         || member.getNationality()
                             .trim()
                             .isEmpty()
                         ? "-"
-                        : h(member.getNationality())%>
+                        : h(member.getNationality())%></span>
                 </li>
 
                 <li>
                     회원 상태 :
-                    <%=h(member.getStatus())%>
+                    <span data-deepl-ignore><%=h(member.getStatus())%></span>
                 </li>
 
             </ul> --%>
@@ -809,7 +819,7 @@ request.setAttribute(
                         <div class="board-meta">
 
                             작성자
-                            <%=h(post.getMemberNickname())%>
+                            <span data-deepl-ignore><%=h(post.getMemberNickname())%></span>
 
                             · 조회
                             <%=post.getViewCount()%>
@@ -913,7 +923,7 @@ request.setAttribute(
                             </a>
 
                             <div class="board-meta">
-                                작성자 <%=h(likedPost.getMemberNickname())%>
+                                작성자 <span data-deepl-ignore><%=h(likedPost.getMemberNickname())%></span>
                                 · 조회 <%=likedPost.getViewCount()%>
                                 · 추천 <%=likedPost.getLikeCount()%>
                                 · 댓글 <%=likedPost.getCommentCount()%>
