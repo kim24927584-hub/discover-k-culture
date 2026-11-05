@@ -271,6 +271,11 @@ request.setAttribute(
 </c:if>
 
 
+<%-- 홈 관광정보 카드의 다국어 넘침 보정: 홈에서만 CSS 파일을 로드합니다. --%>
+<c:if test="${requestScope.pageCss eq 'home.css'}">
+    <link rel="stylesheet" href="${ctx}/resources/css/tour-translation-overflow.css?v=20261105-tour-conditional-1" />
+</c:if>
+
 <%-- 기존 아이콘 사용 유지 --%>
 <!-- <script
     src="https://kit.fontawesome.com/0b6f7fb313.js"
@@ -386,9 +391,7 @@ request.setAttribute(
                         <c:choose>
 
                             <c:when test="${not empty sessionScope.nickname}">
-                            	<div class="profile-name">
-                                	<c:out value="${sessionScope.nickname}" />
-                                </div>
+                                <c:out value="${sessionScope.nickname}" />
                             </c:when>
 
                             <c:otherwise>
