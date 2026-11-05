@@ -114,7 +114,6 @@ html:not(:lang(ko)) .board-translation-layout .chips .chip {
  * 검색 폼의 선택 옵션/placeholder는 JSP에서 언어별로 출력합니다.
  */
 html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll > .board-table {
-    width: 890px;
     min-width: 890px;
     max-width: none;
     table-layout: fixed;
