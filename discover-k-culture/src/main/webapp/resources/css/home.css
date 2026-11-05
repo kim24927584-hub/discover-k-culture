@@ -166,5 +166,17 @@ main {
 .main-s1,
 .main-s4 {
   background: var(--color-surface);
+  
 }
+.main-s4 .board{
+	table-layout: fixed;
+}
+.main-s4 .board td:first-child{
+	width:50px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+.main-s4 .board td:last-child{
+	width:30px;
 
+	}
