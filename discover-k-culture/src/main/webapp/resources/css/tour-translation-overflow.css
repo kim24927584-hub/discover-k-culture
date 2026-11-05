@@ -1,0 +1,87 @@
+@charset "UTF-8";
+/*
+ * K-Culture - 홈 관광정보 API 번역문 넘침 보정
+ * 기존 home.css를 수정하지 않습니다.
+ * html lang가 en / ja / zh 계열일 때만 적용합니다.
+ * DeepL 번역 JS가 <html lang="en-US|ja|zh-CN">을 설정합니다.
+ * 다른 홈 카드, 게시판, 공통 헤더의 레이아웃에는 적용되지 않습니다.
+ */
+
+/* 세 언어에서만 발동: 한국어(lang=ko)에는 아래 규칙이 적용되지 않습니다. */
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider,
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* 긴 번역문 때문에 350px 관광 카드 내부의 표가 확장되지 않도록 고정 배치 */
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide > table.board {
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+    box-sizing: border-box;
+    border-collapse: separate;
+    padding: 8px 12px 4px;
+}
+
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide > table.board td {
+    box-sizing: border-box;
+    vertical-align: top;
+    min-width: 0;
+}
+
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide > table.board td:first-child {
+    width: 105px;
+    padding: 0 10px 0 0;
+}
+
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide > table.board td:last-child {
+    min-width: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide > table.board td:first-child img {
+    display: block;
+    width: 95px;
+    height: 80px;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+/* 텍스트를 블록으로 표시하므로 기존 <br>로 인한 불필요한 간격 제거 */
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide > table.board td:last-child br {
+    display: none;
+}
+
+/* 관광지명/설명: 2줄까지만 보여주고 더 길면 말줄임 */
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide > table.board td:last-child strong,
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide > table.board td:last-child span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+    line-height: 1.35;
+}
+
+/* 주소: 한 줄 말줄임으로 카드 폭 유지 */
+:is(html:lang(en), html:lang(ja), html:lang(zh)) #tourRecommendation #tourSlider .tour-slide > table.board td:last-child small {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.35;
+}
