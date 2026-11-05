@@ -241,4 +241,3 @@ if (sbQuestionViewed.isEmpty()) {
 })();
 </script>
 
-</div>

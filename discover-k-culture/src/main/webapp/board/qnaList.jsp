@@ -141,5 +141,4 @@ request.setAttribute("pageCss", "board/common/listCommon.css");
   </nav>
 </main>
 
-<%@include file="/include/sidebar.jsp"%>
 <%@include file="/include/footer.jsp"%>

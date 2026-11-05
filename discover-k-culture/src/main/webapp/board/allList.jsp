@@ -203,5 +203,4 @@ request.setAttribute("pageTitle", "전체 게시글");
 	</nav>
 </main>
 
-<%@include file="/include/sidebar.jsp"%>
 <%@include file="/include/footer.jsp"%>
