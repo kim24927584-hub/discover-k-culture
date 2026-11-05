@@ -1,140 +1,71 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-
-<%@ page import="dao.BookmarkDAO"%>
-<%@ page import="dao.PostDAO"%>
-<%@ page import="dto.PostDTO"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
+<%@ page import="dao.BookmarkDAO" %>
+<%@ page import="dao.PostDAO" %>
+<%@ page import="dto.PostDTO" %>
 <%!
-/*
- * 게시판 종류별 상세보기 주소
- *
- * 북마크 등록/해제 후 사용자가 보고 있던 게시글로 돌아가기 위해
- * boardType에 맞는 상세보기 주소를 만들어 줍니다.
- */
-private String viewUrl(
-    PostDTO post
-) {
-
-    if (
-        "KCULTURE".equals(
-            post.getBoardType()
-        )
-    ) {
-
-        return "/board/category-view.jsp?postId="
-            + post.getPostId()
-            + "&skipView=1";
+// JavaScript 비활성화 시 기존 게시글로 되돌아가기 위한 경로입니다.
+private String bookmarkViewUrl(PostDTO post) {
+    String path;
+    if ("KCULTURE".equals(post.getBoardType())) {
+        path = "/board/category-view.jsp?postId=" + post.getPostId();
+    } else if ("QUESTION".equals(post.getBoardType())) {
+        path = "/board/qnaView.jsp?id=" + post.getPostId();
+    } else {
+        path = "/board/allView.jsp?id=" + post.getPostId();
     }
-
-    if (
-        "QUESTION".equals(
-            post.getBoardType()
-        )
-    ) {
-
-        return "/board/qnaView.jsp?id="
-            + post.getPostId()
-            + "&skipView=1";
-    }
-
-    return "/board/allView.jsp?id="
-        + post.getPostId()
-        + "&skipView=1";
+    return path + "&skipView=1";
 }
 %>
-
-
 <%
-/* =========================================================
-   1. 로그인 확인
-   ========================================================= */
-Long memberId =
-    (Long) session.getAttribute(
-        "memberId"
-    );
+request.setCharacterEncoding("UTF-8");
+boolean ajax = "XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With"));
+if (ajax) {
+    response.setContentType("application/json; charset=UTF-8");
+    response.setHeader("Cache-Control", "no-store");
+}
+String ctx = request.getContextPath();
 
-if (memberId == null) {
-
-    response.sendRedirect(
-        request.getContextPath()
-        + "/member/login.jsp"
-    );
-
+if (!"POST".equalsIgnoreCase(request.getMethod())) {
+    if (ajax) { response.setStatus(405); out.print("{\"success\":false,\"error\":\"METHOD_NOT_ALLOWED\"}"); }
+    else response.sendRedirect(ctx + "/home.jsp");
     return;
 }
-
-
-/* =========================================================
-   2. 게시글 번호 확인
-   ========================================================= */
-/* 데이터 변경 처리는 POST 요청만 허용합니다. */
-if (!"POST".equalsIgnoreCase(request.getMethod())) {
-    response.sendRedirect(request.getContextPath() + "/home.jsp");
+Long memberId = (Long) session.getAttribute("memberId");
+if (memberId == null) {
+    if (ajax) { response.setStatus(401); out.print("{\"success\":false,\"error\":\"LOGIN_REQUIRED\"}"); }
+    else response.sendRedirect(ctx + "/member/login.jsp");
     return;
 }
 
 long postId;
+try {
+    postId = Long.parseLong(request.getParameter("postId"));
+    if (postId <= 0) throw new NumberFormatException();
+} catch (Exception e) {
+    if (ajax) { response.setStatus(400); out.print("{\"success\":false,\"error\":\"INVALID_ID\"}"); }
+    else response.sendRedirect(ctx + "/board/allList.jsp");
+    return;
+}
 
 try {
+    PostDTO post = new PostDAO().selectById(postId);
+    if (post == null) {
+        if (ajax) { response.setStatus(404); out.print("{\"success\":false,\"error\":\"NOT_FOUND\"}"); }
+        else response.sendRedirect(ctx + "/board/allList.jsp");
+        return;
+    }
 
-    postId =
-        Long.parseLong(
-            request.getParameter(
-                "postId"
-            )
-        );
+    // 회원/게시글의 관계는 기존 BookmarkDAO로 유지합니다.
+    boolean bookmarked = new BookmarkDAO().toggle(memberId.longValue(), postId);
 
+    if (ajax) {
+        out.print("{\"success\":true,\"bookmarked\":" + bookmarked + "}");
+    } else {
+        response.sendRedirect(ctx + bookmarkViewUrl(post));
+    }
 } catch (Exception e) {
-
-    response.sendRedirect(
-        request.getContextPath()
-        + "/board/allList.jsp"
-    );
-
-    return;
+    application.log("북마크 토글 오류", e);
+    if (ajax) { response.setStatus(500); out.print("{\"success\":false,\"error\":\"SERVER_ERROR\"}"); }
+    else response.sendRedirect(ctx + "/board/allList.jsp");
 }
-
-
-/* =========================================================
-   3. 실제 존재하는 게시글인지 확인
-   ========================================================= */
-PostDTO post =
-    new PostDAO().selectById(
-        postId
-    );
-
-if (post == null) {
-
-    response.sendRedirect(
-        request.getContextPath()
-        + "/board/allList.jsp"
-    );
-
-    return;
-}
-
-
-/* =========================================================
-   4. 북마크 토글
-   ---------------------------------------------------------
-   기존 BookmarkDAO.toggle()을 그대로 사용합니다.
-
-   북마크가 없으면 INSERT
-   북마크가 있으면 DELETE
-   ========================================================= */
-new BookmarkDAO().toggle(
-    memberId.longValue(),
-    postId
-);
-
-
-/* =========================================================
-   5. 원래 게시글 상세화면으로 이동
-   ========================================================= */
-response.sendRedirect(
-    request.getContextPath()
-    + viewUrl(post)
-);
 %>

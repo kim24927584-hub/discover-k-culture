@@ -346,12 +346,18 @@ request.setAttribute(
     <section class="mypage-profile">
 
 
-        
+        <img
+            src="<%=h(profileSrc)%>"
+            alt="프로필 이미지"
+            class="mypage-avatar"
+            id="profileAvatar"
+            data-default-src="<%=h(defaultProfileSrc)%>"
+            onerror="this.onerror=null;this.src='<%=h(defaultProfileSrc)%>';">
 
 
         <div class="mypage-info">
-<%-- 
-            <h2>
+
+            <h2 data-deepl-ignore>
                 <%=h(member.getNickname())%>님
             </h2>
 
@@ -360,44 +366,38 @@ request.setAttribute(
 
                 <li>
                     아이디 :
-                    <%=h(member.getLoginId())%>
+                    <span data-deepl-ignore><%=h(member.getLoginId())%></span>
                 </li>
 
                 <li>
                     이메일 :
-                    <%=h(member.getEmail())%>
+                    <span data-deepl-ignore><%=h(member.getEmail())%></span>
                 </li>
 
                 <li>
                     국적 :
-                    <%=member.getNationality() == null
+                    <span data-deepl-ignore><%=member.getNationality() == null
                         || member.getNationality()
                             .trim()
                             .isEmpty()
                         ? "-"
-                        : h(member.getNationality())%>
+                        : h(member.getNationality())%></span>
                 </li>
 
                 <li>
                     회원 상태 :
-                    <%=h(member.getStatus())%>
+                    <span data-deepl-ignore><%=h(member.getStatus())%></span>
                 </li>
 
-            </ul> --%>
+            </ul>
 
             <%-- =============================================
                  회원 정보 수정
                  기존 updateProcess.jsp를 실제 화면과 연결합니다.
                  ============================================= --%>
+            <button type="button" class="btn btn-edit" id="profileEditButton">정보 수정</button>
 
             <div class="profile-edit-wrap" id="profileEditWrap">
-	            <img
-	            src="<%=h(profileSrc)%>"
-	            alt="프로필 이미지"
-	            class="mypage-avatar"
-	            id="profileAvatar"
-	            data-default-src="<%=h(defaultProfileSrc)%>"
-	            onerror="this.onerror=null;this.src='<%=h(defaultProfileSrc)%>';">
                 <form action="<%=request.getContextPath()%>/member/updateProcess.jsp"
                       method="post" class="profile-edit-form">
                     <div class="form-field">
@@ -423,17 +423,20 @@ request.setAttribute(
                         </div>
                         <div>
                             <label>언어
-                                <select name="languageId" class="fix-language" required>
+                                <select name="languageId" class="fix-language" data-language-preview="true" required>
                                     <option value="1" <%=member.getLanguageId() == 1 ? "selected" : ""%>>한국어</option>
                                     <option value="2" <%=member.getLanguageId() == 2 ? "selected" : ""%>>日本語</option>
                                     <option value="3" <%=member.getLanguageId() == 3 ? "selected" : ""%>>中文</option>
                                     <option value="4" <%=member.getLanguageId() == 4 ? "selected" : ""%>>English</option>
                                 </select>
+                                <span class="form-hint" data-deepl-ignore>선택 즉시 화면을 미리 번역합니다. 저장을 눌러야 기본 언어가 변경됩니다.</span>
+                                <span id="languagePreviewError" class="form-hint" data-deepl-ignore role="alert" style="display:none; color:#b42318;"></span>
                             </label>
                         </div>
                     </div>
                     <div class="fix-buttons">
-                        <button type="submit" class="btn">정보 수정</button>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                        <button type="button" class="btn cancel" id="profileEditCancel">취소</button>
                     </div>
                 </form>
             </div>
@@ -615,7 +618,7 @@ request.setAttribute(
             aria-selected="<%=showBookmarkTab%>">
 
             ★ 내 북마크
-            (<%=myBookmarks == null ? 0 : myBookmarks.size()%>)
+            (<span data-bookmark-count><%=myBookmarks == null ? 0 : myBookmarks.size()%></span>)
 
         </button>
 
@@ -749,7 +752,7 @@ request.setAttribute(
         </h2>
 
 
-        <div class="board-list">
+        <div class="board-list" data-bookmark-list>
 
             <%
             if (
@@ -758,7 +761,7 @@ request.setAttribute(
             ) {
             %>
 
-                <div class="board-item">
+                <div class="board-item" data-bookmark-empty>
 
                     <div class="board-body">
 
@@ -779,7 +782,7 @@ request.setAttribute(
                 ) {
             %>
 
-                <div class="board-item">
+                <div class="board-item" data-bookmark-item>
 
 
                     <span class="board-category">
@@ -809,7 +812,7 @@ request.setAttribute(
                         <div class="board-meta">
 
                             작성자
-                            <%=h(post.getMemberNickname())%>
+                            <span data-deepl-ignore><%=h(post.getMemberNickname())%></span>
 
                             · 조회
                             <%=post.getViewCount()%>
@@ -835,7 +838,8 @@ request.setAttribute(
                              ================================= --%>
                         <form
                             action="<%=request.getContextPath()%>/member/bookmarkRemoveProcess.jsp"
-                            method="post">
+                            method="post" data-ajax-bookmark="remove"
+                            data-login-url="<%=request.getContextPath()%>/member/login.jsp">
 
                             <input
                                 type="hidden"
@@ -913,7 +917,7 @@ request.setAttribute(
                             </a>
 
                             <div class="board-meta">
-                                작성자 <%=h(likedPost.getMemberNickname())%>
+                                작성자 <span data-deepl-ignore><%=h(likedPost.getMemberNickname())%></span>
                                 · 조회 <%=likedPost.getViewCount()%>
                                 · 추천 <%=likedPost.getLikeCount()%>
                                 · 댓글 <%=likedPost.getCommentCount()%>
@@ -995,7 +999,7 @@ request.setAttribute(
     }
 
     /* 기존 프로필 정보 수정 폼 열기/닫기는 그대로 유지 */
-    /* const profileEditButton = document.getElementById("profileEditButton");
+    const profileEditButton = document.getElementById("profileEditButton");
     const profileEditWrap = document.getElementById("profileEditWrap");
     const profileEditCancel = document.getElementById("profileEditCancel");
 
@@ -1011,7 +1015,7 @@ request.setAttribute(
             profileEditWrap.classList.remove("is-open");
             profileEditButton.hidden = false;
         });
-    } */
+    }
 
     /* 회원탈퇴 입력창 열기/닫기 및 최종 확인 */
     var withdrawButton = document.getElementById("withdrawOpenButton");
@@ -1143,4 +1147,5 @@ request.setAttribute(
 })();
 </script>
 
+<script defer src="<%=request.getContextPath()%>/resources/js/bookmark-ajax.js?v=20261105-1"></script>
 <%@ include file="/include/footer.jsp" %>
