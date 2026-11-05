@@ -386,7 +386,9 @@ request.setAttribute(
                         <c:choose>
 
                             <c:when test="${not empty sessionScope.nickname}">
-                                <c:out value="${sessionScope.nickname}" />
+                            	<div class="profile-name">
+                                	<c:out value="${sessionScope.nickname}" />
+                                </div>
                             </c:when>
 
                             <c:otherwise>
