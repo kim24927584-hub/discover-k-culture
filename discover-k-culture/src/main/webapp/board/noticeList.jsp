@@ -253,12 +253,13 @@ request.setAttribute(
 %>
 
 <% request.setAttribute("pageCss", "board/noticeList.css"); %>
+<% request.setAttribute("boardTranslationLayout", Boolean.TRUE); %>
 <%@include file="/include/header.jsp" %>
 
 
 
 
-<main class="container">
+<main class="container board-translation-layout">
 
     <%-- =====================================================
          공지사항 제목
@@ -398,6 +399,7 @@ request.setAttribute(
     <%-- =====================================================
          공지사항 목록
          ===================================================== --%>
+    <div class="board-table-scroll" role="region" aria-label="게시글 목록 (가로 스크롤 가능)" tabindex="0">
     <table class="board-table">
 
         <thead>
@@ -535,6 +537,7 @@ request.setAttribute(
         </tbody>
 
     </table>
+</div>
 
 
     <%-- =====================================================

@@ -68,15 +68,17 @@ request.setAttribute("pageTitle", "1:1 문의");
 request.setAttribute("activeMenu", "INQUIRY");
 %>
 
+<% request.setAttribute("boardTranslationLayout", Boolean.TRUE); %>
 <%@include file="/include/header.jsp" %>
 
-<main class="container">
+<main class="container board-translation-layout">
     <h1 class="board-title"><%=admin ? "1:1 문의 관리" : "1:1 문의"%></h1>
 
     <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
         <a href="<%=request.getContextPath()%>/board/inquiryWrite.jsp" class="btn btn-primary btn-inquiry-write">문의 작성</a>
     </div>
 
+    <div class="board-table-scroll" role="region" aria-label="게시글 목록 (가로 스크롤 가능)" tabindex="0">
     <table class="board-table">
         <thead>
             <tr>
@@ -119,6 +121,7 @@ request.setAttribute("activeMenu", "INQUIRY");
         <% } %>
         </tbody>
     </table>
+</div>
 
     <nav class="pagination" aria-label="페이지 이동">
         <a href="<%=currentPage > 1 ? ("?page=" + (currentPage - 1) + "&pageSize=" + pageSize) : "#"%>"

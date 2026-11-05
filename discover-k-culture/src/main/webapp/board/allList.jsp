@@ -14,13 +14,26 @@
 <%@ page import="java.net.URLEncoder"%>
 <%@ page import="dao.UnifiedBoardDAO"%>
 <%@ page import="dto.UnifiedBoardDTO"%>
-<%!private String h(String value) {
+<%!
+/* 번역 엔진은 select/option/input을 제외하므로 검색 UI 문구는 서버에서 다국어로 출력합니다. */
+private String boardUiLabel(String lang, String ko, String en, String ja, String zh) {
+    if ("en".equals(lang)) return en;
+    if ("ja".equals(lang)) return ja;
+    if ("zh".equals(lang)) return zh;
+    return ko;
+}
+private String h(String value) {
 		if (value == null)
 			return "";
 		return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;")
 				.replace("'", "&#39;");
 	}%>
 <%
+// 세션의 표시 언어와 일치하는 검색창/표 머리글을 서버에서 렌더링합니다.
+String boardUiLanguage = (String) session.getAttribute("siteLanguage");
+if (!"en".equals(boardUiLanguage) && !"ja".equals(boardUiLanguage)
+        && !"zh".equals(boardUiLanguage)) boardUiLanguage = "ko";
+
 // 한글 검색어 처리를 위해 UTF-8 인코딩을 지정합니다.
 request.setCharacterEncoding("UTF-8");
 
@@ -81,62 +94,62 @@ request.setAttribute("pageCss", "board/common/listCommon.css");
 request.setAttribute("activeMenu", "ALL");
 request.setAttribute("pageTitle", "전체 게시글");
 %>
+<% request.setAttribute("boardTranslationLayout", Boolean.TRUE); %>
 <%@include file="/include/header.jsp"%>
 
-<main class="container">
+<main class="container board-translation-layout board-all-list">
 	<h1 class="board-title">전체게시글</h1>
 
 	<%-- ===== 검색 대상 + 게시판 필터 + 검색어 + 정렬 ===== --%>
-	<form class="board-search"
-		action="<%=request.getContextPath()%>/board/allList.jsp" method="get">
-		<select name="searchField" class="board-sort" aria-label="검색 대상">
-			<option value="all"
-				<%="all".equals(searchField) ? "selected" : ""%>>전체</option>
-			<option value="title"
-				<%="title".equals(searchField) ? "selected" : ""%>>제목</option>
-			<option value="content"
-				<%="content".equals(searchField) ? "selected" : ""%>>내용</option>
-			<option value="writer"
-				<%="writer".equals(searchField) ? "selected" : ""%>>작성자</option>
-		</select> <select name="boardFilter" class="board-sort" aria-label="게시판 필터">
-			<option value="ALL"
-				<%="ALL".equals(boardFilter) ? "selected" : ""%>>전체 게시판</option>
-			<option value="NOTICE"
-				<%="NOTICE".equals(boardFilter) ? "selected" : ""%>>공지사항</option>
-			<option value="KCULTURE"
-				<%="KCULTURE".equals(boardFilter) ? "selected" : ""%>>K-컬처</option>
-			<option value="QUESTION"
-				<%="QUESTION".equals(boardFilter) ? "selected" : ""%>>질문게시판</option>
-			<option value="FREE"
-				<%="FREE".equals(boardFilter) ? "selected" : ""%>>기존 일반글</option>
-		</select> <input type="search" class="board-search-input"
-			placeholder="검색어를 입력해 주세요" name="keyword" value="<%=h(keyword)%>">
-
-		<select name="sortType" class="board-sort" aria-label="정렬">
-			<option value="latest"
-				<%="latest".equals(sortType) ? "selected" : ""%>>최신순</option>
-			<option value="likes"
-				<%="likes".equals(sortType) ? "selected" : ""%>>추천순</option>
-			<option value="views"
-				<%="views".equals(sortType) ? "selected" : ""%>>조회순</option>
+	<form class="board-search" action="<%=request.getContextPath()%>/board/allList.jsp" method="get">
+		<select name="searchField" class="board-sort" aria-label="<%=boardUiLabel(boardUiLanguage, "검색 대상", "Search field", "検索対象", "搜索范围")%>" data-deepl-ignore>
+			<option value="all" <%="all".equals(searchField) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "전체", "All", "すべて", "全部")%></option>
+			<option value="title" <%="title".equals(searchField) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "제목", "Title", "タイトル", "标题")%></option>
+			<option value="content" <%="content".equals(searchField) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "내용", "Content", "内容", "内容")%></option>
+			<option value="writer" <%="writer".equals(searchField) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "작성자", "Author", "投稿者", "作者")%></option>
 		</select>
-		<button type="submit" class="btn btn-primary">검색</button>
+		<select name="boardFilter" class="board-sort" aria-label="<%=boardUiLabel(boardUiLanguage, "게시판 필터", "Board filter", "掲示板フィルター", "版块筛选")%>" data-deepl-ignore>
+			<option value="ALL" <%="ALL".equals(boardFilter) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "전체 게시판", "All Boards", "すべての掲示板", "所有版块")%></option>
+			<option value="NOTICE" <%="NOTICE".equals(boardFilter) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "공지사항", "Notices", "お知らせ", "公告")%></option>
+			<option value="KCULTURE" <%="KCULTURE".equals(boardFilter) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "K-컬처", "K-Culture", "K-カルチャー", "K-Culture")%></option>
+			<option value="QUESTION" <%="QUESTION".equals(boardFilter) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "질문게시판", "Questions", "質問掲示板", "问答")%></option>
+			<option value="FREE" <%="FREE".equals(boardFilter) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "기존 일반글", "General", "自由掲示板", "自由讨论")%></option>
+		</select>
+		<input type="search" class="board-search-input" name="keyword"
+			placeholder="<%=boardUiLabel(boardUiLanguage, "검색어를 입력해 주세요", "Search posts...", "キーワードを入力", "请输入关键词")%>" value="<%=h(keyword)%>" data-deepl-ignore>
+		<select name="sortType" class="board-sort" aria-label="<%=boardUiLabel(boardUiLanguage, "정렬", "Sort", "並び替え", "排序")%>" data-deepl-ignore>
+			<option value="latest" <%="latest".equals(sortType) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "최신순", "Newest", "新着順", "最新")%></option>
+			<option value="likes" <%="likes".equals(sortType) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "추천순", "Most Liked", "いいね順", "点赞数")%></option>
+			<option value="views" <%="views".equals(sortType) ? "selected" : ""%>><%=boardUiLabel(boardUiLanguage, "조회순", "Most Viewed", "閲覧順", "浏览数")%></option>
+		</select>
+		<button type="submit" class="btn btn-primary" data-deepl-ignore><%=boardUiLabel(boardUiLanguage, "검색", "Search", "検索", "搜索")%></button>
 	</form>
 
 	<%-- ===== 공지/게시글 통합 목록 ===== --%>
-	<table class="board-table">
-		<thead>
-			<tr>
-				<th class="col-num">번호</th>
-				<th class="col-board">게시판</th>
-				<th class="col-title">제목</th>
-				<th class="col-author">작성자</th>
-				<th class="col-views">조회</th>
-				<th class="col-like">추천</th>
-				<th class="col-dislike">비추천</th>
-				<th class="col-date">작성일</th>
-			</tr>
-		</thead>
+	<div class="board-table-scroll" role="region" aria-label="게시글 목록 (가로 스크롤 가능)" tabindex="0">
+    <table class="board-table">
+        <colgroup>
+            <col class="col-num">
+            <col class="col-board">
+            <col class="col-title">
+            <col class="col-author">
+            <col class="col-views">
+            <col class="col-like">
+            <col class="col-dislike">
+            <col class="col-date">
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="col-num" data-deepl-ignore><%=boardUiLabel(boardUiLanguage, "번호", "No.", "番号", "编号")%></th>
+                <th class="col-board" data-deepl-ignore><%=boardUiLabel(boardUiLanguage, "게시판", "Board", "掲示板", "版块")%></th>
+                <th class="col-title" data-deepl-ignore><%=boardUiLabel(boardUiLanguage, "제목", "Title", "タイトル", "标题")%></th>
+                <th class="col-author" data-deepl-ignore><%=boardUiLabel(boardUiLanguage, "작성자", "Author", "投稿者", "作者")%></th>
+                <th class="col-views" data-deepl-ignore><%=boardUiLabel(boardUiLanguage, "조회", "Views", "閲覧数", "浏览")%></th>
+                <th class="col-like" data-deepl-ignore><%=boardUiLabel(boardUiLanguage, "추천", "Likes", "いいね", "点赞")%></th>
+                <th class="col-dislike" data-deepl-ignore><%=boardUiLabel(boardUiLanguage, "비추천", "Dislikes", "低評価", "点踩")%></th>
+                <th class="col-date" data-deepl-ignore><%=boardUiLabel(boardUiLanguage, "작성일", "Date", "投稿日", "日期")%></th>
+            </tr>
+        </thead>
 		<tbody>
 			<%
 			if (list == null || list.isEmpty()) {
@@ -166,6 +179,7 @@ request.setAttribute("pageTitle", "전체 게시글");
 			%>
 		</tbody>
 	</table>
+</div>
 
 	<%-- ===== 검색 조건을 유지하는 페이지네이션 ===== --%>
 	<nav class="pagination" aria-label="페이지 이동">

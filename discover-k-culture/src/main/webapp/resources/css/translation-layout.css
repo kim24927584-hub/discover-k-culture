@@ -1,0 +1,160 @@
+@charset "UTF-8";
+/*
+ * 다국어 번역 보정: 게시판 전용 (v3).
+ * 이 파일은 header.jsp에서 boardTranslationLayout=true일 때만 불러옵니다.
+ * 모든 규칙을 .board-translation-layout 아래로 한정하여
+ * 홈(home.jsp), 홈 카드(home.css), 공통 헤더(header.css)에 영향이 없습니다.
+ * 한국어 화면에도 영향이 없으며 기존 CSS 파일은 손대지 않습니다.
+ */
+
+/* EN/JA/ZH에서만 표 내용을 잘리지 않는 폭으로 확보하고 표 영역만 스크롤 */
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-lg);
+}
+
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll > .board-table {
+    table-layout: fixed;
+    min-width: 880px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table th,
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table td {
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
+    vertical-align: middle;
+}
+
+/* 기존 listCommon.css의 .col-title {width:100%; max-width:0}를 명시적으로 재설정 */
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table .col-title {
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table .col-title a {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table .col-num { width: 64px; }
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table .col-board { width: 140px; }
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table .col-author { width: 115px; }
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table .col-views { width: 74px; }
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table .col-like { width: 80px; }
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table .col-dislike { width: 96px; }
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table .col-date { width: 128px; }
+
+html:not(:lang(ko)) .board-translation-layout .board-table-scroll .board-table-badge {
+    display: inline-block;
+    max-width: 100%;
+    padding: 3px 8px;
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+/* 검색 컨트롤을 줄바꿈 가능하게 하되 기존 스타일/높이는 유지 */
+html:not(:lang(ko)) .board-translation-layout .board-search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+html:not(:lang(ko)) .board-translation-layout .board-search .board-sort {
+    max-width: 100%;
+    min-width: 0;
+    flex: 0 1 auto;
+}
+html:not(:lang(ko)) .board-translation-layout .board-search .board-search-input {
+    flex: 1 1 165px;
+    min-width: 150px;
+}
+html:not(:lang(ko)) .board-translation-layout .board-search .btn {
+    white-space: nowrap;
+}
+
+/* 게시글 내용은 단어 기준 줄바꿈, 한 단어가 매우 길 때만 나누기 */
+html:not(:lang(ko)) .board-translation-layout .post-body,
+html:not(:lang(ko)) .board-translation-layout .post-content,
+html:not(:lang(ko)) .board-translation-layout .comment-text {
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+/* K-컬처 카테고리 카드: 긴 영문 필터명에 한해 칩 너비가 컨테이너를 넘지 않도록 */
+html:not(:lang(ko)) .board-translation-layout .chips .chip {
+    max-width: 100%;
+    padding-inline: 16px;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+/*
+ * 전체 게시판(8열): 번역 헤더가 중첩되지 않도록 고정 폭을 정확히 분배.
+ * colgroup 너비가 기준이며, 스크롤은 표 내부에서만 발생합니다.
+ * 검색 폼의 선택 옵션/placeholder는 JSP에서 언어별로 출력합니다.
+ */
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll > .board-table {
+    width: 890px;
+    min-width: 890px;
+    max-width: none;
+    table-layout: fixed;
+}
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll col.col-num { width: 55px; }
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll col.col-board { width: 130px; }
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll col.col-title { width: 245px; }
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll col.col-author { width: 100px; }
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll col.col-views { width: 70px; }
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll col.col-like { width: 85px; }
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll col.col-dislike { width: 95px; }
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll col.col-date { width: 110px; }
+
+/* th/td padding을 포함해 열 너비를 일치시키고 긴 제목은 말줄임표. */
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll .board-table th,
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll .board-table td {
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll .board-table th.col-like,
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-table-scroll .board-table th.col-dislike {
+    text-align: center;
+    font-size: 12px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* 검색 컨트롤의 긴 선택 항목도 좁은 화면에서 잘리지 않고 다음 행으로 이동. */
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-search .board-sort,
+html:not(:lang(ko)) .board-translation-layout.board-qna-list .board-search .board-sort {
+    max-width: 100%;
+    min-width: max-content;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+}
+html:not(:lang(ko)) .board-translation-layout.board-all-list .board-search .board-search-input,
+html:not(:lang(ko)) .board-translation-layout.board-qna-list .board-search .board-search-input {
+    min-width: min(100%, 180px);
+    flex: 1 1 200px;
+    box-sizing: border-box;
+}

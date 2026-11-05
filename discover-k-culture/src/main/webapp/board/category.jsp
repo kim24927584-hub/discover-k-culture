@@ -89,10 +89,11 @@ request.setAttribute("loadError", loadError);
 request.setAttribute("pageCss", "board/category.css");
 %>
 
+<% request.setAttribute("boardTranslationLayout", Boolean.TRUE); %>
 <%@include file="/include/header.jsp"%>
 
 
-<div class="container">
+<div class="container board-translation-layout">
 	<h1 class="page-title">Discover K-Culture</h1>
 
 	<%-- ===== 카테고리 필터 버튼 ===== --%>

@@ -307,18 +307,22 @@ boolean showLikeTab =
 /* =========================================================
    8. 공통 헤더 설정
    ---------------------------------------------------------
-   기존 mypage.css를 그대로 사용합니다.
-   CSS 파일은 변경하지 않습니다.
+   예전 마이페이지 디자인에 맞춘 mypage.css를 사용합니다.
+   기존 회원/게시글/번역 로직은 유지합니다.
    ========================================================= */
 request.setAttribute(
     "pageTitle",
     "마이페이지"
 );
 
-request.setAttribute(
-    "pageCss",
-    "member/mypage.css"
-);
+// 공통 헤더는 /resources/css/${pageCss} 경로로 스타일 파일을 불러옵니다.
+// member/ 경로에 배치하는 것을 권장하며, 루트 CSS 경로도 지원합니다.
+String mypageCssPath = "member/mypage.css";
+if (application.getResource("/resources/css/member/mypage.css") == null
+        && application.getResource("/resources/css/mypage.css") != null) {
+    mypageCssPath = "mypage.css";
+}
+request.setAttribute("pageCss", mypageCssPath);
 %>
 
 
@@ -345,61 +349,19 @@ request.setAttribute(
          ===================================================== --%>
     <section class="mypage-profile">
 
-
-        <img
-            src="<%=h(profileSrc)%>"
-            alt="프로필 이미지"
-            class="mypage-avatar"
-            id="profileAvatar"
-            data-default-src="<%=h(defaultProfileSrc)%>"
-            onerror="this.onerror=null;this.src='<%=h(defaultProfileSrc)%>';">
-
-
         <div class="mypage-info">
-
-            <h2 data-deepl-ignore>
-                <%=h(member.getNickname())%>님
-            </h2>
-
-
-            <ul class="mypage-meta">
-
-                <li>
-                    아이디 :
-                    <span data-deepl-ignore><%=h(member.getLoginId())%></span>
-                </li>
-
-                <li>
-                    이메일 :
-                    <span data-deepl-ignore><%=h(member.getEmail())%></span>
-                </li>
-
-                <li>
-                    국적 :
-                    <span data-deepl-ignore><%=member.getNationality() == null
-                        || member.getNationality()
-                            .trim()
-                            .isEmpty()
-                        ? "-"
-                        : h(member.getNationality())%></span>
-                </li>
-
-                <li>
-                    회원 상태 :
-                    <span data-deepl-ignore><%=h(member.getStatus())%></span>
-                </li>
-
-            </ul>
-
-            <%-- =============================================
-                 회원 정보 수정
-                 기존 updateProcess.jsp를 실제 화면과 연결합니다.
-                 ============================================= --%>
-            <button type="button" class="btn btn-edit" id="profileEditButton">정보 수정</button>
-
+            <%-- 예전 마이페이지 디자인: 프로필 이미지 + 정보 수정 폼을 한 박스에 배치 --%>
             <div class="profile-edit-wrap" id="profileEditWrap">
+                <img
+                    src="<%=h(profileSrc)%>"
+                    alt="프로필 이미지"
+                    class="mypage-avatar"
+                    id="profileAvatar"
+                    data-default-src="<%=h(defaultProfileSrc)%>"
+                    onerror="this.onerror=null;this.src='<%=h(defaultProfileSrc)%>';">
+
                 <form action="<%=request.getContextPath()%>/member/updateProcess.jsp"
-                      method="post" class="profile-edit-form">
+                      method="post" class="profile-edit-form" id="profileEditForm">
                     <div class="form-field">
                         <div>
                             <label>닉네임
@@ -435,10 +397,23 @@ request.setAttribute(
                         </div>
                     </div>
                     <div class="fix-buttons">
-                        <button type="submit" class="btn btn-primary">저장</button>
+                        <button type="submit" class="btn">정보 수정</button>
                         <button type="button" class="btn cancel" id="profileEditCancel">취소</button>
                     </div>
                 </form>
+
+                <%-- 취소를 눌렀을 때 보여줄 회원 정보. 기본 화면은 예전처럼 수정 폼을 바로 표시합니다. --%>
+                <div class="mypage-summary" id="profileSummary" hidden>
+                    <h2 data-deepl-ignore><%=h(member.getNickname())%>님</h2>
+                    <ul class="mypage-meta">
+                        <li>아이디 : <span data-deepl-ignore><%=h(member.getLoginId())%></span></li>
+                        <li>이메일 : <span data-deepl-ignore><%=h(member.getEmail())%></span></li>
+                        <li>국적 : <span data-deepl-ignore><%=member.getNationality() == null || member.getNationality().trim().isEmpty() ? "-" : h(member.getNationality())%></span></li>
+                        <li>회원 상태 : <span data-deepl-ignore><%=h(member.getStatus())%></span></li>
+                    </ul>
+                    <button type="button" class="btn btn-edit" id="profileEditButton"
+                            aria-controls="profileEditForm" aria-expanded="false">정보 수정</button>
+                </div>
             </div>
 
             <% if ("1".equals(request.getParameter("updated"))) { %>
@@ -998,22 +973,27 @@ request.setAttribute(
         showTab("posts", false);
     }
 
-    /* 기존 프로필 정보 수정 폼 열기/닫기는 그대로 유지 */
+    /* 예전 디자인은 수정 폼이 바로 열려 있습니다.
+       취소 시 회원 요약으로 전환하고, 정보 수정 버튼으로 다시 엽니다. */
     const profileEditButton = document.getElementById("profileEditButton");
-    const profileEditWrap = document.getElementById("profileEditWrap");
+    const profileEditForm = document.getElementById("profileEditForm");
+    const profileSummary = document.getElementById("profileSummary");
     const profileEditCancel = document.getElementById("profileEditCancel");
 
-    if (profileEditButton && profileEditWrap) {
+    if (profileEditButton && profileEditForm && profileSummary) {
         profileEditButton.addEventListener("click", function () {
-            profileEditWrap.classList.add("is-open");
-            profileEditButton.hidden = true;
+            profileEditForm.hidden = false;
+            profileSummary.hidden = true;
+            profileEditButton.setAttribute("aria-expanded", "true");
         });
     }
 
-    if (profileEditCancel && profileEditWrap && profileEditButton) {
+    if (profileEditCancel && profileEditForm && profileSummary) {
         profileEditCancel.addEventListener("click", function () {
-            profileEditWrap.classList.remove("is-open");
-            profileEditButton.hidden = false;
+            profileEditForm.reset();
+            profileEditForm.hidden = true;
+            profileSummary.hidden = false;
+            if (profileEditButton) profileEditButton.setAttribute("aria-expanded", "false");
         });
     }
 
