@@ -43,6 +43,7 @@ try {
  
 <div class="sidebar">
   <div class="sidebar-s1">
+    <p class="side-title">가장 많이 좋아한 게시글</p>
     <ul class="sidebar-tabs">
       <li class="tab-btn active-tab-btn" data-tab="side-s1-all">전체 게시글</li>
       <li class="tab-btn" data-tab="side-s1-kculture">K-컬처</li>
@@ -130,6 +131,7 @@ if (sbQuestionPopular.isEmpty()) {
   </div>
 
   <div class="sidebar-s2">
+  <p class="side-title">가장 많이 본 게시글</p>
     <ul class="sidebar-tabs">
       <li class="tab-btn active-tab-btn" data-tab="side-s2-all">전체 게시글</li>
       <li class="tab-btn" data-tab="side-s2-kculture">K-컬처</li>
@@ -159,7 +161,7 @@ if (sbAllViewed.isEmpty()) {
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
             <td class="content-title"><a href="<%=sbHref%>"><%=sbH(sbItem.getTitle())%></a></td>
-            <td class="content-like"><img src="${ctx}/resources/assets/icons-like-96.png" alt="" /><%=sbItem.getViewCount()%></td>
+            <td class="content-like"><img src="${ctx}/resources/assets/icon-open-eye-829117.png" alt="" /><%=sbItem.getViewCount()%></td>
           </tr>
 <%
     }
@@ -182,7 +184,7 @@ if (sbKViewed.isEmpty()) {
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
             <td class="content-title"><a href="<%=request.getContextPath()%>/board/category-view.jsp?postId=<%=sbItem.getPostId()%>"><%=sbH(sbItem.getTitle())%></a></td>
-            <td class="content-like"><img src="${ctx}/resources/assets/icons-like-96.png" alt="" /><%=sbItem.getViewCount()%></td>
+            <td class="content-like"><img src="${ctx}/resources/assets/icon-open-eye-829117.png" alt="" /><%=sbItem.getViewCount()%></td>
           </tr>
 <%
     }
@@ -205,7 +207,7 @@ if (sbQuestionViewed.isEmpty()) {
           <tr class="tab-content">
             <td class="content-rank"><%=sbRank++%></td>
             <td class="content-title"><a href="<%=request.getContextPath()%>/board/qnaView.jsp?id=<%=sbItem.getPostId()%>"><%=sbH(sbItem.getTitle())%></a></td>
-            <td class="content-like"><img src="${ctx}/resources/assets/icons-like-96.png" alt="" /><%=sbItem.getViewCount()%></td>
+            <td class="content-like"><img src="${ctx}/resources/assets/icon-open-eye-829117.png" alt="" /><%=sbItem.getViewCount()%></td>
           </tr>
 <%
     }

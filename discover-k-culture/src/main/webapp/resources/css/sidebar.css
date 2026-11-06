@@ -4,13 +4,17 @@
 	display: flex;
 	flex-direction: column;
 	gap: 35px;
-	margin: 20px 50px 60px 30px;
+	margin: 0 50px 60px 40px;
   	flex-shrink: 0;
 }
 
 .sidebar-s1,
 .sidebar-s2 {
   height: 200px;
+}
+
+.sidebar-s1 {
+	margin-bottom : 50px;
 }
 
 .sidebar-tabs {
@@ -81,4 +85,16 @@
   height: 15px;
   vertical-align: middle;
   margin: 3px;
+}
+
+.side-title {
+	margin-bottom : 10px;
+	font-size : var(--font-size-base);
+	font-weight: var(--font-weight-semibold);
+}
+
+.sidebar-s2 .content-like img {
+	
+  width: 12px;
+  height: 12px;
 }

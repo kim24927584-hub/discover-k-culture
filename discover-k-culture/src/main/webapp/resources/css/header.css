@@ -208,6 +208,10 @@ body > .wrapper > .layout {
   /* 마우스 올렸을 때 transition 추가 */
 }
 
+.new-post a:hover {
+  background: var(--color-primary-hover);
+}
+
 .new-post a img {
   display: block;
   width: 16px;
